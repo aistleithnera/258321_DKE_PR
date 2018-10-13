@@ -1,0 +1,144 @@
+% -----------------------------------------------------------------------------
+% GENERIC COMPONENTS
+% -----------------------------------------------------------------------------
+contextClass("aimCtx").
+businessCaseClass("semNOTAMCase").
+
+hasParameter("aimCtx","Interest"). hasParameter("aimCtx","FlightPhase"). hasParameter("aimCtx","EventScenario").
+parameter("Interest").
+parameter("FlightPhase").
+parameter("EventScenario").
+
+% -----------------------------------------------------------------------------
+% DERIVING RELATIONSHIPS OF PARAM VALUES AND CONTEXTS
+% -----------------------------------------------------------------------------
+% transitive and transitive-reflexive covers
+tCovers(Pval,Cval) :- tCovers(Pval,X), covers(X,Cval).
+tCovers(Pval,Cval) :- covers(Pval,Cval).
+trCovers(Pval,Cval) :- tCovers(Pval,Cval). trCovers(Pval,Pval):- paramValue(_,Pval).
+
+% Context Hierarchy
+paramCover(P,C,Param):- hasParamValue(C,Param,Pval), hasParamValue(P,Param,Pval2), trCovers(Pval2,Pval).
+notParamCover(C,P,Param):- context(C), hasContextClass(C,CtxCl), hasParameter(CtxCl,Param), context(P), not paramCover(C,P,Param).
+ctxInherits(C,P) :- paramCover(P,C,_), not notParamCover(P,C,_).
+
+
+% -----------------------------------------------------------------------------
+% DEFINING PARAMETERS, PARAMETER VALUES, CONTEXTS, AND DETpARAMvALUE
+% -----------------------------------------------------------------------------
+% Parameter values and their hierarchy
+paramValue("Interest","allInterests"). paramValue("Interest","area"). paramValue("Interest","aircraft"). paramValue("Interest","landplane"). paramValue("Interest","seaplane"). paramValue("Interest","helicopter").paramValue("Interest","unspecifiedAircraft").paramValue("Interest","time").
+paramValue("FlightPhase","allFlightPhases"). paramValue("FlightPhase","onground"). paramValue("FlightPhase","departure"). paramValue("FlightPhase","enroute"). paramValue("FlightPhase","arrival"). paramValue("FlightPhase","dispatch").
+paramValue("EventScenario","allEventScenarios"). paramValue("EventScenario","specialPort"). paramValue("EventScenario","heliport"). paramValue("EventScenario","waterlaneSki"). paramValue("EventScenario","obstruction"). paramValue("EventScenario","closure"). paramValue("EventScenario","runwayClosure"). paramValue("EventScenario","apronClosure"). paramValue("EventScenario","aerodromeBeaconStatus"). paramValue("EventScenario","aerodromeEquipmentStatus").
+
+covers("allInterests", "area"). covers("allInterests", "aircraft"). covers("allInterests", "time").
+covers("aircraft", "landplane"). covers("aircraft", "seaplane"). covers("aircraft", "helicopter"). covers("aircraft", "unspecifiedAircraft").
+covers("allFlightPhases","onground"). covers("allFlightPhases","departure"). covers("allFlightPhases","enroute"). covers("allFlightPhases","arrival"). covers("allFlightPhases","dispatch").
+covers("allEventScenarios","specialPort"). covers("allEventScenarios","obstruction"). covers("allEventScenarios","closure"). covers("allEventScenarios","aerodromeBeaconStatus"). covers("allEventScenarios","aerodromeEquipmentStatus").
+covers("specialPort","heliport"). covers("specialPort","waterlaneSki").
+covers("closure","runwayClosure"). covers("closure","apronClosure").
+
+% Contexts
+context("ctx0"). hasName("ctx0","allInterests_allFlightPhases_allEventScenarios"). hasModule("ctx0","module0"). hasContextClass("ctx0","aimCtx").
+hasParamValue("ctx0", "Interest","allInterests"). hasParamValue("ctx0", "FlightPhase", "allFlightPhases"). hasParamValue("ctx0", "EventScenario","allEventScenarios").
+context("ctx1"). hasName("ctx1","aircraft_allFlightPhases_obstruction"). hasModule("ctx1","module1"). hasContextClass("ctx1","aimCtx").
+hasParamValue("ctx1", "Interest","aircraft"). hasParamValue("ctx1", "FlightPhase", "allFlightPhases"). hasParamValue("ctx1", "EventScenario","obstruction").
+context("ctx2"). hasName("ctx2","helicopter_allFlightPhases_obstruction"). hasModule("ctx2","module2"). hasContextClass("ctx2","aimCtx").
+hasParamValue("ctx2", "Interest","helicopter"). hasParamValue("ctx2", "FlightPhase", "allFlightPhases"). hasParamValue("ctx2", "EventScenario","obstruction").
+context("ctx3"). hasName("ctx3","aircraft_onground_closure"). hasModule("ctx3","module3"). hasContextClass("ctx3","aimCtx").
+hasParamValue("ctx3", "Interest","aircraft"). hasParamValue("ctx3", "FlightPhase", "onground"). hasParamValue("ctx3", "EventScenario","closure").
+context("ctx4"). hasName("ctx4","landplane_onground_runwayClosure"). hasModule("ctx4","module4"). hasContextClass("ctx4","aimCtx").
+hasParamValue("ctx4", "Interest","landplane"). hasParamValue("ctx4", "FlightPhase", "onground"). hasParamValue("ctx4", "EventScenario","runwayClosure").
+context("ctx5"). hasName("ctx5","landplane_allFlightPhases_specialPort"). hasModule("ctx5","module5"). hasContextClass("ctx5","aimCtx").
+hasParamValue("ctx5", "Interest","landplane"). hasParamValue("ctx5", "FlightPhase", "allFlightPhases"). hasParamValue("ctx5", "EventScenario","specialPort").
+context("ctx6"). hasName("ctx6","landplane_allFlightPhases_aerodromeBeaconStatus"). hasModule("ctx6","module6"). hasContextClass("ctx6","aimCtx").
+hasParamValue("ctx6", "Interest","landplane"). hasParamValue("ctx6", "FlightPhase", "allFlightPhases"). hasParamValue("ctx6", "EventScenario","aerodromeBeaconStatus").
+context("ctx7"). hasName("ctx7","aircraft_onground_aerodromeEquipment"). hasModule("ctx7","module7"). hasContextClass("ctx7","aimCtx").
+hasParamValue("ctx7", "Interest","aircraft"). hasParamValue("ctx7", "FlightPhase", "onground"). hasParamValue("ctx7", "EventScenario","aerodromeEquipmentStatus").
+
+% Determine Paremter Values
+detParamValue(BC,"Interest",Val) :- businessCase(BC), hasInterestSpec(BC,I), hasDescProp(I,"interest",A), aircraft(A), hasDescProp(A,"type",Val).
+detParamValue(BC,"FlightPhase",Val) :- businessCase(BC), hasInterestSpec(BC,I), hasDescProp(I,"flightPhase",Val).
+detParamValue(BC,"EventScenario","runwayClosure") :- businessCase(BC), hasNOTAM(BC,N), notam(N), hasDescProp(N,"feature","runway"), hasDescProp(N,"status","closed").
+detParamValue(BC,"EventScenario","runwayClosure") :- businessCase(BC), hasNOTAM(BC,N), notam(N), hasDescProp(N,"feature","runway"), hasDescProp(N,"status","limited").
+detParamValue(BC,"EventScenario","apronClosure") :- businessCase(BC), hasNOTAM(BC,N), notam(N), hasDescProp(N,"feature","apron"), hasDescProp(N,"status","closed").
+detParamValue(BC,"EventScenario","obstruction") :- businessCase(BC), hasNOTAM(BC,N), notam(N), hasDescProp(N,"feature","obstruction").
+detParamValue(BC,"EventScenario","heliport") :- businessCase(BC), hasNOTAM(BC,N), notam(N), hasDescProp(N,"feature","heliport").
+detParamValue(BC,"EventScenario","waterlaneSki") :- businessCase(BC), hasNOTAM(BC,N), notam(N), hasDescProp(N,"feature","waterlaneSki").
+detParamValue(BC,"EventScenario","aerodromeBeaconStatus") :- businessCase(BC), hasNOTAM(BC,N), notam(N), hasDescProp(N,"feature","aerodromeBeacon"), hasDescProp(N,"status",ANON).
+detParamValue(BC,"EventScenario","aerodromeEquipmentStatus") :- businessCase(BC), hasNOTAM(BC,N), notam(N), hasDescProp(N,"feature","aerodromeILS"), hasDescProp(N,"status",ANON).
+
+% -----------------------------------------------------------------------------
+% DETERMINE RELEVANT CONTEXTS AND THE MOST SPECIFIC RELEVANT CONTEXT
+% -----------------------------------------------------------------------------
+bcParamCover(BC,Ctx,Param) :- hasParamValue(Ctx,Param,PVal), detParamValue(BC,Param,PVal2), trCovers(PVal,PVal2).
+notBcParamCover(BC,Ctx,Param) :- businessCase(BC), context(Ctx), hasContextClass(Ctx,CtxCl), hasParameter(CtxCl,Param), not bcParamCover(BC,Ctx,Param).
+detRelevantCtxs(BC,Ctx) :- bcParamCover(BC,Ctx,X), not notBcParamCover(BC,Ctx,Y).
+
+hasRelevantDescendant(BC,Ctx) :- detRelevantCtxs(BC,Ctx), detRelevantCtxs(BC,Ctx2), ctxInherits(Ctx2,Ctx), not w_ctxIdent(Ctx,Ctx2), Ctx!=Ctx2.
+detMostSpecificCtx(BC,Ctx) :- detRelevantCtxs(BC,Ctx), not hasRelevantDescendant(BC,Ctx).
+
+@output("detMostSpecificCtx"). @post("detMostSpecificCtx","orderby(1,2)").
+@output("detRelevantCtxs"). @post("detRelevantCtxs","orderby(1,2)").
+
+% -----------------------------------------------------------------------------
+% WARNINGS
+% -----------------------------------------------------------------------------
+w_incompleteCtxSpec(C) :- parameter(P), context(C), not hasParamValue(C,P,_).
+@output("w_incompleteCtxSpec").
+
+ctxDiffParamValue(Ctx1,Ctx2) :- context(Ctx1), context(Ctx2), hasParamValue(Ctx1,P,PVal1), hasParamValue(Ctx2,P,PVal2), PVal1!=PVal2.
+w_ctxIdent(Ctx1,Ctx2) :- context(Ctx1), context(Ctx2), not ctxDiffParamValue(Ctx1,Ctx2),Ctx1!=Ctx2.
+@output("w_ctxIdent").
+
+%---------------------------------------------BUSINESS CASES-----------------------------------------------------
+% -----------------------------------------------------------------------------
+% DEFINITION OF SEMNOTAMCASES, THEIR INTERSTsPECS, AND NOTAMS
+% -----------------------------------------------------------------------------
+hasBusinessCaseClass(BC,"semNOTAMCase") :- businessCase(BC).
+businessCase("bc1_rwyLimit"). hasInterestSpec("bc1_rwyLimit","iSpec1"). hasNOTAM("bc1_rwyLimit", "nRwyLimitation").
+businessCase("bc1_apronCl"). hasInterestSpec("bc1_apronCl","iSpec1"). hasNOTAM("bc1_apronCl", "nApronClosure").
+businessCase("bc1_rwyCl"). hasInterestSpec("bc1_rwyCl","iSpec1"). hasNOTAM("bc1_rwyCl", "nRwyClosure").
+businessCase("bc1_obstructionT"). hasInterestSpec("bc1_obstructionT","iSpec1"). hasNOTAM("bc1_obstructionT", "nObstructionT").
+businessCase("bc1_obstructionC"). hasInterestSpec("bc1_obstructionC","iSpec1"). hasNOTAM("bc1_obstructionC", "nObstructionC").
+businessCase("bc1_specialPort"). hasInterestSpec("bc1_specialPort","iSpec1"). hasNOTAM("bc1_specialPort", "nSpecialPort").
+businessCase("bc1_aeroBeacon"). hasInterestSpec("bc1_aeroBeacon","iSpec1"). hasNOTAM("bc1_aeroBeacon", "nAeroBeacon").
+businessCase("bc1_aeroEquip"). hasInterestSpec("bc1_aeroEquip","iSpec1"). hasNOTAM("bc1_aeroEquip", "nAeroEquip").
+
+businessCase("bc2_rwyLimit"). hasInterestSpec("bc2_rwyLimit","iSpec2"). hasNOTAM("bc2_rwyLimit", "nRwyLimitation").
+businessCase("bc2_apronCl"). hasInterestSpec("bc2_apronCl","iSpec2"). hasNOTAM("bc2_apronCl", "nApronClosure").
+businessCase("bc2_rwyCl"). hasInterestSpec("bc2_rwyCl","iSpec2"). hasNOTAM("bc2_rwyCl", "nRwyClosure").
+businessCase("bc2_obstructionT"). hasInterestSpec("bc2_obstructionT","iSpec2"). hasNOTAM("bc2_obstructionT", "nObstructionT").
+businessCase("bc2_obstructionC"). hasInterestSpec("bc2_obstructionC","iSpec2"). hasNOTAM("bc2_obstructionC", "nObstructionC").
+businessCase("bc2_specialPort"). hasInterestSpec("bc2_specialPort","iSpec2"). hasNOTAM("bc2_specialPort", "nSpecialPort").
+businessCase("bc2_aeroBeacon"). hasInterestSpec("bc2_aeroBeacon","iSpec2"). hasNOTAM("bc2_aeroBeacon", "nAeroBeacon").
+businessCase("bc2_aeroEquip"). hasInterestSpec("bc2_aeroEquip","iSpec2"). hasNOTAM("bc2_aeroEquip", "nAeroEquip").
+
+businessCase("bc3_rwyLimit"). hasInterestSpec("bc3_rwyLimit","iSpec3"). hasNOTAM("bc3_rwyLimit", "nRwyLimitation").
+businessCase("bc3_apronCl"). hasInterestSpec("bc3_apronCl","iSpec3"). hasNOTAM("bc3_apronCl", "nApronClosure").
+businessCase("bc3_rwyCl"). hasInterestSpec("bc3_rwyCl","iSpec3"). hasNOTAM("bc3_rwyCl", "nRwyClosure").
+businessCase("bc3_obstructionT"). hasInterestSpec("bc3_obstructionT","iSpec3"). hasNOTAM("bc3_obstructionT", "nObstructionT").
+businessCase("bc3_obstructionC"). hasInterestSpec("bc3_obstructionC","iSpec3"). hasNOTAM("bc3_obstructionC", "nObstructionC").
+businessCase("bc3_specialPort"). hasInterestSpec("bc3_specialPort","iSpec3"). hasNOTAM("bc3_specialPort", "nSpecialPort").
+businessCase("bc3_aeroBeacon"). hasInterestSpec("bc3_aeroBeacon","iSpec3"). hasNOTAM("bc3_aeroBeacon", "nAeroBeacon").
+businessCase("bc3_aeroEquip"). hasInterestSpec("bc3_aeroEquip","iSpec3"). hasNOTAM("bc3_aeroEquip", "nAeroEquip").
+
+w_incompleteSemNOTAMCase(BC) :- businessCase(BC), not hasInterestSpec(BC,_).
+w_incompleteSemNOTAMCase(BC) :- businessCase(BC), not hasNOTAM(BC,_).
+@output("w_incompleteSemNOTAMCase").
+
+interestSpec("iSpec1"). hasDescProp("iSpec1","interest","Boeing737"). hasDescProp("iSpec1","flightPhase","onground").
+interestSpec("iSpec2"). hasDescProp("iSpec2","interest","BellAugusta"). hasDescProp("iSpec2","flightPhase","onground").
+interestSpec("iSpec3"). hasDescProp("iSpec3","interest","BellAugusta"). hasDescProp("iSpec3","flightPhase","arrival").
+
+notam("nRwyLimitation"). hasDescProp("nRwyLimitation","feature","runway"). hasDescProp("nRwyLimitation","status","limited"). hasDescProp("nRwyLimitation","weightRestriction","500000").
+notam("nApronClosure"). hasDescProp("nApronClosure","feature","apron"). hasDescProp("nApronClosure","status","closed").
+notam("nRwyClosure"). hasDescProp("nRwyClosure","feature","runway"). hasDescProp("nRwyClosure","status","closed").
+notam("nObstructionT"). hasDescProp("nObstructionT","feature","obstruction"). hasDescProp("nObstructionT","status","tree").
+notam("nObstructionC"). hasDescProp("nObstructionC","feature","obstruction"). hasDescProp("nObstructionC","status","crane").
+notam("nSpecialPort"). hasDescProp("nSpecialPort","feature","waterlaneSki"). hasDescProp("nSpecialPort","status","limited").
+notam("nAeroBeacon"). hasDescProp("nAeroBeacon","feature","aerodromeBeacon"). hasDescProp("nAeroBeacon","status","down").
+notam("nAeroEquip"). hasDescProp("nAeroEquip","feature","aerodromeILS"). hasDescProp("nAeroEquip","status","down").
+
+aircraft("Boeing737"). hasDescProp("Boeing737","weight","194700"). hasDescProp("Boeing737","type","landplane").
+aircraft("BellAugusta"). hasDescProp("BellAugusta","type","helicopter").

@@ -1,0 +1,41 @@
+% ------------------------------------------------------------------------
+% Dynamic Behavioral Modification Detection
+% INPUT: Meta-representations of resultset pairs (parent and child resultsets)
+%        inheritance relations of modules for which resultsets are given
+% OUTPUT: grown predicates
+%         shrunk predicates
+%         modified predicates
+% ------------------------------------------------------------------------
+% Find module labels for module IDs
+moduleLbl(M,L) :- hasAnnotation(M,A), hasName(A,"module"), hasArgument(A,Arg,0), hasSerialization(Arg,L1), L = substring(L1,1,string_length(L1)-1).
+
+% Determine inheritance relationships in provided meta-representations
+inherits(MC,MP) :- hasAnnotation(MC,A), hasName(A,"inherits"), hasArgument(A,Arg,0), hasSerialization(Arg,MP1), moduleLbl(MP,MPL), MPL = substring(MP1,1,string_length(MP1)-1).
+tInherits(M,M2) :- inherits(M,M2).
+tInherits(M,M2) :- tInherits(M,M1), inherits(M1,M2).
+
+%requires resultsets where an annotation @resultset("<module>") is required where <module> is the module generating the resultset
+resultset(RS,M) :- hasAnnotation(RS,A), hasName(A,"resultset"), hasArgument(A,Arg,0), hasSerialization(Arg,L1), moduleLbl(M,L), L = substring(L1,1,string_length(L1)-1).
+
+%Currently only either numbers or strings in facts are possible, currently no means to check for type of serialization!!
+%FOR strings only
+%factPredicate(M,F,PRED,CONST,POS) :- resultset(M,_), hasFact(M,F), relationalAtom(F), hasName(F,PRED), hasArgument(F,Arg,POS), term(Arg), hasSerialization(Arg,L), CONST = substring(L,1,string_length(L)-1).
+%FOR numbers only
+factPredicate(M,F,PRED,L,POS) :- resultset(M,_), hasFact(M,F), relationalAtom(F), hasName(F,PRED), hasArgument(F,Arg,POS), term(Arg), hasSerialization(Arg,L).
+
+factsGrown(C,P,PRED) :- moduleLbl(C,_), moduleLbl(P,_), resultset(RS1,C), resultset(RS2,P), tInherits(C,P), factPredicate(RS1,_,PRED,ARG,POS), not factPredicate(RS2,_,PRED,ARG,POS), factPredicate(RS2,_,PRED,_,_).
+factsGrown(C,P,PRED) :- moduleLbl(C,_), moduleLbl(P,_), resultset(RS1,C), resultset(RS2,P), tInherits(C,P), factPredicate(RS1,_,PRED,ARG,POS), not factPredicate(RS2,_,PRED,ARG,POS), factPredicate(RS2,_,PRED,_,_).
+factsShrunk(C,P,PRED) :- moduleLbl(C,_), moduleLbl(P,_), resultset(RS1,C), resultset(RS2,P), tInherits(C,P), factPredicate(RS2,_,PRED,ARG,POS), not factPredicate(RS1,_,PRED,ARG,POS).
+factsModified(M2,M,P) :- factsGrown(M2,M,P), factsShrunk(M2,M,P).
+factsIdentical(C,P) :- resultset(_,C), resultset(_,P), tInherits(C,P), moduleLbl(C,_), moduleLbl(P,_), not factsGrown(C,P,_), not factsShrunk(C,P,_).
+
+grown(M2,M,P) :- factsGrown(M2,M,P), not factsModified(M2,M,P).
+shrunk(M2,M,P) :- factsShrunk(M2,M,P), not factsModified(M2,M,P).
+
+@output("factsModified"). @ouput("factsModified","orderby(1,2)").
+@output("grown").
+@output("shrunk").
+
+% @output("factsGrown"). @ouput("factsGrown","orderby(1,2,3").
+% @output("factsShrunk"). @ouput("factsShrunk","orderby(1,2,3)").
+% @output("factsIdentical"). @ouput("factsIdentical","orderby(1,2)").

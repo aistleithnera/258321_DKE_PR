@@ -1,0 +1,113 @@
+% ------------------------------------------------------------------------
+% Structural modifciation detection (Meta-Rep)
+% INPUT: Meta-representations of relevant module inheritance tree
+% OUTPUT: added output/input predicates
+%         omitted output/input predicates
+%         redefined output/input predicates
+%         added/omitted predicate annotations
+% ------------------------------------------------------------------------
+% Find module labels for module IDs
+moduleLbl(M,L) :- hasAnnotation(M,A), hasName(A,"module"), hasArgument(A,Arg,0), hasSerialization(Arg,L1), L = substring(L1,1,string_length(L1)-1).
+
+% Determine inheritance relationships in provided meta-representations
+inherits(MC,MP) :- hasAnnotation(MC,A), hasName(A,"inherits"), hasArgument(A,Arg,0), hasSerialization(Arg,MP1), moduleLbl(MP,MPL), MPL = substring(MP1,1,string_length(MP1)-1).
+tInherits(M,M2) :- inherits(M,M2).
+tInherits(M,M2) :- tInherits(M,M1), inherits(M1,M2).
+
+% Input and Output predicates
+inputPredicate(M,P,A) :- tHasAnnotationM(M,A), hasName(A,"input"), not tModOpStmt(M,_,A), hasArgument(A,Arg2,0), hasSerialization(Arg2,L1), P = substring(L1,1,string_length(L1)-1).
+outputPredicate(M,P,A) :- tHasAnnotationM(M,A), hasName(A,"output"), not tModOpStmt(M,_,A), hasArgument(A,Arg2,0), hasSerialization(Arg2,L1), P = substring(L1,1,string_length(L1)-1).
+
+% Defined restrictions and modification operations
+restriction("no_additional_input").
+restriction("no_additional_output").
+restriction("no_additional_annotation").
+restriction("non_omitable").
+restriction("non_redefinable").
+restriction("non_shrinkable").
+restriction("non_growable").
+modOp("remove"). modOp("removeQ").
+modOp("redefines"). modOp("redefinesQ").
+modOp("inherits").
+
+% Inheritance Annotations
+inhAnnotation(A) :- hasAnnotation(_,A), hasName(A,N), restriction(N).
+inhAnnotation(A) :- hasAnnotation(_,A), hasName(A,N), modOp(N).
+
+% Which statements exist in a module?
+hasStmt(M,S) :- hasRule(M,S).
+hasStmt(M,S) :- hasFact(M,S).
+hasStmt(M,S) :- moduleLbl(M,_), hasAnnotation(M,S).
+
+% Only labeled statements are interesting, others always propagated
+stmtLbl(R,L) :- hasRule(M,R), hasAnnotation(R,A), hasName(A,"label"), hasArgument(A,Arg,0), hasSerialization(Arg,L1), L = substring(L1,1,string_length(L1)-1).
+stmtLbl(F,L) :- hasFact(M,F), hasAnnotation(F,A), hasName(A,"label"), hasArgument(A,Arg,0), hasSerialization(Arg,L1), L = substring(L1,1,string_length(L1)-1).
+stmtLbl(A,L) :- hasAnnotation(M,A), hasAnnotation(A,A2), hasName(A2,"label"), hasArgument(A2,Arg,0), hasSerialization(Arg,L1), L = substring(L1,1,string_length(L1)-1).
+stmtML(M,S,L) :- stmtLbl(S,L), hasStmt(M,S).
+
+% RESOLVE INHERITANCE
+% Unqualified remove and redefine
+redefineStmtLbl(M,L) :- hasAnnotation(M,A), hasName(A,"redefines"), hasArgument(A,Arg2,1), hasSerialization(Arg2,L1), L = substring(L1,1,string_length(L1)-1).
+removeStmtLbl(M,L) :- hasAnnotation(M,A), hasName(A,"remove"), hasArgument(A,Arg1,0), hasSerialization(Arg1,L1), L = substring(L1,1,string_length(L1)-1).
+% Any statement except inheritance annotations can be removed
+redefineStmt(M,S):- redefineStmtLbl(M,L), stmtLbl(S,L), not inhAnnotation(S).
+removeStmt(M,S):- removeStmtLbl(M,L), stmtLbl(S,L), not inhAnnotation(S).
+
+% Qualified remove and redefine
+redefineStmtQ(M,L,MQ) :- hasAnnotation(M,A), hasName(A,"redefinesQ"), hasArgument(A,Arg2,1), hasSerialization(Arg2,L1), hasArgument(A,Arg3,2), hasSerialization(Arg3,L2), L = substring(L1,1,string_length(L1)-1), MQ = substring(L2,1,string_length(L2)-1).
+removeStmtQ(M,L,MQ) :- hasAnnotation(M,A), hasName(A,"removeQ"), hasArgument(A,Arg1,0), hasSerialization(Arg1,L1), hasArgument(A,Arg2,1), hasSerialization(Arg2,L2), L = substring(L1,1,string_length(L1)-1), MQ = substring(L2,1,string_length(L2)-1).
+redefineStmt(M,S) :- redefineStmtQ(M,L,MQ), stmtML(MQ,S,L), not inhAnnotation(S).
+removeStmt(M,S) :- removeStmtQ(M,L,MQ), stmtML(MQ,S,L), not inhAnnotation(S).
+
+% Summarize modification operation statements
+modOpStmt(M,S) :- removeStmt(M,S).
+modOpStmt(M,S) :- redefineStmt(M,S).
+tModOpStmt(M,M,S) :- modOpStmt(M,S).
+tModOpStmt(M,Morg,S) :- inherits(M,M2), tModOpStmt(M2,Morg,S).
+
+% Determine for each module its active module and statement annotations
+tHasAnnotationM(M,A) :- moduleLbl(M,L), hasAnnotation(M,A), hasName(A,N), not modOp(N).
+tHasAnnotationM(M,A) :- inherits(M,MP), tHasAnnotationM(MP,A).
+
+% ------------------------------------------------------------------------
+% STRUCTURAL RESTRICTIONS
+% ------------------------------------------------------------------------
+predicateAnnotation(M,"bind",P,ARG):- hasAnnotation(M,A), hasName(A,"bind"), hasArgument(A,Arg1,0), hasSerialization(Arg1,L1), hasArgument(A,Arg2,1), hasSerialization(Arg2,L2), P = substring(L1,1,string_length(L1)-1), ARG = substring(L2,1,string_length(L2)-1).
+
+additionalInput(M2,P0) :-  tInherits(M2,M), inputPredicate(M2,P2,_), not inputPredicate(M,P2,_), P0 = P2.
+additionalOutput(M2,P0) :-  tInherits(M2,M), outputPredicate(M2,P2,_), not outputPredicate(M,P2,_), P0 = P2.
+additionalAnnotation(M2,ANN,P) :-  tInherits(M2,M), predicateAnnotation(M2,ANN,P2,ARG), predicateAnnotation(M,ANN,P,ARG2), P = P2,ARG != ARG2. % if several binds exist this always reports a warning!
+omittedAnnotation(M2,ANN,P0) :-  tInherits(M2,M), predicateAnnotation(M,ANN,P,ARG), not  predicateAnnotation(M2,ANN,P,ARG), P0=P. % if several binds exist this always reports a warning!
+omitted(M2,P) :- tInherits(M2,M), outputPredicate(M,P,S), removeStmt(M2,S).
+omitted(M2,P) :- tInherits(M2,M), inputPredicate(M,P,S), removeStmt(M2,S).
+redefined(M2,P) :- tInherits(M2,M), outputPredicate(M,P,S), redefineStmt(M2,S).
+redefined(M2,P) :- tInherits(M2,M), inputPredicate(M,P,S), redefineStmt(M2,S).
+
+@output("additionalInput").
+@output("additionalOutput").
+@output("additionalAnnotation").
+@output("omitted").
+@output("redefined").
+@output("omittedAnnotation").
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Version using resolved meta-representations + inherits (predicateAnnotation only for bind yet)
+% Cannot detect redefine!!
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+inputPredicate(M,P) :- hasAnnotation(M,A), hasName(A,"input"), hasArgument(A,Arg2,0), hasSerialization(Arg2,L1), P = substring(L1,1,string_length(L1)-1).
+outputPredicate(M,P) :- hasAnnotation(M,A), hasName(A,"output"), hasArgument(A,Arg2,0), hasSerialization(Arg2,L1), P = substring(L1,1,string_length(L1)-1).
+predicateAnnotation(M,"bind",P,ARG):- hasAnnotation(M,A), hasName(A,"bind"), hasArgument(A,Arg1,0), hasSerialization(Arg1,L1), hasArgument(A,Arg2,1), hasSerialization(Arg2,L2), P = substring(L1,1,string_length(L1)-1), ARG = substring(L2,1,string_length(L2)-1).
+
+additionalInput(M2,P0) :-  inherits(M2,M), inputPredicate(M2,P2), not inputPredicate(M,P2), P0 = P2.
+additionalOutput(M2,P0) :-  inherits(M2,M), outputPredicate(M2,P2), not outputPredicate(M,P2), P0 = P2.
+additionalAnnotation(M2,ANN,P) :-  inherits(M2,M), predicateAnnotation(M2,ANN,P2,ARG), predicateAnnotation(M,ANN,P,ARG2), P = P2,ARG != ARG2. % if several binds exist this always reports a warning!
+omitted(M2,P0) :- inherits(M2,M), outputPredicate(M,P), not outputPredicate(M2,P), P0=P.
+omitted(M2,P0) :- inherits(M2,M), inputPredicate(M,P), not inputPredicate(M2,P), P0=P.
+omittedAnnotation(M2,ANN,P0) :-  inherits(M2,M), predicateAnnotation(M,ANN,P,ARG), not  predicateAnnotation(M2,ANN,P,ARG), P0=P.
+
+@output("additionalInput").
+@output("additionalOutput").
+@output("additionalAnnotation").
+@output("omitted").
+@output("omittedAnnotation").

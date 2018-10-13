@@ -1,0 +1,51 @@
+% ------------------------------------------------------------------------
+% Structural and Behavioral conformance
+% INPUT: Detected/reported modification operations
+%        modification restrictions
+% OUTPUT: Any violations
+% TODO: What about omitting predicate annotations? currently not implemented, also no restriction yet
+% ------------------------------------------------------------------------
+
+% ------------------------------------------------------------------------
+% STRUCTURAL RESTRICTIONS
+% Warning about violated restrictions
+w_noAdditionalInput(M,P) :- noAdditionalInput(M), additionalInput(M,P).
+w_noAdditionalOutput(M,P) :- noAdditionalOutput(M), additionalOutput(M,P).
+w_noAdditionalAnnotation(M,ANN,P) :- noAdditionalAnnotation(M,ANN,P), additionalAnnotation(M,ANN,P). % if several binds exist this always reports a warning!
+w_nonOmitableAnnotation(M,ANN,P) :- nonOmitableAnnotation(M,ANN,P), omittedAnnotation(M,ANN,P).
+w_nonOmitable(M,P) :- nonOmitable(M,P), omitted(M,P).
+w_nonRedefinable(M,P) :- nonRedefinable(M,P), redefined(M,P).
+
+@output("w_noAdditionalInput").
+@output("w_noAdditionalOutput").
+@output("w_noAdditionalAnnotation").
+@output("w_nonOmitable").
+@output("w_nonRedefinable").
+
+% ------------------------------------------------------------------------
+% BEHAVIORAL RESTRICTIONS
+w_nonGrowable(C,P) :- nonGrowable(C,P), grown(C,_,P).
+w_nonShrinkable(C,P) :- nonShrinkable(C,P), shrunk(C,_,P).
+
+@output("w_nonGrowable").
+@output("w_nonShrinkable").
+
+
+%-------------------------------------------------------------------------
+% OPTIONAL DERIVATION OF MODIFICATION RESTRICTIONS
+% Find module labels for module IDs
+% moduleLbl(M,L) :- hasAnnotation(M,A), hasName(A,"module"), hasArgument(A,Arg,0), hasSerialization(Arg,L1), L = substring(L1,1,string_length(L1)-1).
+%
+% % Determine for each module its active module and statement annotations
+% tHasAnnotationM(M,A) :- moduleLbl(M,L), hasAnnotation(M,A), hasName(A,N).
+% tHasAnnotationM(M,A) :- inherits(M,MP), tHasAnnotationM(MP,A).
+%
+% % Derive from meta-representation if not given directly
+% % Determine Restrictions defined in modules
+% noAdditionalInput(M) :- tHasAnnotationM(M,A), hasName(A,"no_additional_input").
+% noAdditionalOutput(M) :- tHasAnnotationM(M,A), hasName(A,"no_additional_output").
+% noAdditionalAnnotation(M,ANN,P) :- tHasAnnotationM(M,A), hasName(A,"no_additional_annotation"), hasArgument(A,Arg1,0), hasSerialization(Arg1,L1), hasArgument(A,Arg2,1), hasSerialization(Arg2,L2), P = substring(L1,1,string_length(L1)-1), ANN = substring(L2,1,string_length(L2)-1).
+% nonOmitable(M,P) :-  tHasAnnotationM(M,A), hasName(A,"non_omitable"), hasArgument(A,Arg1,0), hasSerialization(Arg1,L1), P = substring(L1,1,string_length(L1)-1).
+% nonRedefinable(M,P) :- tHasAnnotationM(M,A), hasName(A,"non_redefinable"), hasArgument(A,Arg1,0), hasSerialization(Arg1,L1), P = substring(L1,1,string_length(L1)-1).
+% nonGrowable(M,P) :- moduleStmt(M,F), tHasAnnotationM(M,A), hasName(A,"non_growable"), hasArgument(A,Arg1,0), hasSerialization(Arg1,L1), P  =substring(L1,1,string_length(L1)-1).
+% nonShrinkable(M,P) :- moduleStmt(M,F), tHasAnnotationM(M,A), hasName(A,"non_shrinkable"), hasArgument(A,Arg1,0), hasSerialization(Arg1,L1), P = substring(L1,1,string_length(L1)-1).

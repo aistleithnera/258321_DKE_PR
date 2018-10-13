@@ -1,0 +1,136 @@
+% ------------------------------------------------------------------------
+% Static behavioral modification detection
+% INPUT: Meta-representations of modules in inheritance subtree
+% OUTPUT: grown predicates
+%         shrunk predicates
+%         modified predicates
+% ------------------------------------------------------------------------
+
+% Find module labels for module IDs
+moduleLbl(M,L) :- hasAnnotation(M,A), hasName(A,"module"), hasArgument(A,Arg,0), hasSerialization(Arg,L1), L = substring(L1,1,string_length(L1)-1).
+
+% Determine inheritance relationships in provided meta-representations
+inherits(MC,MP) :- hasAnnotation(MC,A), hasName(A,"inherits"), hasArgument(A,Arg,0), hasSerialization(Arg,MP1), moduleLbl(MP,MPL), MPL = substring(MP1,1,string_length(MP1)-1).
+tInherits(M,M2) :- inherits(M,M2).
+tInherits(M,M2) :- tInherits(M,M1), inherits(M1,M2).
+
+% Predicates in a module
+outputPredicates(M,P) :- tHasAnnotationM(M,A), hasName(A,"output"), not tModOpStmt(M,_,A), hasArgument(A,Arg2,0), hasSerialization(Arg2,L1), P = substring(L1,1,string_length(L1)-1).
+
+% Defined restrictions and modification operations
+restriction("no_additional_input").
+restriction("no_additional_output").
+restriction("no_additional_annotation").
+restriction("non_omitable").
+restriction("non_redefinable").
+restriction("non_shrinkable").
+restriction("non_growable").
+modOp("remove"). modOp("removeQ").
+modOp("redefines"). modOp("redefinesQ").
+modOp("inherits").
+
+% Inheritance Annotations
+inhAnnotation(A) :- hasAnnotation(_,A), hasName(A,N), restriction(N).
+inhAnnotation(A) :- hasAnnotation(_,A), hasName(A,N), modOp(N).
+
+% Which statements exist in a module?
+hasStmt(M,S) :- hasRule(M,S).
+hasStmt(M,S) :- hasFact(M,S).
+hasStmt(M,S) :- moduleLbl(M,_), hasAnnotation(M,S).
+
+% Only labeled statements are interesting, others always propagated
+stmtLbl(R,L) :- hasRule(M,R), hasAnnotation(R,A), hasName(A,"label"), hasArgument(A,Arg,0), hasSerialization(Arg,L1), L = substring(L1,1,string_length(L1)-1).
+stmtLbl(F,L) :- hasFact(M,F), hasAnnotation(F,A), hasName(A,"label"), hasArgument(A,Arg,0), hasSerialization(Arg,L1), L = substring(L1,1,string_length(L1)-1).
+stmtLbl(A,L) :- hasAnnotation(M,A), hasAnnotation(A,A2), hasName(A2,"label"), hasArgument(A2,Arg,0), hasSerialization(Arg,L1), L = substring(L1,1,string_length(L1)-1).
+stmtML(M,S,L) :- stmtLbl(S,L), hasStmt(M,S).
+
+% ------------------------------------------------------------------------
+% RESOLVE INHERITANCE
+% ------------------------------------------------------------------------
+% Unqualified remove and redefine
+removeStmt(M,S) :- hasAnnotation(M,A), hasName(A,"remove"), hasArgument(A,Arg1,0), hasSerialization(Arg1,L1), stmtLbl(S,L), not inhAnnotation(S), L = substring(L1,1,string_length(L1)-1).
+removeStmtQ(M,S) :- hasAnnotation(M,A), hasName(A,"removeQ"), hasArgument(A,Arg1,0), hasSerialization(Arg1,L1), hasArgument(A,Arg2,1), hasSerialization(Arg2,L2), stmtML(MQ,S,L), not inhAnnotation(S), L = substring(L1,1,string_length(L1)-1), MQ = substring(L2,1,string_length(L2)-1).
+
+redefinesStmt(M2,R2,R) :- hasAnnotation(M2,A), hasName(A,"redefines"), hasArgument(A,Arg1,0), hasSerialization(Arg1,L1), hasArgument(A,Arg2,1), hasSerialization(Arg2,L2), stmtLbl(R2,R2Lbl), stmtLbl(R,RLbl), R2Lbl=substring(L1,1,string_length(L1)-1), RLbl=substring(L2,1,string_length(L2)-1).
+redefinesStmt(M2,R2,R) :- hasAnnotation(M2,A), hasName(A,"redefinesQ"), hasArgument(A,Arg1,0), hasSerialization(Arg1,L1), hasArgument(A,Arg2,1), hasSerialization(Arg2,L2), hasArgument(A,Arg3,2), hasSerialization(Arg3,L3), stmtLbl(R2,R2Lbl), stmtML(M,R,RLbl), R2Lbl=substring(L1,1,string_length(L1)-1), RLbl=substring(L2,1,string_length(L2)-1), M = substring(L3,1,string_length(L3)-1).
+
+% Modification operation statements
+modOpStmt(M,S) :- removeStmt(M,S).
+modOpStmt(M,S) :- redefinesStmt(M,_,S).
+tModOpStmt(M,M,S) :- modOpStmt(M,S).
+tModOpStmt(M,Morg,S) :- inherits(M,M2), tModOpStmt(M2,Morg,S).
+
+% DETERMINE ACTIVE STATEMENTS AND MODULE/STATEMENT ANNOTATIONS FOR MODULES
+% Derive for each module its active rules by inheriting
+tHasRule(M,R) :- hasRule(M,R).
+tHasRule(M,R) :- inherits(M,MP), tHasRule(MP,R).
+
+% Determine for each module its active module and statement annotations
+tHasAnnotationM(M,A) :- moduleLbl(M,L), hasAnnotation(M,A), hasName(A,N), not modOp(N).
+tHasAnnotationM(M,A) :- inherits(M,MP), tHasAnnotationM(MP,A).
+
+% -----------------------------------------------------------------------------
+% PRELIMINARY STATIC DETECTION OF MODIFICATIONS
+% -----------------------------------------------------------------------------
+mHasRule(M,R) :- tHasRule(M,R), not tModOpStmt(M,_,R).
+
+identicalAtom(R1,A1,R2,A2,P) :- redefinesStmt(_,R2,R1), hasPositiveBodyAtom(R1,A1), hasName(A1,P), hasPositiveBodyAtom(R2,A2), hasName(A2,P), relationalAtom(A1), relationalAtom(A2), not differingAtom(R1,A1,R2,A2,P).
+differingAtom(R1,A1,R2,A2,P) :- redefinesStmt(_,R2,R1), hasPositiveBodyAtom(R1,A1), hasPositiveBodyAtom(R2,A2), relationalAtom(A1), relationalAtom(A2), hasName(A1,P), hasName(A2,P), hasArgument(A1,Arg1,Pos), hasArgument(A2,Arg2,Pos), hasSerialization(Arg1,S1), hasSerialization(Arg2,S2), S1!=S2, A1!=A2.
+
+%added Facts or removed facts imply facts grown or removed respectively
+factsGrown(M2,M,P) :- tInherits(M2,M), hasFact(M2,F), not redefinesStmt(M2,F,_), relationalAtom(F), hasName(F,P).
+%Merging facts from several parents
+factsGrown(M2,M,P) :- inherits(M2,M), hasFact(M,F), not redefinesStmt(M2,F,_), relationalAtom(F), hasName(F,P), tInherits(M2,M3), hasFact(M3,F2), not redefinesStmt(M2,F2,_), relationalAtom(F2), hasName(F2,P), M <> M3.
+factsShrunk(M2,M,P) :- tInherits(M2,M), removeStmt(M2,R), hasFact(M,F), relationalAtom(F), hasName(F,P).
+
+% Added Rules or removed rules imply facts grown or removed respectively
+factsGrown(M2,M,P) :- tInherits(M2,M), hasRule(M2,R), not redefinesStmt(M2,R,_), hasPositiveHeadAtom(R,A), relationalAtom(A), hasName(A,P).
+factsGrown(M2,M,P) :- inherits(M2,M), hasRule(M,R), not redefinesStmt(M2,R,_), hasPositiveHeadAtom(R,A), relationalAtom(A), hasName(A,P), tInherits(M2,M3), hasRule(M3,R2), not redefinesStmt(M2,R2,_), hasPositiveHeadAtom(R2,A2), relationalAtom(A2), hasName(A2,P), M <> M3.
+factsShrunk(M2,M,P) :- tInherits(M2,M), removeStmt(M2,R), hasRule(M,R), hasPositiveHeadAtom(R,A), relationalAtom(A), hasName(A,P).
+
+% Determine modifications to redefined rules
+samePosPredicate(M2,M,R2,P) :- redefinesStmt(M2,R2,R), hasRule(M,R), hasPositiveBodyAtom(R,A), hasPositiveBodyAtom(R2,A2), identicalAtom(R,A,R2,A2,P).
+lessPosPredicates(M2,M,R2,P) :- redefinesStmt(M2,R2,R), hasRule(M,R), hasPositiveBodyAtom(R,A), relationalAtom(A), hasName(A,P), not samePosPredicate(M2,M,R2,P).
+morePosPredicates(M2,M,R2,P) :- redefinesStmt(M2,R2,R), hasRule(M,R), hasPositiveBodyAtom(R2,A2), relationalAtom(A2), hasName(A2,P), not samePosPredicate(M2,M,R2,P).
+
+sameNegPredicate(M2,M,R2,P) :- redefinesStmt(M2,R2,R), hasRule(M,R), hasNegativeBodyAtom(R,A), relationalAtom(A), hasName(A,P), hasNegativeBodyAtom(R2,A2), relationalAtom(A2), hasName(A2,P2), P2=P.
+lessNegPredicates(M2,M,R2,P) :- redefinesStmt(M2,R2,R), hasRule(M,R), hasNegativeBodyAtom(R,A), relationalAtom(A), hasName(A,P), not sameNegPredicate(M2,M,R2,P).
+moreNegPredicates(M2,M,R2,P) :- redefinesStmt(M2,R2,R), hasRule(M,R), hasNegativeBodyAtom(R2,A2), relationalAtom(A2), hasName(A2,P), not sameNegPredicate(M2,M,R2,P).
+
+someCondition(M,R) :- hasRule(M,R), hasPositiveBodyAtom(R,A), nonRelationalAtom(A).
+noCondition(M,R) :- hasRule(M,R), not someCondition(M,R).
+sameCondition(M2,M,R2,C) :- redefinesStmt(M2,R2,R), hasRule(M,R), hasPositiveBodyAtom(R,A), nonRelationalAtom(A), hasSerialization(A,C), hasPositiveBodyAtom(R2,A2), nonRelationalAtom(A2), hasSerialization(A2,C).
+diffCondition(M2,M,R2) :- redefinesStmt(M2,R2,R), hasRule(M,R), not noCondition(M,R), hasPositiveBodyAtom(R,A), nonRelationalAtom(A), hasSerialization(A,C), not sameCondition(M2,M,R2,C).
+diffCondition(M2,M,R2) :- redefinesStmt(M2,R2,R), hasRule(M,R), not noCondition(M,R),  hasPositiveBodyAtom(R2,A2), nonRelationalAtom(A2), hasSerialization(A2,C), not sameCondition(M2,M,R2,C).
+
+% Determine facts grown or shrunk for redefined rules
+factsGrown(M2,M,P) :- lessPosPredicates(M2,M,R,_), hasPositiveHeadAtom(R,A), relationalAtom(A), hasName(A,P).
+factsGrown(M2,M,P) :- lessNegPredicates(M2,M,R,_), hasPositiveHeadAtom(R,A), relationalAtom(A), hasName(A,P).
+factsShrunk(M2,M,P) :- morePosPredicates(M2,M,R,_), hasPositiveHeadAtom(R,A), relationalAtom(A), hasName(A,P).
+factsShrunk(M2,M,P) :- moreNegPredicates(M2,M,R,_), hasPositiveHeadAtom(R,A), relationalAtom(A), hasName(A,P).
+
+factsGrown(M2,M,P) :- diffCondition(M2,M,R), hasPositiveHeadAtom(R,A), relationalAtom(A), hasName(A,P).
+factsShrunk(M2,M,P) :- diffCondition(M2,M,R), hasPositiveHeadAtom(R,A), relationalAtom(A), hasName(A,P).
+factsShrunk(M2,M,P) :- redefinesStmt(M2,R2,R), noCondition(M,R), someCondition(M2,R2), hasPositiveHeadAtom(R,A), relationalAtom(A), hasName(A,P).
+
+factsGrown(M2,M,P) :- differingAtom(R1,_,R2,_,_), mHasRule(M,R1), mHasRule(M2,R2), hasPositiveHeadAtom(R2,A), relationalAtom(A), hasName(A,P).
+factsShrunk(M2,M,P) :- differingAtom(R1,_,R2,_,_), mHasRule(M,R1), mHasRule(M2,R2), hasPositiveHeadAtom(R2,A), relationalAtom(A), hasName(A,P).
+
+% Propagate fact changes along rule dependencies
+factsGrown(M2,M,P) :- mHasRule(M,R), hasPositiveHeadAtom(R,A0), hasName(A0,P), hasPositiveBodyAtom(R,A), hasName(A,N), factsGrown(M2,M,N).
+factsGrown(M2,M,P) :- mHasRule(M,R), hasPositiveHeadAtom(R,A0), hasName(A0,P), hasNegativeBodyAtom(R,A), hasName(A,N), factsShrunk(M2,M,N).
+
+factsShrunk(M2,M,P) :- mHasRule(M,R), hasPositiveHeadAtom(R,A0), hasName(A0,P), hasPositiveBodyAtom(R,A), hasName(A,N), factsShrunk(M2,M,N).
+factsShrunk(M2,M,P) :- mHasRule(M,R), hasPositiveHeadAtom(R,A0), hasName(A0,P), hasNegativeBodyAtom(R,A), hasName(A,N), factsGrown(M2,M,N).
+
+factsModified(M2,M,P) :- factsGrown(M2,M,P), factsShrunk(M2,M,P), outputPredicates(M2,P).
+factsIdentical(M2,M) :- moduleLbl(M,_), moduleLbl(M2,_), tInherits(M2,M), not factsGrown(M2,_,_), not factsShrunk(M2,_,_).
+
+grown(M2,M,P) :- factsGrown(M2,M,P), not factsModified(M2,M,P), outputPredicates(M2,P).
+shrunk(M2,M,P) :- factsShrunk(M2,M,P), not factsModified(M2,M,P), outputPredicates(M2,P).
+
+@output("grown"). @output("shrunk").
+@output("factsModified"). @post("factsModified","orderby(1,2,3)").
+@output("factsIdentical").
+@output("factsGrown"). @post("factsGrown", "orderby(1,2,3)"). @post("factsGrown","unique"). @post("factsShrunk","unique").
+@output("factsShrunk"). @post("factsShrunk", "orderby(1,2,3)").

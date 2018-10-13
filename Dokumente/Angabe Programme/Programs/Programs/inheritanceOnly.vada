@@ -1,0 +1,204 @@
+% ------------------------------------------------------------------------
+% Inheritance resolution
+% INPUT: module to be derived (toDerive)
+%        module meta-representations of relevant inheritance tree
+% OUTPUT: Meta-representation of target module
+%         Warnings regarding inheritance relations
+% ------------------------------------------------------------------------
+% @input("toDerive").
+toDerive("d").
+
+% ------------------------------------------------------------------------
+% GENERAL PREDICATES USED IN OTHER CODE SECTIONS
+% ------------------------------------------------------------------------
+% Definition of true needed for triple quotes
+true(#T). false(#F).
+
+% Find module labels for module IDs
+moduleLbl(M,L) :- hasAnnotation(M,A), hasName(A,"module"), hasArgument(A,Arg,0), hasSerialization(Arg,L1), L = substring(L1,1,string_length(L1)-1).
+
+% Find Id of module to be derived
+deriveModule(M) :- toDerive(L), moduleLbl(M,L).
+
+% Determine inheritance relationships in provided meta-representations
+inherits(MC,MP) :- hasAnnotation(MC,A), hasName(A,"inherits"), hasArgument(A,Arg,0), hasSerialization(Arg,MP1), moduleLbl(MP,MPL), MPL = substring(MP1,1,string_length(MP1)-1).
+tInherits(M,M2) :- inherits(M,M2).
+tInherits(M,M2) :- tInherits(M,M1), inherits(M1,M2).
+
+% Input and Output predicates
+inputPredicate(M,P) :- tHasAnnotationM(M,A), hasName(A,"input"), not tModOpStmt(M,_,A), hasArgument(A,Arg2,0), hasSerialization(Arg2,L1), P = substring(L1,1,string_length(L1)-1).
+outputPredicate(M,P) :- tHasAnnotationM(M,A), hasName(A,"output"), not tModOpStmt(M,_,A), hasArgument(A,Arg2,0), hasSerialization(Arg2,L1), P = substring(L1,1,string_length(L1)-1).
+
+% Defined restrictions and modification operations
+restriction("no_additional_input").
+restriction("no_additional_output").
+restriction("no_additional_annotation").
+restriction("non_omitable").
+restriction("non_redefinable").
+restriction("non_shrinkable").
+restriction("non_growable").
+modOp("remove"). modOp("removeQ").
+modOp("redefines"). modOp("redefinesQ").
+modOp("inherits").
+
+% Inheritance Annotations
+inhAnnotation(A) :- hasAnnotation(_,A), hasName(A,N), restriction(N).
+inhAnnotation(A) :- hasAnnotation(_,A), hasName(A,N), modOp(N).
+
+% Which statements exist in a module?
+hasStmt(M,S) :- hasRule(M,S).
+hasStmt(M,S) :- hasFact(M,S).
+hasStmt(M,S) :- moduleLbl(M,_), hasAnnotation(M,S).
+
+% Only labeled statements are interesting, others always propagated
+stmtLbl(R,L) :- hasRule(M,R), hasAnnotation(R,A), hasName(A,"label"), hasArgument(A,Arg,0), hasSerialization(Arg,L1), L = substring(L1,1,string_length(L1)-1).
+stmtLbl(F,L) :- hasFact(M,F), hasAnnotation(F,A), hasName(A,"label"), hasArgument(A,Arg,0), hasSerialization(Arg,L1), L = substring(L1,1,string_length(L1)-1).
+stmtLbl(A,L) :- hasAnnotation(M,A), hasAnnotation(A,A2), hasName(A2,"label"), hasArgument(A2,Arg,0), hasSerialization(Arg,L1), L = substring(L1,1,string_length(L1)-1).
+stmtML(M,S,L) :- stmtLbl(S,L), hasStmt(M,S).
+
+% RESOLVE INHERITANCE
+% Unqualified remove and redefine
+redefineStmtLbl(M,L) :- hasAnnotation(M,A), hasName(A,"redefines"), hasArgument(A,Arg2,1), hasSerialization(Arg2,L1), L = substring(L1,1,string_length(L1)-1).
+removeStmtLbl(M,L) :- hasAnnotation(M,A), hasName(A,"remove"), hasArgument(A,Arg1,0), hasSerialization(Arg1,L1), L = substring(L1,1,string_length(L1)-1).
+% Any statement except inheritance annotations can be removed
+redefineStmt(M,S):- redefineStmtLbl(M,L), stmtLbl(S,L), not inhAnnotation(S).
+removeStmt(M,S):- removeStmtLbl(M,L), stmtLbl(S,L), not inhAnnotation(S).
+
+% Qualified remove and redefine
+redefineStmtQ(M,L,MQ) :- hasAnnotation(M,A), hasName(A,"redefinesQ"), hasArgument(A,Arg2,1), hasSerialization(Arg2,L1), hasArgument(A,Arg3,2), hasSerialization(Arg3,L2), L = substring(L1,1,string_length(L1)-1), MQ = substring(L2,1,string_length(L2)-1).
+removeStmtQ(M,L,MQ) :- hasAnnotation(M,A), hasName(A,"removeQ"), hasArgument(A,Arg1,0), hasSerialization(Arg1,L1), hasArgument(A,Arg2,1), hasSerialization(Arg2,L2), L = substring(L1,1,string_length(L1)-1), MQ = substring(L2,1,string_length(L2)-1).
+redefineStmt(M,S) :- redefineStmtQ(M,L,MQ), stmtML(MQ,S,L), not inhAnnotation(S).
+removeStmt(M,S) :- removeStmtQ(M,L,MQ), stmtML(MQ,S,L), not inhAnnotation(S).
+
+% Module name annotations are not inherited
+removeStmt(M,A) :- hasAnnotation(M,A), hasName(A,"module"), not deriveModule(M).
+
+% Summarize modification operation statements
+modOpStmt(M,S) :- removeStmt(M,S).
+modOpStmt(M,S) :- redefineStmt(M,S).
+tModOpStmt(M,M,S) :- modOpStmt(M,S).
+tModOpStmt(M,Morg,S) :- inherits(M,M2), tModOpStmt(M2,Morg,S).
+
+% DETERMINE ACTIVE STATEMENTS AND MODULE/STATEMENT ANNOTATIONS FOR MODULES
+% Derive for each module its active rules by inheriting
+tHasRule(M,R) :- hasRule(M,R).
+tHasRule(M,R) :- inherits(M,MP), tHasRule(MP,R).
+moduleStmt(M,R) :- tHasRule(M,R), not tModOpStmt(M,_,R).
+mHasRule(M,R) :- tHasRule(M,R), not tModOpStmt(M,_,R).
+
+% Determine for each module its active facts by inheriting
+tHasFact(M,F) :- hasFact(M,F).
+tHasFact(M,F) :- inherits(M,MP), tHasFact(MP,F).
+moduleStmt(M,F) :- tHasFact(M,F), not tModOpStmt(M,_,F).
+
+% Determine for each module its active module and statement annotations
+tHasAnnotationM(M,A) :- moduleLbl(M,L), hasAnnotation(M,A), hasName(A,N), not modOp(N).
+tHasAnnotationM(M,A) :- inherits(M,MP), tHasAnnotationM(MP,A).
+tHasAnnotationS(M,Stmt,A) :- hasStmt(M,Stmt), hasAnnotation(Stmt,A).
+tHasAnnotationS(M,Stmt,A) :- inherits(M,MP), tHasAnnotationS(MP,Stmt,A).
+moduleStmt(M,A) :- tHasAnnotationM(M,A), not tModOpStmt(M,_,A).
+
+% Determine Restrictions defined in modules
+noAdditionalInput(M) :- moduleStmt(M,F), tHasAnnotationM(M,A), hasName(A,"no_additional_input").
+noAdditionalOutput(M) :- moduleStmt(M,F), tHasAnnotationM(M,A), hasName(A,"no_additional_output").
+noAdditionalAnnotation(M,ANN,P) :- moduleStmt(M,F), tHasAnnotationM(M,A), hasName(A,"no_additional_annotation"), hasArgument(A,Arg1,0), hasSerialization(Arg1,L1), hasArgument(A,Arg2,1), hasSerialization(Arg2,L2), P = substring(L1,1,string_length(L1)-1), ANN = substring(L2,1,string_length(L2)-1).
+nonOmitableAnnotation(M,ANN,P) :- moduleStmt(M,F), tHasAnnotationM(M,A), hasName(A,"non_omitable_annotation"), hasArgument(A,Arg1,0), hasSerialization(Arg1,L1), hasArgument(A,Arg2,1), hasSerialization(Arg2,L2), P = substring(L1,1,string_length(L1)-1), ANN = substring(L2,1,string_length(L2)-1).
+nonOmitable(M,P) :- moduleStmt(M,F), tHasAnnotationM(M,A), hasName(A,"non_omitable"), hasArgument(A,Arg1,0), hasSerialization(Arg1,L1), P = substring(L1,1,string_length(L1)-1).
+nonRedefinable(M,P) :- moduleStmt(M,F), tHasAnnotationM(M,A), hasName(A,"non_redefinable"), hasArgument(A,Arg1,0), hasSerialization(Arg1,L1), P = substring(L1,1,string_length(L1)-1).
+nonGrowable(M,P) :- moduleStmt(M,F), tHasAnnotationM(M,A), hasName(A,"non_growable"), hasArgument(A,Arg1,0), hasSerialization(Arg1,L1), P  =substring(L1,1,string_length(L1)-1).
+nonShrinkable(M,P) :- moduleStmt(M,F), tHasAnnotationM(M,A), hasName(A,"non_shrinkable"), hasArgument(A,Arg1,0), hasSerialization(Arg1,L1), P = substring(L1,1,string_length(L1)-1).
+
+% ------------------------------------------------------------------------
+% DETERMINE ACTIVE STATEMENTS AND ANNOTATIONS FOR THE MODULE TO BE DERIVED
+% ------------------------------------------------------------------------
+m_hasRule(M,R) :- tHasRule(M,R), not tModOpStmt(M,_,R), deriveModule(M).
+m_hasPositiveHeadAtom(R,AtomID), m_hasAtom(R,AtomID) :- m_hasRule(_,R), hasPositiveHeadAtom(R,AtomID).
+m_hasNegativeHeadAtom(R,AtomID), m_hasAtom(R,AtomID) :- m_hasRule(_,R), hasNegativeHeadAtom(R,AtomID).
+m_hasPositiveBodyAtom(R,AtomID), m_hasAtom(R,AtomID) :- m_hasRule(_,R), hasPositiveBodyAtom(R,AtomID).
+m_hasNegativeBodyAtom(R,AtomID), m_hasAtom(R,AtomID) :- m_hasRule(_,R), hasNegativeBodyAtom(R,AtomID).
+m_relationalAtom(Atom) :- m_hasAtom(_,Atom), relationalAtom(Atom).
+m_hasName(Atom,N) :- m_relationalAtom(Atom), hasName(Atom,N).
+m_hasArgument(Atom,Arg,Pos), m_term(Arg) :- m_relationalAtom(Atom), hasArgument(Atom,Arg,Pos).
+m_hasSerialization(Term,S) :- m_term(Term), hasSerialization(Term,S).
+m_nonRelationalAtom(Atom), m_hasSerialization(Atom,S) :- m_hasAtom(_,Atom), nonRelationalAtom(Atom), hasSerialization(Atom,S).
+
+% Determine the facts active in the module to be derived
+m_hasFact(M,F) :- tHasFact(M,F), not tModOpStmt(M,_,F), deriveModule(M).
+m_relationalAtom(Atom) :- m_hasFact(_,Atom).
+
+% Determine the annotations in the module to be derived
+m_hasAnnotation(M,A) :- tHasAnnotationM(M,A), not tModOpStmt(M,_,A), deriveModule(M).
+m_hasAnnotation(Stmt,A) :- tHasAnnotationS(M,Stmt,A), not tModOpStmt(M,_,Stmt), deriveModule(M).
+m_annotation(A) :- m_hasAnnotation(_,A).
+m_hasName(A,N) :- m_annotation(A), hasName(A,N).
+m_hasArgument(A,Arg,Pos), m_term(Arg) :- m_annotation(A), hasArgument(A,Arg,Pos).
+
+% EXPORTING THE RESULTING META-REPRESENTATION
+line(L) :- deriveModule(M), L = "program("""+M+"""). annotation("""+M+":""). hasAnnotation("""+M+""","""+M+":""). hasName("""+M+":"",""resolved"").".
+line(L) :- m_hasRule(M,R), L = "rule("""+R+"""). hasRule("""+M+""","""+R+""").".
+line(L) :- m_hasPositiveHeadAtom(R,AtomID), L = "hasPositiveHeadAtom("""+R+""","""+AtomID+""").".
+line(L) :- m_hasNegativeHeadAtom(R,AtomID), L = "hasNegativeHeadAtom("""+R+""","""+AtomID+""").".
+line(L) :- m_hasPositiveBodyAtom(R,AtomID), L = "hasPositiveBodyAtom("""+R+""","""+AtomID+""").".
+line(L) :- m_hasNegativeBodyAtom(R,AtomID), L = "hasNegativeBodyAtom("""+R+""","""+AtomID+""").".
+line(L) :- m_relationalAtom(A), L= "relationalAtom("""+A+""").".
+line(L) :- m_hasName(A,N), L= "hasName("""+A+""","""+N+""").".
+line(L) :- m_hasSerialization(Term,S), true(T), T = starts_with(S,""""), T = ends_with(S,""""), L= "hasSerialization("""+Term+""","""""+S+""""").".
+line(L) :- m_hasSerialization(Term,S), false(F), F = starts_with(S,""""), F = ends_with(S,""""), L= "hasSerialization("""+Term+""","""+S+""").".
+line(L) :- m_nonRelationalAtom(A), L= "nonRelationalAtom("""+A+""").".
+line(L) :- m_hasFact(M,F), L= "hasFact("""+M+""","""+F+""").".
+line(L) :- m_hasAnnotation(Stmt,A), L="annotation("""+A+"""). hasAnnotation("""+Stmt+""","""+A+""").".
+line(L) :- m_hasArgument(A,Arg,Pos), L = "hasArgument("""+A+""","""+Arg+""","+Pos+").".
+line(L) :- m_term(Arg), L = "term("""+Arg+""").".
+
+@output("line").
+
+% ------------------------------------------------------------------------
+% WARNINGS REGARDING INHERITANCE
+% ------------------------------------------------------------------------
+% Warn if restrictions or mod ops are modified
+w_modifiedInhAnnotation(M,S) :- modOpStmt(M,S), inhAnnotation(S).
+
+% Warn if non-existing statement is modified
+w_modifyUnknownStmt(M,X) :- removeStmtLbl(M,L), not stmtLbl(_,L), X = L.
+w_modifyUnknownStmt(M,X) :- redefineStmtLbl(M,L), not stmtLbl(_,L), X = L.
+w_modifyUnknownStmtQ(M,X,Y) :- removeStmtQ(M,L,MQ), not stmtML(MQ,_,L), X = L, Y = MQ.
+w_modifyUnknownStmtQ(M,X,Y) :- redefineStmtQ(M,L,MQ), not stmtML(MQ,_,L), X = L, Y = MQ.
+
+% Two different modules employ the same ID
+w_labelMultiplicity(M,S,M2,S2,L) :- stmtML(M,S,L), stmtML(M2,S2,L2), moduleLbl(M,_), tInherits(MC,M2), tInherits(MC,M), L = L2, M != M2, S != S2.
+w_labelMultiplicity(M,S,M2,S2,L) :- stmtML(M,S,L), stmtML(M2,S2,L2), moduleLbl(M,_), tInherits(M,M2), L = L2, M != M2, S != S2.
+
+% An annotation is defined multiple times for the same predicate
+moduleAnnotation(M,A,N,P) :- moduleStmt(M,A), hasAnnotation(_,A), hasName(A,N), hasArgument(A,Arg2,0), hasSerialization(Arg2,L1), P = substring(L1,1,string_length(L1)-1).
+w_annotationMultiplyDefined(M,A1,A2,Type,Predicate) :- moduleAnnotation(M,A1,Type,P1), moduleAnnotation(M,A2,Type,Predicate), A1 != A2, P1 = Predicate.
+
+@output("w_modifiedInhAnnotation").
+@output("w_modifyUnknownStmt").
+@output("w_modifyUnknownStmtQ").
+@output("w_labelMultiplicity").
+@output("w_annotationMultiplyDefined").
+
+% Multi-inheritance: Statement modified differently in two branches!
+tRemoveStmt(M,S) :- removeStmt(M,S).
+tRemoveStmt(M,S) :- inherits(M,M2), tRemoveStmt(M2,S).
+tRedefineStmt(M,S) :- redefineStmt(M,S).
+tRedefineStmt(M,S) :- inherits(M,M2), redefineStmt(M2,S).
+
+w_mergeWithCommonStmtsRemoved(C,GP,P1,P2,S) :- moduleLbl(GP,_), moduleLbl(P1,_), moduleLbl(P2,_), inherits(C,P1), inherits(C,P2), tInherits(P1,GP), tInherits(P2,GP), moduleStmt(GP,S), tRemoveStmt(P1,S), P1 != P2.
+w_mergeWithCommonStmtsRedefined(C,GP,P1,P2,S) :- moduleLbl(GP,_), moduleLbl(P1,_), moduleLbl(P2,_), inherits(C,P1), inherits(C,P2), tInherits(P1,GP), tInherits(P2,GP), moduleStmt(GP,S), tRedefineStmt(P1,S), P1 != P2.
+w_diffModifiedParent(C,P1,P2,S) :- w_mergeWithCommonStmtsRemoved(C,_,P1,P2,S), not tRemoveStmt(P2,S).
+w_diffModifiedParent(C,P1,P2,S) :- w_mergeWithCommonStmtsRedefined(C,_,P1,P2,S), not tRedefineStmt(P2,S).
+
+% Multi-inheritance: Warning about different restrictions in parents
+w_diffParentRestriction(C,P1,P2,"noAdditionalInput") :- moduleLbl(P1,_), moduleLbl(P2,_), inherits(C,P1), inherits(C,P2), noAdditionalInput(P1), not noAdditionalInput(P2), P1 != P2.
+w_diffParentRestriction(C,P1,P2,"noAdditionalOutput") :- moduleLbl(P1,_), moduleLbl(P2,_), inherits(C,P1), inherits(C,P2), noAdditionalOutput(P1), not noAdditionalOutput(P2), P1 != P2.
+w_diffParentRestriction(C,P1,P2,"noAdditionalAnnotation") :- moduleLbl(P1,_), moduleLbl(P2,_), inherits(C,P1), inherits(C,P2), noAdditionalAnnotation(P1,ANN,Predicate), not noAdditionalAnnotation(P2,ANN,Predicate), P1 != P2.
+w_diffParentRestriction(C,P1,P2,"nonOmitableAnnotation") :- moduleLbl(P1,_), moduleLbl(P2,_), inherits(C,P1), inherits(C,P2), nonOmitableAnnotation(P1,ANN,Predicate), not nonOmitableAnnotation(P2,ANN,Predicate), P1 != P2.
+w_diffParentRestriction(C,P1,P2,"nonOmitable") :- moduleLbl(P1,_), moduleLbl(P2,_), inherits(C,P1), inherits(C,P2), nonOmitable(P1,Predicate), not nonOmitable(P2,Predicate), P1 != P2.
+w_diffParentRestriction(C,P1,P2,"nonRedefinable") :- moduleLbl(P1,_), moduleLbl(P2,_), inherits(C,P1), inherits(C,P2), nonGrowable(P1,PRED), not nonGrowable(P2,PRED), P1 != P2.
+
+w_diffParentRestriction(C,P1,P2,"nonGrowable") :- moduleLbl(P1,_), moduleLbl(P2,_), inherits(C,P1), inherits(C,P2), nonGrowable(P1,PRED), not nonGrowable(P2,PRED), P1 != P2.
+w_diffParentRestriction(C,P1,P2,"nonShrinkable") :- moduleLbl(P1,_), moduleLbl(P2,_), inherits(C,P1), inherits(C,P2), nonShrinkable(P1,PRED), not nonShrinkable(P2,PRED), P1 != P2.
+
+@output("w_diffModifiedParent").
+@output("w_diffParentRestriction").

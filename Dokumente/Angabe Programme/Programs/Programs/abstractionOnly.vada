@@ -1,0 +1,33 @@
+%-------------------------------------------------------------------------
+% Abstract Modules
+% INPUT: resolved module
+% OUTPUT: abstract predicates and whether module is abstract
+%-------------------------------------------------------------------------
+% Predicates in a module
+inputPredicate(M,P) :- program(M), hasAnnotation(M,A), hasName(A,"input"), hasArgument(A,Arg2,0), hasSerialization(Arg2,L1), P = substring(L1,1,string_length(L1)-1).
+outputPredicate(M,P) :- program(M), hasAnnotation(M,A), hasName(A,"output"), hasArgument(A,Arg2,0), hasSerialization(Arg2,L1), P = substring(L1,1,string_length(L1)-1).
+
+predicate(M,P) :- inputPredicate(M,P).
+predicate(M,P) :- outputPredicate(M,P).
+predicate(M,P) :- hasFact(M,F), relationalAtom(F), hasName(F,P).
+predicate(M,P) :- hasRule(M,R), ruleHeadPredicate(R,P).
+predicate(M,P) :- hasRule(M,R), ruleBodyPredicate(R,P).
+
+ruleBodyPredicate(R,P):- hasRule(M,R), hasNegativeBodyAtom(R,A), relationalAtom(A), hasName(A,P).
+ruleBodyPredicate(R,P):- hasRule(M,R), hasPositiveBodyAtom(R,A), relationalAtom(A), hasName(A,P).
+ruleHeadPredicate(R,P):- hasRule(M,R), hasNegativeHeadAtom(R,A), relationalAtom(A), hasName(A,P).
+ruleHeadPredicate(R,P):- hasRule(M,R), hasPositiveHeadAtom(R,A), relationalAtom(A), hasName(A,P).
+
+% Derving abstract and concrete predicates
+predicateDependency(M,P,P2) :- hasRule(M,R), ruleHeadPredicate(R,P), ruleBodyPredicate(R,P2).
+concretePredicate(M,P) :- hasFact(M,F), relationalAtom(F), hasName(F,P).
+concretePredicate(M,P) :- inputPredicate(M,P).
+concretePredicate(M,P) :- hasConcreteDependency(M,P), not hasAbstractDependency(M,P).
+hasConcreteDependency(M,X) :- predicateDependency(M,X,Y), concretePredicate(M,Y).
+hasAbstractDependency(M,X) :- predicateDependency(M,X,Y), abstractPredicate(M,Y).
+
+abstractPredicate(M,P) :- predicate(M,P), predicate(M,P2), not concretePredicate(M,P2), P2 = P. % P2 necessary as otherwise not warded
+abstractModule(M) :- abstractPredicate(M,_).
+
+@output("abstractPredicate").
+@output("abstractModule").
