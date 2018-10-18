@@ -1,0 +1,24 @@
+Parameter 
+Parameter Werte
+Business Cases 
+Kontext Modelle 
+Kontexte
+
+Anforderungen an Datengeneratoren detaillierter 
+Für welche Testfälle müssen welche Daten generiert werden
+
+Keine graphische Benutzeroberfläche notwendig 
+texteingabe oder konsoleneingabe
+CBR und Inheritance stärker unterscheiden/voneinander trennen 
+
+Datengenerator Inheritance
+ohne annotationen 
+meta code
+
+CBR 
+normaler code 
+
+Abgabefrist 28.10.
+Fragen per mail
+
+
