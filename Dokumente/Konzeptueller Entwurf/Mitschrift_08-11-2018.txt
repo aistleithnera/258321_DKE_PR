@@ -1,0 +1,34 @@
+CBR Vadalog Code generieren 
+anderer Datengenerator Meta Code generieren, Rule Model Inheritance  
+
+Konzeptueller Entwurf
+wie wird der Code generiert 
+vllt mit Liste 
+Wie sollen die Prädikate heißen 
+
+Rule Models
+Komplexität der Regeln 
+Komplexität durch Menge der Prädikaten 
+
+Datenpersistierung need to have 
+dauerhaft zu speichern: Performance Ergebnisse, woher kommt das Ergebnis, welcher Test wurde durchgeführt, was hat wie 
+lange gedauert, generierter Code muss nicht gespeichert werden
+
+Konzeptuelles Modell:
+Welche Methoden, welche Schnittstelle, wie spielen sie zueinander
+Was gib ich ein, was kommt raus
+
+Systemspezifikation muss nicht mehr bearbeitet werden, Feedback soll berücksichtigt werden 
+
+Komponenten: 
+Datengenerator CBR 
+Datengenerator Rule Model Inheritance
+System zur Evaluierung 
+welche Schnittstellen und Komponenten sonst noch relevant sind 
+
+Zeitschätzung, Aufwandsschätzung wie lange etwas zu implementieren dauert 
+
+
+Organisatorisches: 
+Termine im Dezember fallen sehr wahrscheinlich aus. 
+Abgaben sollen trotzdem gemacht werden. 
