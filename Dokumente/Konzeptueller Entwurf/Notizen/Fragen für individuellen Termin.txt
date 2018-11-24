@@ -1,0 +1,28 @@
+-- Jupyter Interface Ausführung, wie funktioniert das? konnten es nicht zum laufen bringen
+
+-- User Schnittstelle Eingabe Daten
+	- CBR, reichen als Eingabe Anzahl Parameter? 
+	Parameter Values, Contexte, Business Cases? wie viele und woher kommt die Anzahl, auch vom User? 
+
+	- Rule Model Inheritance, Eingabe Daten Rules und Facts, reichen oder mehr benötigt? 
+
+-- Datengenratoren Rule Model Inheritance 
+	- abstractionOnly
+	Input: Resolved Module - ein Module gefordert, für das alle Vererbungsbeziehungen aufgelöst wurden
+
+	- conformanceOnly
+	Input: detected/reported modification and operations modification restrictions - Input erkannte/gemeldete 
+	Änderungsvorgänge und Modifikationsbeschränkungen
+
+	-dynamicBehavioralDetectionOnly
+	Input: Meta-representations of resultset pairs (parent and child resultsets) 
+	and inheritance relations of modules for which resultsets are given - Meta-Repräsentationen von Resultset-Paaren 
+	(Eltern- und Child-Resultsets) und
+	Vererbungsbeziehungen von Modulen, für die Ergebnismengen angegeben sind
+
+	-structuralDetectionOnly
+	Input: Meta-representations of relevant module inheritance tree - Metadarstellungen des relevanten Modulvererbungsbaums
+
+Input muss generiert werden. Wie sieht der Input genau aus?
+ Wie kann der generiert werden? Mithilfe der Anzahl der Rules und Facts?
+
