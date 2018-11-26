@@ -5,12 +5,16 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
+import Exceptions.NegativeNumberException;
+
 public class GeneratorCBR {
 
 	private static String CBRCode;
 
-	public static String generateCBRCode(int parameters) {
-
+	public static String generateCBRCode(int parameters) throws NegativeNumberException{
+		
+		if(parameters < 0) throw new NegativeNumberException("Negative numbers not allowed!");
+	
 		CBRCode = "";
 		CBRCode += generateContextClass();
 		CBRCode += generateParameters(parameters);
@@ -18,7 +22,7 @@ public class GeneratorCBR {
 		CBRCode += generateContextHierachy();
 
 		return CBRCode;
-
+		
 	}
 
 	private static String generateContextClass() {
