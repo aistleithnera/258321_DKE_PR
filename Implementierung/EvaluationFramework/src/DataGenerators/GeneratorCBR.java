@@ -2,7 +2,6 @@ package DataGenerators;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 import Exceptions.NegativeNumberException;
@@ -13,7 +12,7 @@ public class GeneratorCBR {
 
 	public static String generateCBRCode(int parameters) throws NegativeNumberException{
 		
-		if(parameters < 0) throw new NegativeNumberException("Negative numbers not allowed!");
+		if(parameters <= 0) throw new NegativeNumberException("Negative numbers not allowed!");
 	
 		CBRCode = "";
 		CBRCode += generateContextClass();
