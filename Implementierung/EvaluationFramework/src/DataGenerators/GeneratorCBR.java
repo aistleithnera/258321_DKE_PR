@@ -10,18 +10,24 @@ public class GeneratorCBR {
 
 	private static String CBRCode;
 
-	public static String generateCBRCode(int parameters) throws NegativeNumberException{
-		
-		if(parameters <= 0) throw new NegativeNumberException("Negative numbers not allowed!");
-	
+	public static String generateCBRCode(int parameters) throws NegativeNumberException {
+
+		if (parameters <= 0)
+			throw new NegativeNumberException("Negative numbers not allowed!");
+
 		CBRCode = "";
 		CBRCode += generateContextClass();
 		CBRCode += generateParameters(parameters);
 		CBRCode += generateTransitiveAndTransitiveReflexiveCovers();
 		CBRCode += generateContextHierachy();
+		CBRCode += generateParameterValuesAndHierachys();
+		CBRCode += generateContextClass();
+		CBRCode += generateDetermineParemeterValues();
+		CBRCode += generateDetermineRelevantContextsAndMostSpecificRelevantContext();
+		CBRCode += generateBusinessCases();
 
 		return CBRCode;
-		
+
 	}
 
 	private static String generateContextClass() {
@@ -89,5 +95,21 @@ public class GeneratorCBR {
 
 		return generatedContextHierachy;
 
+	}
+
+	private static String generateParameterValuesAndHierachys() {
+		return "";
+	}
+
+	private static String generateDetermineParemeterValues() {
+		return "";
+	}
+
+	private static String generateDetermineRelevantContextsAndMostSpecificRelevantContext() {
+		return "";
+	}
+
+	private static String generateBusinessCases() {
+		return "";
 	}
 }
