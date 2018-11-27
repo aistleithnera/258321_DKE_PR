@@ -26,3 +26,4 @@
 Input muss generiert werden. Wie sieht der Input genau aus?
  Wie kann der generiert werden? Mithilfe der Anzahl der Rules und Facts?
 
+-- Functional Requirements von Spezifikation zuordnen, wei? Abgabe war nicht richtig bzw. nicht so gut. 
