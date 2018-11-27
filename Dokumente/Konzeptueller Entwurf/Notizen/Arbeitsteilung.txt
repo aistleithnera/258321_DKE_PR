@@ -1,0 +1,9 @@
+Milos & Maja: Rule Model Inheritance 1.2
+	Regeln und Fakten, und Modules Structures generieren. 
+
+Alex: Datenbanken anpassen im konzeptuellen Entwurf
+	User Eigabe bei CBR User Schnittstelle hinzufügen - Speicherung Schnittstelle 
+	Präsentation 
+
+Andrea: allgemeines blabla, Struktur Schnittstellen zu Bestandteile hinzufügen
+	CBR beschreiben, 
