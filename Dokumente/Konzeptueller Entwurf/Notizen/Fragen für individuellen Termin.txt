@@ -1,11 +1,32 @@
 -- Jupyter Interface Ausführung, wie funktioniert das? konnten es nicht zum laufen bringen
 
 -- User Schnittstelle Eingabe Daten
+
+	Struktur ändern Dokument, Schnittstellen zu den Komponenten 
+
 	- CBR, reichen als Eingabe Anzahl Parameter? 
 	Parameter Values, Contexte, Business Cases? wie viele und woher kommt die Anzahl, auch vom User? 
+	auch vom User festgegelt als Eingabeparameter - bei User Schnittstelle hinzufügen, bei Datenspeicherung auch hinzufügen, SQL Tabelle ergänzen
+	Beschreibung im konzeptuellen Entwurf: 
 
+	komplexere Methode Kontexte - konzeputeller Entwurf soll da sein, genau beschreiben. 
+	zB.: pro Parameter 10 parameter Values, eher breit statt tief, wie zu generieren. 
+	statischen Code zusammenfassen
+	Bennenung der Methoden aufpassen, Reihenfolge 
+
+	letzter Schritt nicht Business Cases, sondern früher, 
+
+	alle statischen Methoden zusammenfassen, Operationen sparen 
+	Reihenfolge im Beispiel muss nicht eingehalten werden. 
+
+	Grundidee der Datengeneratoren zusammenfassen der Implementierung, Templates, generierte Werte einfügen, am Anfang erklären 
+	ablegen von generierten Daten in Methoden, um später wieder darauf zugreifen zu können. Speicherung in Liste in der Klasse
+		
 	- Rule Model Inheritance, Eingabe Daten Rules und Facts, reichen oder mehr benötigt? 
-
+	Anzahl Input und Output Prädikate festlegen
+	generierte Input Prädikate in den Regeln auch verwenden. 
+	
+	
 -- Datengenratoren Rule Model Inheritance 
 	- abstractionOnly
 	Input: Resolved Module - ein Module gefordert, für das alle Vererbungsbeziehungen aufgelöst wurden
@@ -24,6 +45,15 @@
 	Input: Meta-representations of relevant module inheritance tree - Metadarstellungen des relevanten Modulvererbungsbaums
 
 Input muss generiert werden. Wie sieht der Input genau aus?
- Wie kann der generiert werden? Mithilfe der Anzahl der Rules und Facts?
+Wie kann der generiert werden? Mithilfe der Anzahl der Rules und Facts?
 
 -- Functional Requirements von Spezifikation zuordnen, wei? Abgabe war nicht richtig bzw. nicht so gut. 
+
+
+TO DO:
+======
+Package Speicherung 
+Tabellen Beschriftung 
+Wertebereiche einschränken
+Datenbankwerte ändern
+Abbildung in Dokument ändern -> speicherung Package
