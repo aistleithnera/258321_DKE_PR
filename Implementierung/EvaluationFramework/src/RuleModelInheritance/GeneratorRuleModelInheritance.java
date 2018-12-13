@@ -42,6 +42,8 @@ public class GeneratorRuleModelInheritance {
 	
 	private static String generateRules(int nrRules) {
 		
+		System.out.println(nrRules+" this");
+		
 		String generatedRules = "";
 		for(int i = 0; i<nrRules; i++){
 			int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
@@ -61,6 +63,7 @@ public class GeneratorRuleModelInheritance {
 	private static String generateRelationalsAtoms(int nrRules) {
 		String generatedRelationalAtoms = "";
 		
+		
 		for(int i = 0; i< nrRules; i++){
 			int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
 			program.getAllRelationalAtoms().add(new RelationalAtoms(GeneratorRandomString.getRandomString(randomNumber)));
@@ -69,16 +72,32 @@ public class GeneratorRuleModelInheritance {
 		for(RelationalAtoms r: program.getAllRelationalAtoms()){
 			generatedRelationalAtoms += "relationalAtom(" + r  + ").  " +  "\n";
 		}
+		
+		List<RelationalAtoms> list = new ArrayList<>();
+		for(RelationalAtoms r: program.getAllRelationalAtoms()){
+			list.add(r);				
+			
+		}
+		
+		if(nrRules == 1) {
+			
+			
+			
+			
+			
+		}else if(nrRules == 2) {
+			
+			
+			
+			
+		}else {
+			
+		
 
 		
 	
 		for(int i = 0; i< program.getRules().size(); i++) {
 			
-			List<RelationalAtoms> list = new ArrayList<>();
-			for(RelationalAtoms r: program.getAllRelationalAtoms()){
-				list.add(r);				
-				
-			}
 			
 			int random = ThreadLocalRandom.current().nextInt(0, list.size()-1);
 				generatedRelationalAtoms += "hasPositiveHeadAtom(" + program.getRules().get(i) +"," +  list.get(random) + ")."+  "\n";
@@ -98,6 +117,8 @@ public class GeneratorRuleModelInheritance {
 				}
 				count = 0;
 			}	
+		}//else not 1 or 2
+		
 		return generatedRelationalAtoms;
 	}
 
