@@ -2,9 +2,9 @@ package EvaluationFramework;
 
 import java.util.Scanner;
 
-import DataGenerators.GeneratorCBR;
+import DataGeneratorCBR.GeneratorCBR;
+import DataGeneratorRuleModelInheritance.GeneratorRuleModelInheritance;
 import Exceptions.NegativeNumberException;
-import RuleModelInheritance.GeneratorRuleModelInheritance;
 
 public class EvaluationFrameworkApp {
 	

@@ -1,6 +1,6 @@
 package Test;
 
-import DataGenerators.GeneratorCBR;
+import DataGeneratorCBR.GeneratorCBR;
 import Exceptions.NegativeNumberException;
 
 public class TestGeneratorCBR {

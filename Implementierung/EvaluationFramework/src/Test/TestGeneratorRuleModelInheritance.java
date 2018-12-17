@@ -1,8 +1,8 @@
 package Test;
 
-import DataGenerators.GeneratorCBR;
+import DataGeneratorCBR.GeneratorCBR;
+import DataGeneratorRuleModelInheritance.GeneratorRuleModelInheritance;
 import Exceptions.NegativeNumberException;
-import RuleModelInheritance.GeneratorRuleModelInheritance;
 
 public class TestGeneratorRuleModelInheritance {
 	

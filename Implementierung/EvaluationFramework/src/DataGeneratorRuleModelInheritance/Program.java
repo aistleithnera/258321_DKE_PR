@@ -1,4 +1,4 @@
-package RuleModelInheritance;
+package DataGeneratorRuleModelInheritance;
 
 import java.util.ArrayList;
 import java.util.List;

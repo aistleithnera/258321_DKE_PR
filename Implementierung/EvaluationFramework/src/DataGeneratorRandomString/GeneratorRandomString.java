@@ -1,4 +1,4 @@
-package DataGenerators;
+package DataGeneratorRandomString;
 
 import java.security.SecureRandom;
 

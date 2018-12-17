@@ -1,11 +1,11 @@
-package RuleModelInheritance;
+package DataGeneratorRuleModelInheritance;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-import DataGenerators.GeneratorRandomString;
+import DataGeneratorRandomString.GeneratorRandomString;
 import Exceptions.NegativeNumberException;
 
 public class GeneratorRuleModelInheritance {

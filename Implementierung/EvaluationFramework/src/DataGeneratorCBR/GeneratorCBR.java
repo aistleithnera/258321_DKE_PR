@@ -1,9 +1,10 @@
-package DataGenerators;
+package DataGeneratorCBR;
 
 import java.util.List;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
+import DataGeneratorRandomString.GeneratorRandomString;
 import Exceptions.NegativeNumberException;
 
 public class GeneratorCBR {

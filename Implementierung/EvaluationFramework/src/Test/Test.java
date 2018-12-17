@@ -2,8 +2,8 @@ package Test;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import DataGenerators.GeneratorCBR;
-import DataGenerators.GeneratorRandomString;
+import DataGeneratorCBR.GeneratorCBR;
+import DataGeneratorRandomString.GeneratorRandomString;
 import Exceptions.NegativeNumberException;
 
 public class Test {

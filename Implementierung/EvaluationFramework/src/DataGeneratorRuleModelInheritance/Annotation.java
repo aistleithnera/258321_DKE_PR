@@ -1,4 +1,4 @@
-package RuleModelInheritance;
+package DataGeneratorRuleModelInheritance;
 
 public class Annotation {
 	
