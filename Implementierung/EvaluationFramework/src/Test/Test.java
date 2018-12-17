@@ -13,7 +13,7 @@ public class Test {
 		try {
 			
 		// String text = GeneratorRandomString.getRandomString(5);
-		String text = GeneratorCBR.generateCBRCode(-1);
+		String text = GeneratorCBR.generateCBRCode(1, 3);
 		System.out.println(text);
 		
 		}catch(Exception e) {
