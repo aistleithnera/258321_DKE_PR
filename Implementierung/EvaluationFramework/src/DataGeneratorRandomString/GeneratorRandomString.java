@@ -5,7 +5,7 @@ import java.security.SecureRandom;
 public class GeneratorRandomString {
 	
 	public static String getRandomString(int length) {
-		String ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		String ALPHABET = "abcdefghijklmnopqrstuvwxyz";
 		final SecureRandom RANDOM = new SecureRandom();
 
 		StringBuilder sb = new StringBuilder();

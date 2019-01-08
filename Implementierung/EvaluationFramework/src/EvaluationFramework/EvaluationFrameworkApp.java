@@ -58,17 +58,37 @@ public class EvaluationFrameworkApp {
 			
 			case 1: 
 				
-				int rules1;
+				int anno1;
 				int facts1;
+				int rules1;
 				
-				System.out.println("\n\n AbstractionOnly: \n");
+				System.out.println("\nAbstractionOnly: \n");
+				System.out.print("Annotations: ");
+				anno1 = s1.nextInt();
+				System.out.print("Facts: ");
+				facts1 = s1.nextInt();
 				System.out.print("Rules: ");
 				rules1 = s1.nextInt();
+				
+				EvaluationFramework.RunAbstractionOnly(anno1, facts1, rules1);
+				
+				break;
+				
+			case 2:
+				
+				break;
+				
+			case 3:
+				
+				System.out.println("\nDynamicBehavioralDetectionOnly: \n");
 				System.out.print("Facts: ");
 				facts1 = s1.nextInt();
 				
-				String text = GeneratorRuleModelInheritance.generateRMI(rules1, facts1);
-				System.out.println(text);
+				System.out.println("\n");
+				EvaluationFramework.RunDynamicBehavioralDetectionOnly(facts1);
+				
+				break;
+			 
 				
 			
 			

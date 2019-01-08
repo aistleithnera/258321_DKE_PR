@@ -15,9 +15,6 @@ public class Rule {
 	
 	public Rule(String name) {
 		this.name = name;
-		relationalAtomsHead = new ArrayList<>();
-		relationalAtomsBody = new ArrayList<>();
-		annotations = new ArrayList<>();
 
 	}
 	

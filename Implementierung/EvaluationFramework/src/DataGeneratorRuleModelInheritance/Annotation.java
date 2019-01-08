@@ -4,9 +4,7 @@ public class Annotation {
 	
 	
 	private String name;
-	private String label;
 
-	
 	
 	public Annotation(String name) {
 		this.name = name;
@@ -19,8 +17,6 @@ public class Annotation {
 	public void setName(String s){
 		this.name = s;
 	}
-	
-	
 	
 
 }
