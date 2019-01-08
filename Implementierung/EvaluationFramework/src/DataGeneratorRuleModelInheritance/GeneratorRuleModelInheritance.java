@@ -19,51 +19,393 @@ public class GeneratorRuleModelInheritance {
 	private static List <String> terms;
 
 
-	public static String generateRMI(int rules, int facts) {
-
-		RMICode = "";
-		RMICode += generateProgram();
-		RMICode += generateRules(rules);
-		RMICode += generateRelationalsAtoms(rules);
-		RMICode += generateNonRelationalAtoms(facts);
-		RMICode += generateAnnotation(rules);
-		RMICode += generateTerms();
-		
-		return RMICode;
-
+	
+	//programm(namen) generieren
+	
+	public static String generateProgram() {
+		program.setName("id1");
+		return "program(\"" + program + "\")." +  "\n";
 	}
 	
-	private static String generateProgram() {
+
+	//fakten incl. terms generieren
+	
+	public static String generateOnlyFacts(int factsNum, int termsNum) {
+		
+		int factsCount = factsNum;
+		int termsCount = termsNum;
+		int termsInAtom = 0;
+		
+		String facts = "";
+		
+		//fakten generieren
+		
+	while(factsCount > 0) {
+		
 		int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
-		program.setName(GeneratorRandomString.getRandomString(randomNumber));
-		return "program(" + program + ")." +  "\n";
+		RelationalAtoms a = new RelationalAtoms(GeneratorRandomString.getRandomString(randomNumber));
+		facts += "relationalAtom(\"" + a + "\"). \n";
+		facts += "hasFact(\"" + program +"\",\"" + a + "\"). \n";
+		facts += "hasName(\"" + a + "\",\"" + (GeneratorRandomString.getRandomString(randomNumber)) + "\"). \n";
 		
-	}
-	
-	private static String generateRules(int nrRules) {
+		factsCount--;
 		
-		System.out.println(nrRules+" this");
+		termsInAtom = 0;
 		
-		String generatedRules = "";
-		for(int i = 0; i<nrRules; i++){
-			int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
-			program.getRules().add(new Rule(GeneratorRandomString.getRandomString(randomNumber)));
-		}
+		//terms generieren
 		
-		for(Rule r: program.getRules()){
-			generatedRules += "hasRule(" + program + "," + r + ")  " +  "\n";
-		}
+		int maxTerms = ThreadLocalRandom.current().nextInt(1, termsNum + 1) ;
+		
+		
+		while(maxTerms > 0) {
+			
+			randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+			Term t = new Term(GeneratorRandomString.getRandomString(randomNumber));
 
-		for(Rule r:program.getRules()){
-			generatedRules += "rule(" + r + ")." +  "\n";
-		}
-		return generatedRules;
+			facts += "term(\"" + t + "\"). \n";
+			facts += "hasSerialization(\"" + t + "\",\"\"\"" + GeneratorRandomString.getRandomString(randomNumber) 
+			+ "\"\"\"). \n";
+			facts += "hasArgument(\"" + a + "\",\"" + t + "\"," + termsInAtom + "). \n";
+			
+			maxTerms--;
+			termsInAtom++;
+			
+		}//whileTerms
+		
+		termsCount = termsNum;
+	
+	}//whileFacts
+		return facts;
 	}
 	
+	
+	//fakten incl. Terms generieren 
+	
+		public static String generateFactsFromRules(int factsNum, int termsNum, RelationalAtoms a) {
+			
+			int factsCount = factsNum;
+			int termsInAtom = 0;
+			
+			String facts = "";
+			
+			//fakten generieren
+			
+		while(factsCount > 0) {
+			
+			int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+			RelationalAtoms atom = a;
+			facts += "relationalAtom(\"" + atom + "\"). \n";
+			facts += "hasName(\"" + atom + "\",\"" + (GeneratorRandomString.getRandomString(randomNumber)) + "\"). \n";
+			
+			factsCount--;
+			
+			termsInAtom = 0;
+			
+			//terms generieren
+			
+			int i = ThreadLocalRandom.current().nextInt(1, termsNum + 1) ;
+			
+			
+			while(i > 0) {
+				
+				randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+				Term t = new Term(GeneratorRandomString.getRandomString(randomNumber));
+
+				facts += "term(\"" + t + "\"). \n";
+				facts += "hasSerialization(\"" + t + "\",\"\"\"" + GeneratorRandomString.getRandomString(randomNumber) 
+				+ "\"\"\"). \n";
+				facts += "hasArgument(\"" + atom + "\",\"" + t + "\"," + termsInAtom + "). \n";
+				
+				i--;
+				termsInAtom++;
+				
+			}//whileTerms
+			
+		
+		
+		}//whileFacts
+			return facts;
+		}
+	
+	
+		//fakten incl. Terms generieren 
+		
+			public static String generateFactsFromAnnotations(int termsNum, Annotation anno) {
+				
+				
+				int termsInAtom = 0;
+				
+				String facts = "";
+				
+				//fakten generieren
+				
+		
+				int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+	
+				Annotation a = anno;
+				RelationalAtoms atom = new RelationalAtoms(GeneratorRandomString.getRandomString(randomNumber));
+				
+				facts += "relationalAtom(\"" + a + "\"). \n";
+				facts += "hasName(\"" + atom + "\",\"" + (GeneratorRandomString.getRandomString(randomNumber)) + "\"). \n";
+				facts += "hasFact(\"" + program +"\",\"" + atom + "\"). \n";
+				
+				termsInAtom = 0;
+				
+				//terms generieren
+				
+				int i = ThreadLocalRandom.current().nextInt(1, termsNum + 1) ;
+				
+				
+				
+				while(i > 0) {
+					
+					randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+					Term t = new Term(GeneratorRandomString.getRandomString(randomNumber));
+
+					facts += "term(\"" + t + "\"). \n";
+					facts += "hasSerialization(\"" + t + "\",\"\"\"" + GeneratorRandomString.getRandomString(randomNumber) 
+					+ "\"\"\"). \n";
+					facts += "hasArgument(\"" + atom + "\",\"" + t + "\"," + termsInAtom + "). \n";
+					
+					i--;
+					termsInAtom++;
+					
+				}//whileTerms
+				
+				facts += "hasAnnotation(\"" + atom + "\",\"" + a + "\"). \n";
+				facts += "hasName(\"" + a + "\",\"" + (GeneratorRandomString.getRandomString(randomNumber)) + "\"). \n";
+				
+				return facts;
+			}
+		
+		
+
+		
+	public static String generateOnlyRules(int factsNum, int termsNum, int rulesNum) {
+		
+		String rules = "";
+		int rulesCount = rulesNum;
+		
+		
+		while(rulesCount > 0) {
+			
+			int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+			Rule r = new Rule(GeneratorRandomString.getRandomString(randomNumber));
+			
+			rules+= "rule(\"" + r + "\").\n";
+			rules+= "hasRule(\"" + program + "\",\"" + r + "\").\n";
+			RelationalAtoms a1 = new RelationalAtoms(GeneratorRandomString.getRandomString(randomNumber));
+			rules+= "hasPositiveHeadAtom(\"" + r +"\",\"" + a1 + "\").\n";
+			rules+= generateFactsFromRules(1, termsNum, a1);
+			
+			
+			int factsCount = factsNum;
+			
+			while(factsCount > 0) {
+				
+				RelationalAtoms a2 = new RelationalAtoms(GeneratorRandomString.getRandomString(randomNumber));
+				rules+= "hasPositiveBodyAtom(\"" + r +"\",\"" + a2 + "\").\n";
+				rules+= generateFactsFromRules(1, termsNum, a2);
+				
+				factsCount--;
+			}
+			
+			rulesCount--;
+		}
+		
+		return rules;
+	}//generateOnlyRules
+	
+	
+	
+    public static String generateAnnotationsFromRules(int factsNum, int termsNum, Annotation a) {
+		
+		String rules = "";
+
+			int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+			Rule r = new Rule(GeneratorRandomString.getRandomString(randomNumber));
+			
+			rules+= "rule(\"" + r + "\").\n";
+			rules+= "hasRule(\"" + program + "\",\"" + r + "\").\n";
+			RelationalAtoms a1 = new RelationalAtoms(GeneratorRandomString.getRandomString(randomNumber));
+			rules+= "hasPositiveHeadAtom(\"" + r +"\",\"" + a1 + "\").\n";
+			rules+= generateFactsFromRules(1, termsNum, a1);
+			
+			
+			int factsCount = factsNum;
+			
+			while(factsCount > 0) {
+				
+				RelationalAtoms a2 = new RelationalAtoms(GeneratorRandomString.getRandomString(randomNumber));
+				rules+= "hasPositiveBodyAtom(\"" + r +"\",\"" + a2 + "\").\n";
+				rules+= generateFactsFromRules(1, termsNum, a2);
+				
+				factsCount--;
+			}
+			
+			rules += "hasAnnotation(\"" + r + "\",\"" + a + "\"). \n";
+			rules += "hasName(\"" + a + "\",\"" + (GeneratorRandomString.getRandomString(randomNumber)) + "\"). \n";
+		
+		
+		return rules;
+	}
+	
+	
+	public static String generateOnlyAnnotations(int annoNum, int termsNum){
+		
+		int annoCount = annoNum;
+		
+		String generatedAnnotations = "";
+		
+		while(annoCount > 0) {
+		
+		int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+		Annotation a = new Annotation(GeneratorRandomString.getRandomString(randomNumber));
+		generatedAnnotations += "annotation(\"" + a + "\"). \n";
+		generatedAnnotations += "hasAnnotation(\"" + program +"\",\"" + a + "\"). \n";
+		generatedAnnotations += "hasName(\"" + a + "\",\"" + (GeneratorRandomString.getRandomString(randomNumber)) + "\"). \n";
+		
+
+		annoCount--;
+		
+		
+		//terms generieren
+		
+		int i = ThreadLocalRandom.current().nextInt(1, termsNum + 1) ;
+		int termsInAnno = 0;
+		
+		while(i > 0) {
+			
+			randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+			Term t = new Term(GeneratorRandomString.getRandomString(randomNumber));
+
+			generatedAnnotations += "term(\"" + t + "\"). \n";
+			generatedAnnotations += "hasSerialization(\"" + t + "\",\"\"\"" + GeneratorRandomString.getRandomString(randomNumber) 
+			+ "\"\"\"). \n";
+			generatedAnnotations += "hasArgument(\"" + a + "\",\"" + t + "\"," + termsInAnno + "). \n";
+			
+			i--;
+			termsInAnno++;
+			
+		}//whileTerms
+		
+
+		}//whileAnnoCount
+		
+
+		return generatedAnnotations;
+	}
+
+	//generate linked Annotations (with Facts, rules etc.)
+	
+    public static String generateAnnotationsWithFacts(int annoNum, int annoTermNum, int factTermNum){
+		
+		int annoCount = annoNum;
+		
+		String generatedAnnotations = "";
+		
+		while(annoCount > 0) {
+		
+		int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+		Annotation a = new Annotation(GeneratorRandomString.getRandomString(randomNumber));
+		generatedAnnotations += "annotation(\"" + a + "\"). \n";
+		
+		generatedAnnotations += generateFactsFromAnnotations(factTermNum, a);
+		
+		annoCount--;
+		
+		
+		//terms generieren
+		
+		int i = ThreadLocalRandom.current().nextInt(1, factTermNum + 1) ;
+		int termsInAnno = 0;
+		
+		while(i > 0) {
+			
+			randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+			Term t = new Term(GeneratorRandomString.getRandomString(randomNumber));
+
+			generatedAnnotations += "term(\"" + t + "\"). \n";
+			generatedAnnotations += "hasSerialization(\"" + t + "\",\"\"\"" + GeneratorRandomString.getRandomString(randomNumber) 
+			+ "\"\"\"). \n";
+			generatedAnnotations += "hasArgument(\"" + a + "\",\"" + t + "\"," + termsInAnno + "). \n";
+			
+			i--;
+			termsInAnno++;
+			
+		}//whileTerms
+		
+
+		}//whileAnnoCount
+		
+
+		return generatedAnnotations;
+	}
+
+	
+//generate linked Annotations (with Facts, rules etc.)
+	
+    public static String generateAnnotationsWithRules(int annoNum, int terms, int ruleFacts){
+		
+		int annoCount = annoNum;
+		
+		String generatedAnnotations = "";
+		
+		while(annoCount > 0) {
+		
+		int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+		Annotation a = new Annotation(GeneratorRandomString.getRandomString(randomNumber));
+		generatedAnnotations += "annotation(\"" + a + "\"). \n";
+		
+		generatedAnnotations += generateAnnotationsFromRules(ruleFacts, terms, a);
+		
+		annoCount--;
+		
+		
+		//terms generieren
+		
+		int i = ThreadLocalRandom.current().nextInt(1, terms + 1) ;
+		int termsInAnno = 0;
+		
+		while(i > 0) {
+			
+			randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+			Term t = new Term(GeneratorRandomString.getRandomString(randomNumber));
+
+			generatedAnnotations += "term(\"" + t + "\"). \n";
+			generatedAnnotations += "hasSerialization(\"" + t + "\",\"\"\"" + GeneratorRandomString.getRandomString(randomNumber) 
+			+ "\"\"\"). \n";
+			generatedAnnotations += "hasArgument(\"" + a + "\",\"" + t + "\"," + termsInAnno + "). \n";
+			
+			i--;
+			termsInAnno++;
+			
+		}//whileTerms
+		
+
+		}//whileAnnoCount
+		
+
+		return generatedAnnotations;
+		
+	}//generateAnnotationsWithRules
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+	/*
+	 * old methods!
 	private static String generateRelationalsAtoms(int nrRules) {
 		String generatedRelationalAtoms = "";
-		
-		
 		for(int i = 0; i< nrRules; i++){
 			int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
 			program.getAllRelationalAtoms().add(new RelationalAtoms(GeneratorRandomString.getRandomString(randomNumber)));
@@ -78,24 +420,11 @@ public class GeneratorRuleModelInheritance {
 			list.add(r);				
 			
 		}
-		
 		if(nrRules == 1) {
-			
-			
-			
-			
-			
-		}else if(nrRules == 2) {
-			
-			
-			
-			
-		}else {
-			
-		
 
-		
-	
+		}else if(nrRules == 2) {
+
+		}else {
 		for(int i = 0; i< program.getRules().size(); i++) {
 			
 			
@@ -122,32 +451,12 @@ public class GeneratorRuleModelInheritance {
 		return generatedRelationalAtoms;
 	}
 
+	
+	
 	private static String generateNonRelationalAtoms(int facts){
 		return "";
 	}
 	
-	private static String generateAnnotation(int nrRules){
-		String generatedAnnotations = "";
-		
-		
-		for(int i = 0; i<nrRules; i++){
-			int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
-			program.getAllAnnotations().add(new Annotation(GeneratorRandomString.getRandomString(randomNumber)));
-		}
-		
-		for(Annotation a: program.getAllAnnotations()){
-			generatedAnnotations += "annotation(" + a + ")." +  "\n";
-		}
+	*/ // old methods
 	
-		
-		return generatedAnnotations;
-	}
-	
-	private static String generateTerms(){
-		String generatedTerms = "";
-		
-		
-		
-		return generatedTerms;
-	}
 }
