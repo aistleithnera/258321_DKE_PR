@@ -14,5 +14,16 @@ public class GeneratorRandomString {
 		}
 		return sb.toString();
 	}
+	
+	
+	public static String getRandomBigChar(int length) {
+		String ALPHABET = "ABCDEFGHIJKLMOPQRSTUVWXYZ";
+		final SecureRandom RANDOM = new SecureRandom();
+
+		StringBuilder sb = new StringBuilder();
+			sb.append(ALPHABET.charAt(RANDOM.nextInt(ALPHABET.length())));
+		
+		return sb.toString();
+	}
 
 }

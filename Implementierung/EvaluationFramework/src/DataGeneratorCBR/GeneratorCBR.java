@@ -21,7 +21,7 @@ public class GeneratorCBR {
 		CBRCode += generateParameters(parameters);
 		CBRCode += generateParameterValues(parameterValues);
 
-		CBRCode += generateParameterHierachies();
+		CBRCode += generateParameterValuesAndHierachys();
 		CBRCode += generateDetermineParemeterValues();
 		CBRCode += generateDetermineRelevantContextsAndMostSpecificRelevantContext();
 		CBRCode += generateBusinessCases();
@@ -172,7 +172,7 @@ public class GeneratorCBR {
 		return staticCode;
 	}
 
-	private static String generateParameterHierachies() {
+	private static String generateParameterValuesAndHierachys() {
 		return "";
 	}
 

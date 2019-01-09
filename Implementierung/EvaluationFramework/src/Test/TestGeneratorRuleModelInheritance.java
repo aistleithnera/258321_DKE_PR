@@ -144,7 +144,31 @@ public class TestGeneratorRuleModelInheritance {
 		String text17 = GeneratorRuleModelInheritance.generateProgram() + 
 					    GeneratorRuleModelInheritance.generateAnnotationsWithRules(3, 3, 3);
 	    System.out.println(text17);
+	    
+
+		//test - generate positiveAndNegativeRules (1 rule, 1 Term, 1 positive, 1 negative)
 		
+		System.out.println("generate Annotations with facts (1 rule, 1 Term, 1 positive, 1 negative)\n");
+		String text18 = GeneratorRuleModelInheritance.generateProgram() + 
+					    GeneratorRuleModelInheritance.generatePositiveAndNegativeRules(1, 1, 1, 1);
+	    System.out.println(text18);
+	    
+
+		//test - generate positiveAndNegativeRules (1 rule, 1 Term, 3 positive, 3 negative)
+		
+		System.out.println("generate Annotations with facts (1 rule, 1 Term, 3 positive, 3 negative)\n");
+		String text19 = GeneratorRuleModelInheritance.generateProgram() + 
+					    GeneratorRuleModelInheritance.generatePositiveAndNegativeRules(1, 1, 3, 3);
+	    System.out.println(text19);
+	    
+
+		//test - generate rulesWithNonRelationalAtoms (1 rule, 1 Terms, 1 relationalAtom, 1 nonRelationalAtom)
+		
+		System.out.println("generate Annotations with facts (1 rule, 1 Terms, 1 relationalAtom, 1 nonRelationalAtom)\n");
+		String text20 = GeneratorRuleModelInheritance.generateProgram() + 
+					    GeneratorRuleModelInheritance.generateRulesWithNonRelationalAtoms(1, 1, 1, 1);
+	    System.out.println(text20);
+	    
 		
 	}
 	

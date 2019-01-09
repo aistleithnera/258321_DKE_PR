@@ -125,10 +125,56 @@ public class GeneratorRuleModelInheritance {
 		
 		}//whileFacts
 			return facts;
-		}
-	
-	
+		}//fakten incl. Terms generieren 
+		
+		
+		
 		//fakten incl. Terms generieren 
+		
+			public static String generateNonRelationalFactsFromRules(int factsNum, int termsNum, NonRelationalAtom a) {
+				
+				int factsCount = factsNum;
+				int termsInAtom = 0;
+				
+				String facts = "";
+				
+				//fakten generieren
+				
+			while(factsCount > 0) {
+				
+				int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+				NonRelationalAtom atom = a;
+				facts += "nonRelationalAtom(\"" + atom + "\"). \n";
+				facts += "hasName(\"" + atom + "\",\"" + (GeneratorRandomString.getRandomString(randomNumber)) + "\"). \n";
+				
+				factsCount--;
+				
+				termsInAtom = 0;
+				
+				//terms generieren
+				
+				int i = ThreadLocalRandom.current().nextInt(1, termsNum + 1) ;
+				
+				
+				while(i > 0) {
+					
+					randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+					
+					facts += "hasSerialization(\"" + atom + "\",\"" + GeneratorRandomString.getRandomBigChar(1) + "=" + "\"\"" + 
+					                                               GeneratorRandomString.getRandomString(randomNumber) + "\"\"\"). \n";
+					
+					
+					i--;
+					termsInAtom++;
+					
+				}//whileTerms
+				
+			
+			
+			}//whileFacts
+				return facts;
+			}//generateNonRelationalFactsFromRules
+		
 		
 			public static String generateFactsFromAnnotations(int termsNum, Annotation anno) {
 				
@@ -216,6 +262,93 @@ public class GeneratorRuleModelInheritance {
 		return rules;
 	}//generateOnlyRules
 	
+	
+public static String generatePositiveAndNegativeRules(int rulesNum, int termsNum, int positiveBodyNum, int negativeBodyNum) {
+		
+		String rules = "";
+		int rulesCount = rulesNum;
+		int positiveBodyCount = positiveBodyNum;
+		int negativeBodyCount = negativeBodyNum;
+		
+		
+		while(rulesCount > 0) {
+			
+			int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+			Rule r = new Rule(GeneratorRandomString.getRandomString(randomNumber));
+			
+			rules+= "rule(\"" + r + "\").\n";
+			rules+= "hasRule(\"" + program + "\",\"" + r + "\").\n";
+			RelationalAtoms a1 = new RelationalAtoms(GeneratorRandomString.getRandomString(randomNumber));
+			rules+= "hasPositiveHeadAtom(\"" + r +"\",\"" + a1 + "\").\n";
+			rules+= generateFactsFromRules(1, termsNum, a1);
+			
+			while(positiveBodyCount > 0) {
+				
+				RelationalAtoms a2 = new RelationalAtoms(GeneratorRandomString.getRandomString(randomNumber));
+				rules+= "hasPositiveBodyAtom(\"" + r +"\",\"" + a2 + "\").\n";
+				rules+= generateFactsFromRules(1, termsNum, a2);
+				
+				positiveBodyCount--;
+			}
+			
+            while(negativeBodyCount > 0) {
+				
+				RelationalAtoms a2 = new RelationalAtoms(GeneratorRandomString.getRandomString(randomNumber));
+				rules+= "hasNegativeBodyAtom(\"" + r +"\",\"" + a2 + "\").\n";
+				rules+= generateFactsFromRules(1, termsNum, a2);
+				
+				negativeBodyCount--;
+			}
+			
+			rulesCount--;
+		}
+		
+		return rules;
+	}//generatePositiveAndNegativeRules
+
+
+public static String generateRulesWithNonRelationalAtoms(int rulesNum, int termsNum, int relationalAtomNum, int nonRelationalAtomNum) {
+	
+	String rules = "";
+	int rulesCount = rulesNum;
+	int relationalAtomCount = relationalAtomNum;
+	int nonRelationalAtomCount = nonRelationalAtomNum;
+	
+	
+	while(rulesCount > 0) {
+		
+		int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+		Rule r = new Rule(GeneratorRandomString.getRandomString(randomNumber));
+		
+		rules+= "rule(\"" + r + "\").\n";
+		rules+= "hasRule(\"" + program + "\",\"" + r + "\").\n";
+		RelationalAtoms a1 = new RelationalAtoms(GeneratorRandomString.getRandomString(randomNumber));
+		rules+= "hasPositiveHeadAtom(\"" + r +"\",\"" + a1 + "\").\n";
+		rules+= generateFactsFromRules(1, termsNum, a1);
+		
+		while(relationalAtomCount > 0) {
+			
+			RelationalAtoms a2 = new RelationalAtoms(GeneratorRandomString.getRandomString(randomNumber));
+			rules+= "hasPositiveBodyAtom(\"" + r +"\",\"" + a2 + "\").\n";
+			rules+= generateFactsFromRules(1, termsNum, a2);
+			
+			relationalAtomCount--;
+		}
+		
+        while(nonRelationalAtomCount > 0) {
+			
+			NonRelationalAtom a2 = new NonRelationalAtom(GeneratorRandomString.getRandomString(randomNumber));
+			rules+= "hasPositiveBodyAtom(\"" + r +"\",\"" + a2 + "\").\n";
+			rules+= generateNonRelationalFactsFromRules(1, termsNum, a2);
+			
+			nonRelationalAtomCount--;
+		}
+		
+		rulesCount--;
+	}
+	
+	return rules;
+}//generateRulesNonRelationalAtoms
 	
 	
     public static String generateAnnotationsFromRules(int factsNum, int termsNum, Annotation a) {
