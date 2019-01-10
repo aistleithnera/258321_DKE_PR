@@ -20,8 +20,8 @@ public class GeneratorCBR {
 		CBRCode += generateBusinessCaseClass();
 		CBRCode += generateParameters(parameters);
 		CBRCode += generateParameterValues(parameterValues);
+		CBRCode += generateParameterValuesHierarchies();
 
-		CBRCode += generateParameterValuesAndHierachys();
 		CBRCode += generateDetermineParemeterValues();
 		CBRCode += generateDetermineRelevantContextsAndMostSpecificRelevantContext();
 		CBRCode += generateBusinessCases();
@@ -33,8 +33,10 @@ public class GeneratorCBR {
 	}
 
 	public static String generateContextClass() {
-
+		String contextClass = "";
 		cc = new ContextClass();
+		
+		contextClass += "% Generic Components\n"; 
 
 		// set length of name
 		int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
@@ -42,7 +44,7 @@ public class GeneratorCBR {
 		// set name
 		cc.setName(GeneratorRandomString.getRandomString(randomNumber));
 
-		String contextClass = "contextClass(\"" + cc.getName() + "\"). \n";
+		contextClass += "contextClass(\"" + cc.getName() + "\"). \n";
 
 		return contextClass;
 	}
@@ -67,6 +69,8 @@ public class GeneratorCBR {
 
 		int paramCount = count;
 		String generatedParameters = "";
+		
+		generatedParameters += "% Parameters\n"; 
 
 		for (int i = 0; i < paramCount; i++) {
 
@@ -100,6 +104,8 @@ public class GeneratorCBR {
 	private static String generateParameterValues(int pv) {
 
 		String generatedParameterValues = "";
+		
+		generatedParameterValues += "% Parameter Values\n"; 
 
 		for (int i = 0; i < cc.getParameters().size(); i++) {
 			for (int m = 0; m <= pv; m++) {
@@ -134,22 +140,57 @@ public class GeneratorCBR {
 
 	}
 
+	private static String generateParameterValuesHierarchies() {
+		
+		String generatedParameterValuesHierarchies = "";
+		
+		generatedParameterValuesHierarchies += "% Parameter Hierachies\n";
+
+		for (int i = 0; i < cc.getParameters().size(); i++) {
+
+			int x = cc.getParameters().get(i).getParameterValues().size() / 2;
+
+			for (int t = 1; t < x; t++) {
+
+				generatedParameterValuesHierarchies += "covers(\""
+						+ cc.getParameters().get(i).getParameterValues().get(0).getName() + "\", \""
+						+ cc.getParameters().get(i).getParameterValues().get(t).getName() + "\").";
+
+			}
+
+			for (int u = x + 1; u < cc.getParameters().get(i).getParameterValues().size(); u++) {
+
+				generatedParameterValuesHierarchies += "covers(\""
+						+ cc.getParameters().get(i).getParameterValues().get(x).getName() + "\", \""
+						+ cc.getParameters().get(i).getParameterValues().get(u).getName() + "\").";
+
+			}
+			generatedParameterValuesHierarchies += "\n";
+		}
+		generatedParameterValuesHierarchies += "\n";
+
+		return generatedParameterValuesHierarchies;
+	}
+
 	private static String generateStaticCode() {
 
 		String staticCode = "";
 
 		// transitive and transitive-reflexive covers
-		staticCode = "tCovers(Pval,Cval) :- tCovers(Pval,X), covers(X,Cval).\r\n"
+		staticCode += "% transitive and transitive-reflexive covers\n"; 
+		staticCode += "tCovers(Pval,Cval) :- tCovers(Pval,X), covers(X,Cval).\r\n"
 				+ "tCovers(Pval,Cval) :- covers(Pval,Cval).\r\n"
 				+ "trCovers(Pval,Cval) :- tCovers(Pval,Cval). trCovers(Pval,Pval):- paramValue(_,Pval).\r\n\n";
 
 		// Context Hierarchy
+		staticCode += "% Context Hierarchy\n"; 
 		staticCode += "paramCover(P,C,Param):- hasParamValue(C,Param,Pval), hasParamValue(P,Param,Pval2), trCovers(Pval2,Pval).\r\n"
 				+ "notParamCover(C,P,Param):- context(C), hasContextClass(C,CtxCl), hasParameter(CtxCl,Param), context(P), not paramCover(C,P,Param).\r\n"
 				+ "ctxInherits(C,P) :- paramCover(P,C,_), not notParamCover(P,C,_).\r\n\n";
 
 		// DETERMINE RELEVANT CONTEXTS AND THE MOST SPECIFIC RELEVANT CONTEXT
 
+		staticCode += "% DETERMINE RELEVANT CONTEXTS AND THE MOST SPECIFIC RELEVANT CONTEXT\n";
 		staticCode += "bcParamCover(BC,Ctx,Param) :- hasParamValue(Ctx,Param,PVal), detParamValue(BC,Param,PVal2), trCovers(PVal,PVal2).\r\n"
 				+ "notBcParamCover(BC,Ctx,Param) :- businessCase(BC), context(Ctx), hasContextClass(Ctx,CtxCl), hasParameter(CtxCl,Param), not bcParamCover(BC,Ctx,Param).\r\n"
 				+ "detRelevantCtxs(BC,Ctx) :- bcParamCover(BC,Ctx,X), not notBcParamCover(BC,Ctx,Y)\n\n";
@@ -161,7 +202,7 @@ public class GeneratorCBR {
 				+ "@output(\"detRelevantCtxs\"). @post(\"detRelevantCtxs\",\"orderby(1,2)\").\n\n";
 
 		// WARNINGS
-
+		staticCode += "% WARNINGS\n";
 		staticCode += "w_incompleteCtxSpec(C) :- parameter(P), context(C), not hasParamValue(C,P,_).\r\n"
 				+ "@output(\"w_incompleteCtxSpec\").\n\n";
 
@@ -170,10 +211,6 @@ public class GeneratorCBR {
 				+ "@output(\"w_ctxIdent\").\n\n";
 
 		return staticCode;
-	}
-
-	private static String generateParameterValuesAndHierachys() {
-		return "";
 	}
 
 	private static String generateDetermineParemeterValues() {
