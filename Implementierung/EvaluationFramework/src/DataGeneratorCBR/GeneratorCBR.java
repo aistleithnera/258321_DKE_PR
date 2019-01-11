@@ -12,19 +12,20 @@ public class GeneratorCBR {
 	private static String CBRCode;
 	private static ContextClass cc;
 	private static BusinessCaseClass bcc;
+	private static List<Context> contextsList;
 
-	public static String generateCBRCode(int parameters, int parameterValues) {
+	public static String generateCBRCode(int parameters, int contexts, int businessCases) {
 
 		CBRCode = "";
 		CBRCode += generateContextClass();
 		CBRCode += generateBusinessCaseClass();
 		CBRCode += generateParameters(parameters);
-		CBRCode += generateParameterValues(parameterValues);
+		CBRCode += generateParameterValues(contexts);
 		CBRCode += generateParameterValuesHierarchies();
+		CBRCode += generateContexts(contexts);
 
-		CBRCode += generateDetermineParemeterValues();
-		CBRCode += generateDetermineRelevantContextsAndMostSpecificRelevantContext();
-		CBRCode += generateBusinessCases();
+		CBRCode += generateDetermineParameterValues();
+		CBRCode += generateBusinessCases(businessCases);
 
 		CBRCode += generateStaticCode();
 
@@ -35,14 +36,14 @@ public class GeneratorCBR {
 	public static String generateContextClass() {
 		String contextClass = "";
 		cc = new ContextClass();
-		
-		contextClass += "% Generic Components\n"; 
+
+		contextClass += "% Generic Components\n";
 
 		// set length of name
 		int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
 
 		// set name
-		cc.setName(GeneratorRandomString.getRandomString(randomNumber));
+		cc.setName(GeneratorRandomString.getRandomString(randomNumber) + "Ctx");
 
 		contextClass += "contextClass(\"" + cc.getName() + "\"). \n";
 
@@ -57,7 +58,7 @@ public class GeneratorCBR {
 		int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
 
 		// set name
-		bcc.setName(GeneratorRandomString.getRandomString(randomNumber));
+		bcc.setName(GeneratorRandomString.getRandomString(randomNumber) + "Case");
 
 		String businessCaseClass = "businessCaseClass(\"" + bcc.getName() + "\"). \n\n";
 
@@ -69,8 +70,8 @@ public class GeneratorCBR {
 
 		int paramCount = count;
 		String generatedParameters = "";
-		
-		generatedParameters += "% Parameters\n"; 
+
+		generatedParameters += "% Parameters\n";
 
 		for (int i = 0; i < paramCount; i++) {
 
@@ -80,7 +81,7 @@ public class GeneratorCBR {
 
 			// new parameter is generated and added
 			Parameter p = new Parameter();
-			p.setName(GeneratorRandomString.getRandomString(randomNumber));
+			p.setName("Param_" + GeneratorRandomString.getRandomString(randomNumber));
 			cc.addParameters(p);
 		}
 
@@ -104,8 +105,8 @@ public class GeneratorCBR {
 	private static String generateParameterValues(int pv) {
 
 		String generatedParameterValues = "";
-		
-		generatedParameterValues += "% Parameter Values\n"; 
+
+		generatedParameterValues += "% Parameter Values\n";
 
 		for (int i = 0; i < cc.getParameters().size(); i++) {
 			for (int m = 0; m <= pv; m++) {
@@ -115,7 +116,7 @@ public class GeneratorCBR {
 				int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
 
 				// set name
-				pp.setName(GeneratorRandomString.getRandomString(randomNumber));
+				pp.setName("ParamValue_" + GeneratorRandomString.getRandomString(randomNumber));
 
 				cc.getParameters().get(i).addParameterValues(pp);
 
@@ -126,7 +127,7 @@ public class GeneratorCBR {
 		for (int i = 0; i < cc.getParameters().size(); i++) {
 			for (int t = 0; t < cc.getParameters().get(i).getParameterValues().size(); t++) {
 
-				generatedParameterValues += "paramValues(\"" + cc.getParameters().get(i).getName() + "\", \""
+				generatedParameterValues += "paramValues(\"" + cc.getParameters().get(i).getName() + "\",\""
 						+ cc.getParameters().get(i).getParameterValues().get(t).getName() + "\").";
 
 			}
@@ -141,35 +142,147 @@ public class GeneratorCBR {
 	}
 
 	private static String generateParameterValuesHierarchies() {
-		
+
 		String generatedParameterValuesHierarchies = "";
-		
-		generatedParameterValuesHierarchies += "% Parameter Hierachies\n";
 
-		for (int i = 0; i < cc.getParameters().size(); i++) {
+		// random choice if hierarchy tree is wide or deep
+		// random number 0 = wide hierarchy tree is wide
+		// random number 1 = wide hierarchy tree is deep
 
-			int x = cc.getParameters().get(i).getParameterValues().size() / 2;
+		int randomNumber = ThreadLocalRandom.current().nextInt(0, 2);
 
-			for (int t = 1; t < x; t++) {
+		if (randomNumber == 0) {
 
-				generatedParameterValuesHierarchies += "covers(\""
-						+ cc.getParameters().get(i).getParameterValues().get(0).getName() + "\", \""
-						+ cc.getParameters().get(i).getParameterValues().get(t).getName() + "\").";
+			generatedParameterValuesHierarchies += "% Parameter Hierachies\n";
 
+			for (int i = 0; i < cc.getParameters().size(); i++) {
+
+				int x = cc.getParameters().get(i).getParameterValues().size() / 2;
+
+				for (int t = 1; t < x; t++) {
+
+					generatedParameterValuesHierarchies += "covers(\""
+							+ cc.getParameters().get(i).getParameterValues().get(0).getName() + "\",\""
+							+ cc.getParameters().get(i).getParameterValues().get(t).getName() + "\").";
+
+				}
+
+				for (int u = x + 1; u < cc.getParameters().get(i).getParameterValues().size(); u++) {
+
+					generatedParameterValuesHierarchies += "covers(\""
+							+ cc.getParameters().get(i).getParameterValues().get(x).getName() + "\",\""
+							+ cc.getParameters().get(i).getParameterValues().get(u).getName() + "\").";
+
+				}
+				generatedParameterValuesHierarchies += "\n";
 			}
 
-			for (int u = x + 1; u < cc.getParameters().get(i).getParameterValues().size(); u++) {
-
-				generatedParameterValuesHierarchies += "covers(\""
-						+ cc.getParameters().get(i).getParameterValues().get(x).getName() + "\", \""
-						+ cc.getParameters().get(i).getParameterValues().get(u).getName() + "\").";
-
-			}
-			generatedParameterValuesHierarchies += "\n";
 		}
+
+		if (randomNumber == 1) {
+
+			for (int i = 0; i < cc.getParameters().size(); i++) {
+
+				for (int u = 0; u < cc.getParameters().get(i).getParameterValues().size() - 1; u++) {
+					generatedParameterValuesHierarchies += "covers(\""
+							+ cc.getParameters().get(i).getParameterValues().get(u).getName() + "\",\""
+							+ cc.getParameters().get(i).getParameterValues().get(u + 1).getName() + "\").";
+				}
+
+				generatedParameterValuesHierarchies += "\n";
+
+			}
+		}
+
 		generatedParameterValuesHierarchies += "\n";
 
 		return generatedParameterValuesHierarchies;
+	}
+
+	private static String generateContexts(int contexts) {
+		String generatedContexts = "";
+		generatedContexts += "% Contexts\n";
+
+		contextsList = new ArrayList<Context>();
+
+		for (int i = 0; i < contexts; i++) {
+
+			Context c = new Context();
+			c.setCtx("ctx" + i);
+
+			generatedContexts += "context(\"" + c.getCtx() + "\").\n";
+
+			// to prevent to have all context names at the same length, a random Number
+			// generator is used.
+			int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+
+			// new context name is generated and added
+			c.setName("ctxName_" + GeneratorRandomString.getRandomString(randomNumber));
+			generatedContexts += "hasName(\"" + c.getCtx() + "\",\"" + c.getName() + "\").\n";
+
+			// new module is generated
+			Module m = new Module();
+			m.setName("module" + i);
+
+			c.setModule(m);
+
+			generatedContexts += "hasModule(\"" + c.getCtx() + "\",\"" + c.getModule().getName() + "\"). ";
+
+			// context class is set
+			c.setContextClass(cc.getName());
+
+			generatedContexts += "hasContextClass(\"" + c.getCtx() + "\",\"" + c.getContextClass() + "\").\n";
+
+			// match parameter values
+
+			for (int p = 0; p < cc.getParameters().size(); p++) {
+
+				generatedContexts += "hasParamValues(\"" + c.getCtx() + "\",\"" + cc.getParameters().get(p).getName()
+						+ "\", \"" + cc.getParameters().get(p).getParameterValues().get(i).getName() + "\").\n";
+
+			}
+
+			contextsList.add(c);
+		}
+
+		generatedContexts += "\n";
+		return generatedContexts;
+	}
+
+	private static String generateDetermineParameterValues() {
+		String genratedDetermineParameterValues = "";
+
+		genratedDetermineParameterValues += "% Determine Parameter Values\n";
+
+		for (int i = 0; i < cc.getParameters().size(); i++) {
+
+			// to prevent to have all determined parameter values names at the same length,
+			// a random Number
+			// generator is used.
+			int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+
+			cc.getParameters().get(i).setDescProp("descProp_" + GeneratorRandomString.getRandomString(randomNumber));
+
+			genratedDetermineParameterValues += "detParamValue(BC,\"" + cc.getParameters().get(i).getName()
+					+ "\",Val) :- businessCase(BC), hasDescProp(BC,\"" + cc.getParameters().get(i).getDescProp()
+					+ "\",Val).\n";
+
+		}
+
+		genratedDetermineParameterValues += "\n";
+
+		return genratedDetermineParameterValues;
+	}
+
+	private static String generateBusinessCases(int businessCases) {
+		String generatedBusinessCases = "";
+
+		generatedBusinessCases += "% Business Cases\n";
+
+		generatedBusinessCases += "hasBusinessCaseClass(BC,\"" + bcc.getName() + "\") :- businessCase(BC).\n";
+
+		generatedBusinessCases += "\n";
+		return generatedBusinessCases;
 	}
 
 	private static String generateStaticCode() {
@@ -177,13 +290,13 @@ public class GeneratorCBR {
 		String staticCode = "";
 
 		// transitive and transitive-reflexive covers
-		staticCode += "% transitive and transitive-reflexive covers\n"; 
+		staticCode += "% transitive and transitive-reflexive covers\n";
 		staticCode += "tCovers(Pval,Cval) :- tCovers(Pval,X), covers(X,Cval).\r\n"
 				+ "tCovers(Pval,Cval) :- covers(Pval,Cval).\r\n"
 				+ "trCovers(Pval,Cval) :- tCovers(Pval,Cval). trCovers(Pval,Pval):- paramValue(_,Pval).\r\n\n";
 
 		// Context Hierarchy
-		staticCode += "% Context Hierarchy\n"; 
+		staticCode += "% Context Hierarchy\n";
 		staticCode += "paramCover(P,C,Param):- hasParamValue(C,Param,Pval), hasParamValue(P,Param,Pval2), trCovers(Pval2,Pval).\r\n"
 				+ "notParamCover(C,P,Param):- context(C), hasContextClass(C,CtxCl), hasParameter(CtxCl,Param), context(P), not paramCover(C,P,Param).\r\n"
 				+ "ctxInherits(C,P) :- paramCover(P,C,_), not notParamCover(P,C,_).\r\n\n";
@@ -213,15 +326,4 @@ public class GeneratorCBR {
 		return staticCode;
 	}
 
-	private static String generateDetermineParemeterValues() {
-		return "";
-	}
-
-	private static String generateDetermineRelevantContextsAndMostSpecificRelevantContext() {
-		return "";
-	}
-
-	private static String generateBusinessCases() {
-		return "";
-	}
 }

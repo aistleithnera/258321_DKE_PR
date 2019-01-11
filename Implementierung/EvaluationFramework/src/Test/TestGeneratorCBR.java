@@ -21,7 +21,7 @@ public class TestGeneratorCBR {
 //			}
 //		}
 		
-		System.out.println(GeneratorCBR.generateCBRCode(3, 4));
+		System.out.println(GeneratorCBR.generateCBRCode(3, 4, 5));
 
 	}
 

@@ -27,7 +27,7 @@ public class EvaluationFrameworkApp {
 			try {
 				
 				// String text = GeneratorRandomString.getRandomString(5);
-				String text = GeneratorCBR.generateCBRCode(5, 3);
+				String text = GeneratorCBR.generateCBRCode(5, 3, 5);
 				System.out.println(text);
 				
 				}catch(Exception e) {

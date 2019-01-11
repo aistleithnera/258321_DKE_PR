@@ -7,6 +7,7 @@ public class Parameter {
 	
 	private String name;
 	private List<ParameterValue> parameterValues = new ArrayList<ParameterValue>();
+	private String descProp; 
 	
 	public String getName() {
 		return this.name;
@@ -22,6 +23,14 @@ public class Parameter {
 	
 	public void addParameterValues(ParameterValue v) {
 		this.parameterValues.add(v); 
+	}
+	
+	public String getDescProp() {
+		return this.descProp;
+	}
+	
+	public void setDescProp (String n) {
+		this.descProp = n; 
 	}
 
 }
