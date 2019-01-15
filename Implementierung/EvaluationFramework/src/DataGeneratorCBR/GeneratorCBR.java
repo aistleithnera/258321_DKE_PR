@@ -14,19 +14,17 @@ public class GeneratorCBR {
 	private static BusinessCaseClass bcc;
 	private static List<Context> contextsList;
 
-	public static String generateCBRCode(int parameters, int contexts, int businessCases) {
+	public static String generateCBRCode(int parameters, int paramValues, int businessCases) {
 
 		CBRCode = "";
 		CBRCode += generateContextClass();
 		CBRCode += generateBusinessCaseClass();
 		CBRCode += generateParameters(parameters);
-		CBRCode += generateParameterValues(contexts);
+		CBRCode += generateParameterValues(paramValues);
 		CBRCode += generateParameterValuesHierarchies();
-		CBRCode += generateContexts(contexts);
-
+		CBRCode += generateContexts(paramValues);
 		CBRCode += generateDetermineParameterValues();
 		CBRCode += generateBusinessCases(businessCases);
-
 		CBRCode += generateStaticCode();
 
 		return CBRCode;
