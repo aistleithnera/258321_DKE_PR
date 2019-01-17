@@ -12,7 +12,6 @@ public class GeneratorCBR {
 	private static String CBRCode;
 	private static ContextClass cc;
 	private static BusinessCaseClass bcc;
-	private static List<Context> contextsList;
 
 	public static String generateCBRCode(int parameters, int paramValues, int businessCases) {
 
@@ -41,7 +40,7 @@ public class GeneratorCBR {
 		int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
 
 		// set name
-		cc.setName(GeneratorRandomString.getRandomString(randomNumber) + "Ctx");
+		cc.setName("ccName_" + GeneratorRandomString.getRandomString(randomNumber) + "Ctx");
 
 		contextClass += "contextClass(\"" + cc.getName() + "\"). \n";
 
@@ -56,7 +55,7 @@ public class GeneratorCBR {
 		int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
 
 		// set name
-		bcc.setName(GeneratorRandomString.getRandomString(randomNumber) + "Case");
+		bcc.setName("bccName_" + GeneratorRandomString.getRandomString(randomNumber) + "Case");
 
 		String businessCaseClass = "businessCaseClass(\"" + bcc.getName() + "\"). \n\n";
 
@@ -79,7 +78,7 @@ public class GeneratorCBR {
 
 			// new parameter is generated and added
 			Parameter p = new Parameter();
-			p.setName("Param_" + GeneratorRandomString.getRandomString(randomNumber));
+			p.setName("Param_" + cc.getParameters().size() + "_" + GeneratorRandomString.getRandomString(randomNumber));
 			cc.addParameters(p);
 		}
 
@@ -107,14 +106,15 @@ public class GeneratorCBR {
 		generatedParameterValues += "% Parameter Values\n";
 
 		for (int i = 0; i < cc.getParameters().size(); i++) {
-			for (int m = 0; m <= pv; m++) {
+			for (int m = 0; m < pv; m++) {
 				ParameterValue pp = new ParameterValue();
 
 				// set name length
 				int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
 
 				// set name
-				pp.setName("ParamValue_" + GeneratorRandomString.getRandomString(randomNumber));
+				pp.setName("ParamValue_" + i + "_" + cc.getParameters().get(i).getParameterValues().size() + "_"
+						+ GeneratorRandomString.getRandomString(randomNumber));
 
 				cc.getParameters().get(i).addParameterValues(pp);
 
@@ -201,8 +201,6 @@ public class GeneratorCBR {
 		String generatedContexts = "";
 		generatedContexts += "% Contexts\n";
 
-		contextsList = new ArrayList<Context>();
-
 		for (int i = 0; i < contexts; i++) {
 
 			Context c = new Context();
@@ -236,11 +234,12 @@ public class GeneratorCBR {
 			for (int p = 0; p < cc.getParameters().size(); p++) {
 
 				generatedContexts += "hasParamValues(\"" + c.getCtx() + "\",\"" + cc.getParameters().get(p).getName()
-						+ "\", \"" + cc.getParameters().get(p).getParameterValues().get(i).getName() + "\").\n";
+						+ "\",\"" + cc.getParameters().get(p).getParameterValues().get(i).getName() + "\").\n";
 
 			}
 
-			contextsList.add(c);
+			cc.addContexts(c);
+			generatedContexts += "\n";
 		}
 
 		generatedContexts += "\n";
@@ -278,6 +277,42 @@ public class GeneratorCBR {
 		generatedBusinessCases += "% Business Cases\n";
 
 		generatedBusinessCases += "hasBusinessCaseClass(BC,\"" + bcc.getName() + "\") :- businessCase(BC).\n";
+
+		int x = cc.getParameters().size();
+
+		for (int i = 1; i <= businessCases; i++) {
+
+			String bcName = "";
+			bcName = "bc" + i;
+
+			BusinessCase bc = new BusinessCase();
+			bc.setName(bcName);
+
+			for (int t = 0; t < x; t++) {
+				String descProp = "";
+				String paramValue = "";
+
+				descProp = cc.getParameters().get(t).getDescProp();
+
+				// to get one random paramValue from the chosen Parameter
+				int help = cc.getParameters().get(t).getParameterValues().size();
+				int randomNumber = ThreadLocalRandom.current().nextInt(0, help);
+				paramValue = cc.getParameters().get(t).getParameterValues().get(randomNumber).getName();
+
+				bc.addDescProp(descProp);
+				bc.addParameterValues(paramValue);
+
+				generatedBusinessCases += "businessCase(\"" + bc.getName() + "\")." + "hasDescProp(\"" + bc.getName()
+						+ "\",\"" + bc.getDescProp().get(t) + "\",\"" + bc.getParameterValues().get(t) + "\").";
+
+				generatedBusinessCases += "\n";
+
+			}
+
+			bcc.addBusinessCase(bc);
+
+			generatedBusinessCases += "\n";
+		}
 
 		generatedBusinessCases += "\n";
 		return generatedBusinessCases;
