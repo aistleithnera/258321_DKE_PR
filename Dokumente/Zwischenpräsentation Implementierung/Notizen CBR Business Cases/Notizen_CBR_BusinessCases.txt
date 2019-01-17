@@ -1,0 +1,119 @@
+
+% Generic Components
+contextClass("ccName_xhdodCtx"). 
+businessCaseClass("bccName_wcxrCase"). 
+
+% Parameters
+hasParameter("ccName_xhdodCtx,"Param_0_lwxde"). hasParameter("ccName_xhdodCtx,"Param_1_vcixn"). hasParameter("ccName_xhdodCtx,"Param_2_hbviwrs"). 
+parameter("Param_0_lwxde").
+parameter("Param_1_vcixn").
+parameter("Param_2_hbviwrs").
+
+% Parameter Values
+paramValues("Param_0_lwxde","ParamValue_0_0_wgxb").paramValues("Param_0_lwxde","ParamValue_0_1_trnzw").paramValues("Param_0_lwxde","ParamValue_0_2_bufes").paramValues("Param_0_lwxde","ParamValue_0_3_roccgr").paramValues("Param_0_lwxde","ParamValue_0_4_wgblv").
+paramValues("Param_1_vcixn","ParamValue_1_0_vmqqctc").paramValues("Param_1_vcixn","ParamValue_1_1_riimvye").paramValues("Param_1_vcixn","ParamValue_1_2_pfkrhgf").paramValues("Param_1_vcixn","ParamValue_1_3_uyxisl").paramValues("Param_1_vcixn","ParamValue_1_4_azqaw").
+paramValues("Param_2_hbviwrs","ParamValue_2_0_sktoc").paramValues("Param_2_hbviwrs","ParamValue_2_1_yrdtl").paramValues("Param_2_hbviwrs","ParamValue_2_2_qrios").paramValues("Param_2_hbviwrs","ParamValue_2_3_kydy").paramValues("Param_2_hbviwrs","ParamValue_2_4_iotcqfk").
+
+covers("ParamValue_0_0_wgxb","ParamValue_0_1_trnzw").covers("ParamValue_0_1_trnzw","ParamValue_0_2_bufes").covers("ParamValue_0_2_bufes","ParamValue_0_3_roccgr").covers("ParamValue_0_3_roccgr","ParamValue_0_4_wgblv").
+covers("ParamValue_1_0_vmqqctc","ParamValue_1_1_riimvye").covers("ParamValue_1_1_riimvye","ParamValue_1_2_pfkrhgf").covers("ParamValue_1_2_pfkrhgf","ParamValue_1_3_uyxisl").covers("ParamValue_1_3_uyxisl","ParamValue_1_4_azqaw").
+covers("ParamValue_2_0_sktoc","ParamValue_2_1_yrdtl").covers("ParamValue_2_1_yrdtl","ParamValue_2_2_qrios").covers("ParamValue_2_2_qrios","ParamValue_2_3_kydy").covers("ParamValue_2_3_kydy","ParamValue_2_4_iotcqfk").
+
+% Contexts
+context("ctx0").
+hasName("ctx0","ctxName_sbrow").
+hasModule("ctx0","module0"). hasContextClass("ctx0","ccName_xhdodCtx").
+hasParamValues("ctx0","Param_0_lwxde","ParamValue_0_0_wgxb").
+hasParamValues("ctx0","Param_1_vcixn","ParamValue_1_0_vmqqctc").
+hasParamValues("ctx0","Param_2_hbviwrs","ParamValue_2_0_sktoc").
+context("ctx1").
+hasName("ctx1","ctxName_sfnrb").
+hasModule("ctx1","module1"). hasContextClass("ctx1","ccName_xhdodCtx").
+hasParamValues("ctx1","Param_0_lwxde","ParamValue_0_1_trnzw").
+hasParamValues("ctx1","Param_1_vcixn","ParamValue_1_1_riimvye").
+hasParamValues("ctx1","Param_2_hbviwrs","ParamValue_2_1_yrdtl").
+context("ctx2").
+hasName("ctx2","ctxName_ksyum").
+hasModule("ctx2","module2"). hasContextClass("ctx2","ccName_xhdodCtx").
+hasParamValues("ctx2","Param_0_lwxde","ParamValue_0_2_bufes").
+hasParamValues("ctx2","Param_1_vcixn","ParamValue_1_2_pfkrhgf").
+hasParamValues("ctx2","Param_2_hbviwrs","ParamValue_2_2_qrios").
+context("ctx3").
+hasName("ctx3","ctxName_ytylbnk").
+hasModule("ctx3","module3"). hasContextClass("ctx3","ccName_xhdodCtx").
+hasParamValues("ctx3","Param_0_lwxde","ParamValue_0_3_roccgr").
+hasParamValues("ctx3","Param_1_vcixn","ParamValue_1_3_uyxisl").
+hasParamValues("ctx3","Param_2_hbviwrs","ParamValue_2_3_kydy").
+context("ctx4").
+hasName("ctx4","ctxName_eoiop").
+hasModule("ctx4","module4"). hasContextClass("ctx4","ccName_xhdodCtx").
+hasParamValues("ctx4","Param_0_lwxde","ParamValue_0_4_wgblv").
+hasParamValues("ctx4","Param_1_vcixn","ParamValue_1_4_azqaw").
+hasParamValues("ctx4","Param_2_hbviwrs","ParamValue_2_4_iotcqfk").
+
+% Determine Parameter Values
+detParamValue(BC,"Param_0_lwxde",Val) :- businessCase(BC), hasDescProp(BC,"descProp_jxmfjay",Val).
+detParamValue(BC,"Param_1_vcixn",Val) :- businessCase(BC), hasDescProp(BC,"descProp_yxragiv",Val).
+detParamValue(BC,"Param_2_hbviwrs",Val) :- businessCase(BC), hasDescProp(BC,"descProp_mcul",Val).
+
+% Business Cases
+hasBusinessCaseClass(BC,"bccName_wcxrCase") :- businessCase(BC).
+
+% transitive and transitive-reflexive covers
+tCovers(Pval,Cval) :- tCovers(Pval,X), covers(X,Cval).
+tCovers(Pval,Cval) :- covers(Pval,Cval).
+trCovers(Pval,Cval) :- tCovers(Pval,Cval). trCovers(Pval,Pval):- paramValue(_,Pval).
+
+% Context Hierarchy
+paramCover(P,C,Param):- hasParamValue(C,Param,Pval), hasParamValue(P,Param,Pval2), trCovers(Pval2,Pval).
+notParamCover(C,P,Param):- context(C), hasContextClass(C,CtxCl), hasParameter(CtxCl,Param), context(P), not paramCover(C,P,Param).
+ctxInherits(C,P) :- paramCover(P,C,_), not notParamCover(P,C,_).
+
+% DETERMINE RELEVANT CONTEXTS AND THE MOST SPECIFIC RELEVANT CONTEXT
+bcParamCover(BC,Ctx,Param) :- hasParamValue(Ctx,Param,PVal), detParamValue(BC,Param,PVal2), trCovers(PVal,PVal2).
+notBcParamCover(BC,Ctx,Param) :- businessCase(BC), context(Ctx), hasContextClass(Ctx,CtxCl), hasParameter(CtxCl,Param), not bcParamCover(BC,Ctx,Param).
+detRelevantCtxs(BC,Ctx) :- bcParamCover(BC,Ctx,X), not notBcParamCover(BC,Ctx,Y)
+
+hasRelevantDescendant(BC,Ctx) :- detRelevantCtxs(BC,Ctx), detRelevantCtxs(BC,Ctx2), ctxInherits(Ctx2,Ctx), not w_ctxIdent(Ctx,Ctx2), Ctx!=Ctx2.
+detMostSpecificCtx(BC,Ctx) :- detRelevantCtxs(BC,Ctx), not hasRelevantDescendant(BC,Ctx).
+
+@output("detMostSpecificCtx"). @post("detMostSpecificCtx","orderby(1,2)").
+@output("detRelevantCtxs"). @post("detRelevantCtxs","orderby(1,2)").
+
+% WARNINGS
+w_incompleteCtxSpec(C) :- parameter(P), context(C), not hasParamValue(C,P,_).
+@output("w_incompleteCtxSpec").
+
+ctxDiffParamValue(Ctx1,Ctx2) :- context(Ctx1), context(Ctx2), hasParamValue(Ctx1,P,PVal1), hasParamValue(Ctx2,P,PVal2), PVal1!=PVal2.
+w_ctxIdent(Ctx1,Ctx2) :- context(Ctx1), context(Ctx2), not ctxDiffParamValue(Ctx1,Ctx2),Ctx1!=Ctx2.
+@output("w_ctxIdent").
+
+
+
+
+1 business cases
+
+% Business Cases
+hasBusinessCaseClass(BC,"bccName_wcxrCase") :- businessCase(BC).
+businessCase("bc1").hasDescProp("bc1","descProp_jxmfjay", "ParamValue_0_0_wgxb").
+businessCase("bc1").hasDescProp("bc1","descProp_yxragiv", "ParamValue_1_1_riimvye").
+businessCase("bc1").hasDescProp("bc1","descProp_mcul", "ParamValue_2_0_sktoc").
+
+
+---------------------------------------------------------------------------------------
+
+
+businessCase("bc2").hasDescProp("bc2","descProp_jxmfjay", Param_0_lwxde_paramValue).
+businessCase("bc2").hasDescProp("bc2","descProp_yxragiv", Param_1_vcixn_paramValue).
+businessCase("bc2").hasDescProp("bc2","descProp_mcul", Param_2_hbviwrs_paramValue).
+
+
+für alle descProp
+
+
+businessCase("bc1").hasDescProp("bc1","descProp_jxmfjay", Param_0_lwxde_wgxb).
+businessCase("bc1").hasDescProp("bc1","descProp_yxragiv", Param_1_vcixn_paramValue).
+businessCase("bc1").hasDescProp("bc1","descProp_mcul", Param_2_hbviwrs_paramValue).
+
+businessCase("bc2").hasDescProp("bc2","descProp_jxmfjay", Param_0_lwxde_paramValue).
+businessCase("bc2").hasDescProp("bc2","descProp_yxragiv", Param_1_vcixn_paramValue).
+businessCase("bc2").hasDescProp("bc2","descProp_mcul", Param_2_hbviwrs_paramValue).
