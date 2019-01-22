@@ -7,6 +7,19 @@ public class ContextClass {
 
 	private String name;
 	private List<Parameter> parameters = new ArrayList<Parameter>();
+	private List <Context> contexts = new ArrayList<Context>(); 
+
+	public List<Context> getContexts() {
+		return contexts;
+	}
+
+	public void setContexts(List<Context> contexts) {
+		this.contexts = contexts;
+	}
+	
+	public void addContexts (Context context) {
+		this.contexts.add(context);
+	}
 
 	public String getName() {
 		return this.name;
