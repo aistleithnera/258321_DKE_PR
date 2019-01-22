@@ -9,7 +9,7 @@ public class RMI {
 	private int hour;
 	private int minute;
 	private int second;
-	private String testType;
+	private int testType;
 	private int noRules;
 	private int noFacts;
 	private int noInPr;
@@ -60,10 +60,10 @@ public class RMI {
 	public void setSecond(int second) {
 		this.second = second;
 	}
-	public String getTestType() {
+	public int getTestType() {
 		return testType;
 	}
-	public void setTestType(String testType) {
+	public void setTestType(int testType) {
 		this.testType = testType;
 	}
 	public int getNoRules() {

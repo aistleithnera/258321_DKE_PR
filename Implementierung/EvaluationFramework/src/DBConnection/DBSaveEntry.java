@@ -82,7 +82,7 @@ public class DBSaveEntry {
 			insertRMI.setInt(5, rmi.getHour());
 			insertRMI.setInt(6, rmi.getMinute());
 			insertRMI.setInt(7, rmi.getSecond());
-			insertRMI.setString(8, rmi.getTestType());
+			insertRMI.setInt(8, rmi.getTestType());
 			insertRMI.setInt(9, rmi.getNoRules());	
 			insertRMI.setInt(10, rmi.getNoFacts());	
 			insertRMI.setInt(11, rmi.getNoInPr());
