@@ -6,7 +6,8 @@ public class VadalogExecution {
 
 	public static double calcExTime() {
 
-		double randExTime = ThreadLocalRandom.current().nextDouble(1, 500);
+		int help =  ThreadLocalRandom.current().nextInt(11, 401);
+		double randExTime = help/10;
 		return randExTime;
 
 	}
@@ -28,7 +29,8 @@ public class VadalogExecution {
 
 	public static double calcCpuUsage() {
 
-		double randCpuUsage = ThreadLocalRandom.current().nextDouble(1, 101);
+		int help = ThreadLocalRandom.current().nextInt(101, 5001);
+		double randCpuUsage = help/100; 
 
 		return randCpuUsage;
 

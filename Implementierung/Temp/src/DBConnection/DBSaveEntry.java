@@ -11,7 +11,7 @@ public class DBSaveEntry {
 	
 	public static void newCBR(CBR cbr) {
 
-		String queryInsertCBR = "INSERT INTO cbr (id, day, month, year, hour, minute, second, noParam, noParamVal, noBusCase, exTime, errors, cpuUsage) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String queryInsertCBR = "INSERT INTO cbr (id, day, month, year, hour, minute, second, noParm, noParmVal, noBusCase, exTime, errors, cpuUsage) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		PreparedStatement insertCBR = null;
 
 		Connection connection = null;
