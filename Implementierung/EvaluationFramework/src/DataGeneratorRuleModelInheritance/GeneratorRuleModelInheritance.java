@@ -3,6 +3,7 @@ package DataGeneratorRuleModelInheritance;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 import DataGeneratorRandomString.GeneratorRandomString;
@@ -13,21 +14,49 @@ public class GeneratorRuleModelInheritance {
 	private static String RMICode; 
 	private static Program program = new Program();
 	
+	private static List<Program> programs;
 	
 	private static List <String> nonRelationalAtoms;
 	private static List <String> annotations;
 	private static List <String> terms;
-
+	private static List <String> modules = new ArrayList<>();
+	public static Map<Integer, String> moduleFacts = new HashMap<>();
+	static int countModule = 0;
+	
 
 	
 	//programm(namen) generieren
 	
 	public static String generateProgram() {
-		program.setName("id1");
+		int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+		program = new Program();
+		program.setName(GeneratorRandomString.getRandomString(randomNumber));
+		programs = new ArrayList<Program>();
+		programs.add(program);
 		return "program(\"" + program + "\")." +  "\n";
+		
+		
 	}
 	
-
+	
+	public static String generateModuleResultSet() {
+		String generateModuleResultSet = "";
+		String generatedFacts = null;
+		int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+		program = new Program();
+		program.setName(modules.get(countModule));
+		programs = new ArrayList<Program>();
+		programs.add(program);
+		generateModuleResultSet += "program(\"" + program + "\")." +  "\n";
+		generatedFacts = generateOnlyFacts(2,1);
+		generateModuleResultSet += generatedFacts;
+		moduleFacts.put(countModule, generatedFacts);
+		generateModuleResultSet += generateAnnotationResultSet(1);
+		countModule++;
+		return generateModuleResultSet;
+	}
+	
+	
 	//fakten incl. terms generieren
 	
 	public static String generateOnlyFacts(int factsNum, int termsNum) {
@@ -44,9 +73,12 @@ public class GeneratorRuleModelInheritance {
 		
 		int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
 		RelationalAtoms a = new RelationalAtoms(GeneratorRandomString.getRandomString(randomNumber));
+		
+		String s1 = GeneratorRandomString.getRandomString(randomNumber);
+		a.setName(s1);
 		facts += "relationalAtom(\"" + a + "\"). \n";
 		facts += "hasFact(\"" + program +"\",\"" + a + "\"). \n";
-		facts += "hasName(\"" + a + "\",\"" + (GeneratorRandomString.getRandomString(randomNumber)) + "\"). \n";
+		facts += "hasName(\"" + a + "\",\"" + s1 + "\"). \n";
 		
 		factsCount--;
 		
@@ -61,9 +93,12 @@ public class GeneratorRuleModelInheritance {
 			
 			randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
 			Term t = new Term(GeneratorRandomString.getRandomString(randomNumber));
+			
+			String s = GeneratorRandomString.getRandomString(randomNumber);
+			t.setSerialization(s);
 
 			facts += "term(\"" + t + "\"). \n";
-			facts += "hasSerialization(\"" + t + "\",\"\"\"" + GeneratorRandomString.getRandomString(randomNumber) 
+			facts += "hasSerialization(\"" + t + "\",\"\"\"" +  s
 			+ "\"\"\"). \n";
 			facts += "hasArgument(\"" + a + "\",\"" + t + "\"," + termsInAtom + "). \n";
 			
@@ -525,6 +560,110 @@ public static String generateRulesWithNonRelationalAtoms(int rulesNum, int terms
     
     
     
+public static String generateModule(int annoNum){
+		
+		int annoCount = annoNum;
+		
+		String generatedAnnotations = "";
+		
+		while(annoCount > 0) {
+		
+		int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+		Annotation a = new Annotation(GeneratorRandomString.getRandomString(randomNumber));
+		generatedAnnotations += "annotation(\"" + a + "\"). \n";
+		generatedAnnotations += "hasAnnotation(\"" + program +"\",\"" + a + "\"). \n";
+		generatedAnnotations += "hasName(\"" + a + "\",\"" + "module" + "\"). \n";
+		
+
+		annoCount--;
+		
+		
+		//terms generieren
+			
+			randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+			Term t = new Term(GeneratorRandomString.getRandomString(randomNumber));
+
+			generatedAnnotations += "term(\"" + t + "\"). \n";
+			String s = GeneratorRandomString.getRandomString(randomNumber);
+			modules.add(s);
+			generatedAnnotations += "hasSerialization(\"" + t + "\",\"\"\"" + s 
+			+ "\"\"\"). \n";
+			generatedAnnotations += "hasArgument(\"" + a + "\",\"" + t + "\"," + 0 + "). \n";
+			
+		}
+		return generatedAnnotations;
+
+}
+    
+public static String generateModuleInheritance(int annoNum){
+	
+	int annoCount = annoNum;
+	
+	String generatedAnnotations = "";
+	
+	while(annoCount > 0) {
+	
+	int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+	Annotation a = new Annotation(GeneratorRandomString.getRandomString(randomNumber));
+	generatedAnnotations += "annotation(\"" + a + "\"). \n";
+	generatedAnnotations += "hasAnnotation(\"" + program +"\",\"" + a + "\"). \n";
+	generatedAnnotations += "hasName(\"" + a + "\",\"" + "inherits" + "\"). \n";
+	
+
+	annoCount--;
+	
+	
+	//terms generieren
+		
+		randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+		Term t = new Term(GeneratorRandomString.getRandomString(randomNumber));
+
+		generatedAnnotations += "term(\"" + t + "\"). \n";
+		String s = modules.get(0);
+		generatedAnnotations += "hasSerialization(\"" + t + "\",\"\"\"" + s 
+		+ "\"\"\"). \n";
+		generatedAnnotations += "hasArgument(\"" + a + "\",\"" + t + "\"," + 0 + "). \n";
+		
+	}
+	return generatedAnnotations;
+
+}
+
+
+public static String generateAnnotationResultSet(int annoNum){
+	
+	int annoCount = annoNum;
+	
+	String generatedAnnotations = "";
+	
+	while(annoCount > 0) {
+	
+	int randomNumber = ThreadLocalRandom.current().nextInt(2, 4);
+	Annotation a = new Annotation(GeneratorRandomString.getRandomString(randomNumber));
+	generatedAnnotations += "annotation(\"" + a + "\"). \n";
+	generatedAnnotations += "hasAnnotation(\"" + program +"\",\"" + a + "\"). \n";
+	generatedAnnotations += "hasName(\"" + a + "\",\"" + "resultset" + "\"). \n";
+	
+
+	annoCount--;
+	
+	
+	//terms generieren
+		
+		randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+		Term t = new Term(GeneratorRandomString.getRandomString(randomNumber));
+
+		generatedAnnotations += "term(\"" + t + "\"). \n";
+		String s = modules.get(countModule);
+		generatedAnnotations += "hasSerialization(\"" + t + "\",\"\"\"" + s 
+		+ "\"\"\"). \n";
+		generatedAnnotations += "hasArgument(\"" + a + "\",\"" + t + "\"," + 0 + "). \n";
+		
+	}
+	return generatedAnnotations;
+
+}
+    
     
     
     
@@ -592,4 +731,5 @@ public static String generateRulesWithNonRelationalAtoms(int rulesNum, int terms
 	
 	*/ // old methods
 	
+
 }
