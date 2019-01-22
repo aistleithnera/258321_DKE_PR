@@ -7,8 +7,10 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import DataGeneratorCBR.GeneratorCBR;
 import DataGeneratorRuleModelInheritance.GeneratorRuleModelInheritance;
+import DataGeneratorRuleModelInheritance.RMIModule;
 import Exceptions.NegativeNumberException;
 import Models.CBR;
+import Models.RMI;
 import Vadalog.VadalogExecution;
 
 public class EvaluationFrameworkApp {
@@ -107,10 +109,94 @@ public class EvaluationFrameworkApp {
 			System.out.println(date.getSeconds());
 			
 		} else if (option == 2) {
+			
+			int rules;
+			int facts;
+			int noInPr;
+			int noOutPr;
 
-			int option2;
+			System.out.print("Rules: ");
+			rules = s1.nextInt();
+			System.out.print("Facts: ");
+			facts = s1.nextInt();
+			System.out.print("NoInPr: ");
+			noInPr = s1.nextInt();
+			System.out.print("NoOutPr: ");
+			noOutPr = s1.nextInt();
+			System.out.print("\n");
+			
+			RMIModule m1 = new RMIModule();
+			String text = m1.generateRMIModule(rules, facts, noInPr, noOutPr );
 
-			System.out.println("\n\n");
+			System.out.println("Input ");
+			System.out.println("==================");
+			System.out.println("Rules: " + rules);
+			System.out.println("Facts: " + facts);
+			System.out.println("NoInPr: " + noInPr);
+			System.out.println("NoOutPr: " + noOutPr);
+			System.out.print("\n");
+
+			System.out.println("Generated RMI Meta-Code");
+			System.out.println("==================");
+
+			System.out.println(text);
+			
+			
+			double exTime = VadalogExecution.calcExTime();
+			boolean error = VadalogExecution.calcNoErrors(); 
+			double cpuUsage = VadalogExecution.calcCpuUsage(); 
+			
+			
+			System.out.println("Evaluation");
+			System.out.println("==================");
+			System.out.print("Execution Time: " + exTime);
+			System.out.print("\n");
+			System.out.print("Errors: " );
+			if (error == true) {
+				System.out.print("no errors detected");
+			} else {
+				System.out.print("errors detected");
+			}
+			
+			System.out.print("\n");
+			System.out.print("CPU Usage: " + cpuUsage);
+			System.out.print("\n");
+			
+			RMI rmiObject = new RMI(); 
+			
+			rmiObject.setId(ThreadLocalRandom.current().nextInt(0, 101));
+			
+			Calendar now = Calendar.getInstance(); 
+			Date date = now.getTime(); 
+			
+			rmiObject.setDay(now.get(Calendar.DAY_OF_MONTH)); 
+			rmiObject.setMonth(now.get(Calendar.MONTH)+1);
+			rmiObject.setYear(now.get(Calendar.YEAR));
+			rmiObject.setHour(date.getHours());
+			rmiObject.setMinute(date.getMinutes());
+			rmiObject.setSecond(date.getSeconds());
+			rmiObject.setTestType("Test");
+			rmiObject.setNoRules(rules);
+			rmiObject.setNoFacts(facts);
+			rmiObject.setNoInPr(noInPr);
+			rmiObject.setNoOutPr(noOutPr);
+			
+			rmiObject.setExTime(exTime);
+			rmiObject.setErrors(error);
+			rmiObject.setCpuUsage(cpuUsage);
+
+			DBConnection.DBSaveEntry.newRMI(rmiObject);
+			
+			System.out.println(now.get(Calendar.DAY_OF_MONTH));
+			System.out.println(now.get(Calendar.MONTH)+1);
+			System.out.println(now.get(Calendar.YEAR));
+			System.out.println(date.getHours());
+			System.out.println(date.getMinutes());
+			System.out.println(date.getSeconds());
+			
+			
+
+			/*System.out.println("\n\n");
 
 			System.out.println("1. AbstractionOnly");
 			System.out.println("2. ConformanceOnly");
@@ -162,8 +248,9 @@ public class EvaluationFrameworkApp {
 
 		} else {
 			System.out.println("Option not valid!");
-		}
+		*/
 
+	}
 	}
 
 }

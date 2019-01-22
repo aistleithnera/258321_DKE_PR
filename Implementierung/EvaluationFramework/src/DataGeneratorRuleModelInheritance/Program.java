@@ -6,6 +6,7 @@ import java.util.List;
 public class Program {
 	
 	private String name;
+	private static int nrOfPr = 1;
 	private static List<Rule> rules;
 	private static List<RelationalAtoms> relationalAtoms;
 	private static List<Annotation> annotations;
@@ -16,6 +17,9 @@ public class Program {
 		this.rules = new ArrayList<Rule>();
 		this.relationalAtoms = new ArrayList<RelationalAtoms>();
 		this.annotations = new ArrayList<Annotation>();
+		
+		this.name= "program" + this.nrOfPr;
+		nrOfPr++;		
 	}
 	
 	
