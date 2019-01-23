@@ -64,7 +64,7 @@ public class EvaluationFrameworkApp {
 			
 			System.out.println("Evaluation");
 			System.out.println("==================");
-			System.out.print("Execution Time: " + exTime);
+			System.out.print("Execution Time: " + exTime + " Seconds");
 			System.out.print("\n");
 			System.out.print("Errors: " );
 			if (error == true) {
@@ -74,7 +74,7 @@ public class EvaluationFrameworkApp {
 			}
 			
 			System.out.print("\n");
-			System.out.print("CPU Usage: " + cpuUsage);
+			System.out.print("CPU Usage: " + cpuUsage + "%");
 			System.out.print("\n");
 			
 			CBR cbrObject = new CBR(); 
@@ -101,12 +101,7 @@ public class EvaluationFrameworkApp {
 
 			DBConnection.DBSaveEntry.newCBR(cbrObject);
 			
-			System.out.println(now.get(Calendar.DAY_OF_MONTH));
-			System.out.println(now.get(Calendar.MONTH)+1);
-			System.out.println(now.get(Calendar.YEAR));
-			System.out.println(date.getHours());
-			System.out.println(date.getMinutes());
-			System.out.println(date.getSeconds());
+
 			
 		} else if (option == 2) {
 			
@@ -149,7 +144,7 @@ public class EvaluationFrameworkApp {
 			
 			System.out.println("Evaluation");
 			System.out.println("==================");
-			System.out.print("Execution Time: " + exTime);
+			System.out.print("Execution Time: " + exTime + " Seconds");
 			System.out.print("\n");
 			System.out.print("Errors: " );
 			if (error == true) {
@@ -159,7 +154,7 @@ public class EvaluationFrameworkApp {
 			}
 			
 			System.out.print("\n");
-			System.out.print("CPU Usage: " + cpuUsage);
+			System.out.print("CPU Usage: " + cpuUsage  + "%");
 			System.out.print("\n");
 			
 			RMI rmiObject = new RMI(); 
@@ -187,12 +182,7 @@ public class EvaluationFrameworkApp {
 
 			DBConnection.DBSaveEntry.newRMI(rmiObject);
 			
-			System.out.println(now.get(Calendar.DAY_OF_MONTH));
-			System.out.println(now.get(Calendar.MONTH)+1);
-			System.out.println(now.get(Calendar.YEAR));
-			System.out.println(date.getHours());
-			System.out.println(date.getMinutes());
-			System.out.println(date.getSeconds());
+
 			
 			
 
