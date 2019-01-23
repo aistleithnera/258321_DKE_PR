@@ -74,7 +74,7 @@ public class EvaluationFrameworkApp {
 			}
 			
 			System.out.print("\n");
-			System.out.print("CPU Usage: " + cpuUsage + "%");
+			System.out.print("CPU Usage: " + cpuUsage + " %");
 			System.out.print("\n");
 			
 			CBR cbrObject = new CBR(); 
@@ -154,7 +154,7 @@ public class EvaluationFrameworkApp {
 			}
 			
 			System.out.print("\n");
-			System.out.print("CPU Usage: " + cpuUsage  + "%");
+			System.out.print("CPU Usage: " + cpuUsage  + " %");
 			System.out.print("\n");
 			
 			RMI rmiObject = new RMI(); 
