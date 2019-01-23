@@ -145,7 +145,6 @@ public class EvaluationFrameworkApp {
 			double exTime = VadalogExecution.calcExTime();
 			boolean error = VadalogExecution.calcNoErrors(); 
 			double cpuUsage = VadalogExecution.calcCpuUsage(); 
-			int testType = 1; // TESTER TESTER TESTER TESTER
 			
 			
 			System.out.println("Evaluation");
@@ -176,7 +175,7 @@ public class EvaluationFrameworkApp {
 			rmiObject.setHour(date.getHours());
 			rmiObject.setMinute(date.getMinutes());
 			rmiObject.setSecond(date.getSeconds());
-			rmiObject.setTestType(testType);
+			rmiObject.setTestType(1);
 			rmiObject.setNoRules(rules);
 			rmiObject.setNoFacts(facts);
 			rmiObject.setNoInPr(noInPr);

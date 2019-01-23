@@ -7,10 +7,9 @@ public class Module {
 	private String name;
 	private Module prev;
 	private static int nrOfModule = 1;
+	
 	List<Rule> rules;
-	
 	List<RelationalAtoms> facts;
-	
 	List<String> inputPredicate;
 	List<String>outputPredicate;
 	
@@ -83,8 +82,6 @@ public class Module {
 		this.name= name;
 	}
 	
-	
-	
 	public void setRules(List<Rule>t){
 		this.rules = t;
 	}
@@ -92,8 +89,6 @@ public class Module {
 	public List<Rule> getRules(){
 		return this.rules;
 	}
-	
-
 	
 	public void setFacts(List<RelationalAtoms>t){
 		this.facts = t;

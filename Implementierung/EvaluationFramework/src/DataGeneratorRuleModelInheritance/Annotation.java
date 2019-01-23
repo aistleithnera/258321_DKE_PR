@@ -106,6 +106,62 @@ public String generateAnnotationsInput(Program pr){
 	return generatedAnnotations;
 }
 
+public String generateAnnotationsAbstract(Program pr, String predicate){
+	
+	
+	String generatedAnnotations = "";
+	
+	
+	
+	int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+	String	m = GeneratorRandomString.getRandomString(randomNumber);	
+		
+	generatedAnnotations += "annotation(\"" + m + "\"). \n";
+	generatedAnnotations += "hasAnnotation(\"" + pr +"\",\"" + m + "\"). \n";
+	generatedAnnotations += "hasName(\"" + m + "\",\"" + "outputAbstractPredicate" + "\"). \n";
+	
+	
+	//terms generieren
+		randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+		Term t = new Term(GeneratorRandomString.getRandomString(randomNumber));
+		generatedAnnotations += "term(\"" + t + "\"). \n";
+		generatedAnnotations += "hasSerialization(\"" + t + "\",\"\"\"" + predicate 
+		+ "\"\"\"). \n";
+		return generatedAnnotations += "hasArgument(\"" + m + "\",\"" + t + "\"," + 0 + "). \n";
+		
+	
+		
+}
+
+
+public String generateAnnotationsAbstractModule(Program pr, String module){
+	
+	
+	String generatedAnnotations = "";
+	
+	
+	int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+	String	m = GeneratorRandomString.getRandomString(randomNumber);	
+		
+	generatedAnnotations += "annotation(\"" + m + "\"). \n";
+	generatedAnnotations += "hasAnnotation(\"" + pr +"\",\"" + m + "\"). \n";
+	generatedAnnotations += "hasName(\"" + m + "\",\"" + "outputAbstractModule" + "\"). \n";
+	
+	
+	//terms generieren
+		randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+		Term t = new Term(GeneratorRandomString.getRandomString(randomNumber));
+		generatedAnnotations += "term(\"" + t + "\"). \n";
+		generatedAnnotations += "hasSerialization(\"" + t + "\",\"\"\"" + module 
+		+ "\"\"\"). \n";
+		return generatedAnnotations += "hasArgument(\"" + m + "\",\"" + t + "\"," + 0 + "). \n";
+		
+	
+}
+
+
+
+
 
 public String generateAnnotationsInheritance(Program pr, String modulename){
 	

@@ -64,7 +64,7 @@ public class DBSaveEntry {
 	
 	public static void newRMI(RMI rmi) {
 
-		String queryinsertRMI = "INSERT INTO cbr (id, day, month, year, hour, minute, second, testType, noRules, noFacts, noInPr, noOutPr, exTime, errors, cpuUsage) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String queryinsertRMI = "INSERT INTO rmi (id, day, month, year, hour, minute, second, testType, noRules, noFacts, noInPr, noOutPr, exTime, errors, cpuUsage) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		PreparedStatement insertRMI = null;
 
 		Connection connection = null;
