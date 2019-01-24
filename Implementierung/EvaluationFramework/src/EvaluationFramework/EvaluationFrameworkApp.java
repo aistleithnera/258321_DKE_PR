@@ -99,7 +99,7 @@ public class EvaluationFrameworkApp {
 			cbrObject.setErrors(error);
 			cbrObject.setCpuUsage(cpuUsage);
 
-			DBConnection.DBSaveEntry.newCBR(cbrObject);
+			DB.SaveEntry.newCBR(cbrObject);
 			
 
 			
@@ -180,7 +180,7 @@ public class EvaluationFrameworkApp {
 			rmiObject.setErrors(error);
 			rmiObject.setCpuUsage(cpuUsage);
 
-			DBConnection.DBSaveEntry.newRMI(rmiObject);
+			DB.SaveEntry.newRMI(rmiObject);
 			
 
 			
