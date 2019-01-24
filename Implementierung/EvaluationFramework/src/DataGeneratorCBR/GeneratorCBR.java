@@ -80,7 +80,7 @@ public class GeneratorCBR {
 		}
 
 		for (int i = 0; i < cc.getParameters().size(); i++) {
-			generatedParameters += "hasParameter(\"" + cc.getName() + ",\"" + cc.getParameters().get(i).getName()
+			generatedParameters += "hasParameter(\"" + cc.getName() + "\"" + ",\"" + cc.getParameters().get(i).getName()
 					+ "\"). ";
 		}
 
@@ -336,14 +336,11 @@ public class GeneratorCBR {
 		staticCode += "% DETERMINE RELEVANT CONTEXTS AND THE MOST SPECIFIC RELEVANT CONTEXT\n";
 		staticCode += "bcParamCover(BC,Ctx,Param) :- hasParamValue(Ctx,Param,PVal), detParamValue(BC,Param,PVal2), trCovers(PVal,PVal2).\r\n"
 				+ "notBcParamCover(BC,Ctx,Param) :- businessCase(BC), context(Ctx), hasContextClass(Ctx,CtxCl), hasParameter(CtxCl,Param), not bcParamCover(BC,Ctx,Param).\r\n"
-				+ "detRelevantCtxs(BC,Ctx) :- bcParamCover(BC,Ctx,X), not notBcParamCover(BC,Ctx,Y)\n\n";
-
-		staticCode += "hasRelevantDescendant(BC,Ctx) :- detRelevantCtxs(BC,Ctx), detRelevantCtxs(BC,Ctx2), ctxInherits(Ctx2,Ctx), not w_ctxIdent(Ctx,Ctx2), Ctx!=Ctx2.\r\n"
-				+ "detMostSpecificCtx(BC,Ctx) :- detRelevantCtxs(BC,Ctx), not hasRelevantDescendant(BC,Ctx).\n\n";
-
-		staticCode += "@output(\"detMostSpecificCtx\"). @post(\"detMostSpecificCtx\",\"orderby(1,2)\").\r\n"
-				+ "@output(\"detRelevantCtxs\"). @post(\"detRelevantCtxs\",\"orderby(1,2)\").\n\n";
-
+				+ "detRelevantCtxs(BC,Ctx) :- bcParamCover(BC,Ctx,X), not notBcParamCover(BC,Ctx,Y).\r\n" + "\r\n"
+				+ "hasRelevantDescendant(BC,Ctx) :- detRelevantCtxs(BC,Ctx), detRelevantCtxs(BC,Ctx2), ctxInherits(Ctx2,Ctx), not w_ctxIdent(Ctx,Ctx2), Ctx!=Ctx2.\r\n"
+				+ "detMostSpecificCtx(BC,Ctx) :- detRelevantCtxs(BC,Ctx), not hasRelevantDescendant(BC,Ctx).\r\n"
+				+ "\r\n" + "@output(\"detMostSpecificCtx\"). @post(\"detMostSpecificCtx\",\"orderby(1,2)\").\r\n"
+				+ "@output(\"detRelevantCtxs\"). @post(\"detRelevantCtxs\",\"orderby(1,2)\").";
 		// WARNINGS
 		staticCode += "% WARNINGS\n";
 		staticCode += "w_incompleteCtxSpec(C) :- parameter(P), context(C), not hasParamValue(C,P,_).\r\n"
