@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
+
 import DataGeneratorCBR.GeneratorCBR;
 import DataGeneratorRuleModelInheritance.GeneratorRuleModelInheritance;
 import DataGeneratorRuleModelInheritance.RMIModule;
@@ -99,7 +100,7 @@ public class EvaluationFrameworkApp {
 			cbrObject.setErrors(error);
 			cbrObject.setCpuUsage(cpuUsage);
 
-			DB.SaveEntry.newCBR(cbrObject);
+			DBConnection.DBSaveEntry.newCBR(cbrObject);
 			
 
 			
@@ -180,7 +181,7 @@ public class EvaluationFrameworkApp {
 			rmiObject.setErrors(error);
 			rmiObject.setCpuUsage(cpuUsage);
 
-			DB.SaveEntry.newRMI(rmiObject);
+			DBConnection.DBSaveEntry.newRMI(rmiObject);
 			
 
 			
