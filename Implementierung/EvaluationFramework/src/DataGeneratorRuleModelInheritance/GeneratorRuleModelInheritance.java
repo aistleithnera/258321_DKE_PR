@@ -5,20 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
-
 import DataGeneratorRandomString.GeneratorRandomString;
-import Exceptions.NegativeNumberException;
 
 public class GeneratorRuleModelInheritance {
 	
-	private static String RMICode; 
 	private static Program program = new Program();
-	
 	private static List<Program> programs;
-	
-	private static List <String> nonRelationalAtoms;
-	private static List <String> annotations;
-	private static List <String> terms;
 	private static List <String> modules = new ArrayList<>();
 	public static Map<Integer, String> moduleFacts = new HashMap<>();
 	static int countModule = 0;
@@ -42,7 +34,6 @@ public class GeneratorRuleModelInheritance {
 	public static String generateModuleResultSet() {
 		String generateModuleResultSet = "";
 		String generatedFacts = null;
-		int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
 		program = new Program();
 		program.setName(modules.get(countModule));
 		programs = new ArrayList<Program>();
@@ -62,7 +53,6 @@ public class GeneratorRuleModelInheritance {
 	public static String generateOnlyFacts(int factsNum, int termsNum) {
 		
 		int factsCount = factsNum;
-		int termsCount = termsNum;
 		int termsInAtom = 0;
 		
 		String facts = "";
@@ -106,8 +96,6 @@ public class GeneratorRuleModelInheritance {
 			termsInAtom++;
 			
 		}//whileTerms
-		
-		termsCount = termsNum;
 	
 	}//whileFacts
 		return facts;
@@ -169,7 +157,6 @@ public class GeneratorRuleModelInheritance {
 			public static String generateNonRelationalFactsFromRules(int factsNum, int termsNum, NonRelationalAtom a) {
 				
 				int factsCount = factsNum;
-				int termsInAtom = 0;
 				
 				String facts = "";
 				
@@ -183,8 +170,6 @@ public class GeneratorRuleModelInheritance {
 				facts += "hasName(\"" + atom + "\",\"" + (GeneratorRandomString.getRandomString(randomNumber)) + "\"). \n";
 				
 				factsCount--;
-				
-				termsInAtom = 0;
 				
 				//terms generieren
 				
@@ -200,7 +185,6 @@ public class GeneratorRuleModelInheritance {
 					
 					
 					i--;
-					termsInAtom++;
 					
 				}//whileTerms
 				

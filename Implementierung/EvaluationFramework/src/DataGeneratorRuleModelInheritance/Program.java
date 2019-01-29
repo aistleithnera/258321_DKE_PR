@@ -14,11 +14,11 @@ public class Program {
 	
 	
 	public Program(){
-		this.rules = new ArrayList<Rule>();
-		this.relationalAtoms = new ArrayList<RelationalAtoms>();
-		this.annotations = new ArrayList<Annotation>();
+		Program.rules = new ArrayList<Rule>();
+		Program.relationalAtoms = new ArrayList<RelationalAtoms>();
+		Program.annotations = new ArrayList<Annotation>();
 		
-		this.name= "program" + this.nrOfPr;
+		this.name= "program" + Program.nrOfPr;
 		nrOfPr++;		
 	}
 	

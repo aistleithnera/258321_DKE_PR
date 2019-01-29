@@ -48,10 +48,12 @@ public class Annotation {
 		this.name = s;
 	}
 
+	
 	public String generateAnnotationsModule(Program pr) {
 
 		String generatedAnnotations = "";
 
+		// annotation generieren
 		generatedAnnotations += "annotation(\"" + this + "\"). \n";
 		generatedAnnotations += "hasAnnotation(\"" + pr + "\",\"" + this + "\"). \n";
 		generatedAnnotations += "hasName(\"" + this + "\",\"" + "module" + "\"). \n";
@@ -59,7 +61,6 @@ public class Annotation {
 		// terms generieren
 		int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
 		Term t = new Term(GeneratorRandomString.getRandomString(randomNumber));
-
 		generatedAnnotations += "term(\"" + t + "\"). \n";
 		generatedAnnotations += "hasSerialization(\"" + t + "\",\"\"\"" + this.getTerm() + "\"\"\"). \n";
 		generatedAnnotations += "hasArgument(\"" + this + "\",\"" + t + "\"," + 0 + "). \n";
@@ -67,6 +68,8 @@ public class Annotation {
 		return generatedAnnotations;
 	}
 
+	
+	// für jeden input annotations generieren
 	public String generateAnnotationsInput(Program pr) {
 
 		String generatedAnnotations = "";
@@ -92,6 +95,7 @@ public class Annotation {
 	}
 
 	
+	//für jeden input non omitable annotations generieren
 	public String generateNonOmitableInputAnnotations(Program pr) {
 
 		String generatedAnnotations = "";
@@ -117,6 +121,7 @@ public class Annotation {
 	}
 
 
+	// iheritance annotations generieren
 	public String generateAnnotationsInheritance(Program pr, String modulename) {
 
 		String generatedAnnotations = "";
@@ -138,6 +143,7 @@ public class Annotation {
 		return generatedAnnotations;
 	}
 
+	//für jeden output annotations generieren
 	public String generateAnnotationsOutput(Program pr) {
 
 		String generatedAnnotations = "";
@@ -161,6 +167,7 @@ public class Annotation {
 		return generatedAnnotations;
 	}
 
+	// label annotations generieren
 	public String generateAnnotationsLabel(String ruleId) {
 
 		String generatedAnnotations = "";
@@ -177,6 +184,61 @@ public class Annotation {
 		generatedAnnotations += "hasSerialization(\"" + t + "\",\"\"\"" + this + "\"\"\"). \n";
 		generatedAnnotations += "hasArgument(\"" + this + "\",\"" + t + "\"," + 0 + "). \n";
 
+		return generatedAnnotations;
+	}
+	
+	// non growable annotations generieren
+	public String generateNonGrownableAnnotations(Program pr) {
+
+		String generatedAnnotations = "";
+		
+		
+		for(int i=0; i<this.getOutputPredicate().size()/2; i ++) {
+
+		
+			int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+			String m = GeneratorRandomString.getRandomString(randomNumber);
+
+			generatedAnnotations += "annotation(\"" + m + "\"). \n";
+			generatedAnnotations += "hasAnnotation(\"" + pr + "\",\"" + m + "\"). \n";
+			generatedAnnotations += "hasName(\"" + m + "\",\"" + "non_growable" + "\"). \n";
+
+			// terms generieren
+			randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+			Term t = new Term(GeneratorRandomString.getRandomString(randomNumber));
+			generatedAnnotations += "term(\"" + t + "\"). \n";
+			generatedAnnotations += "hasSerialization(\"" + t + "\",\"\"\"" + this.getOutputPredicate().get(i) + "\"\"\"). \n";
+			generatedAnnotations += "hasArgument(\"" + m + "\",\"" + t + "\"," + 0 + "). \n";
+
+		} // whileAnnoCoun
+		return generatedAnnotations;
+	}
+
+	
+	// non shrinkable annotations generieren
+	public String generateNonShrinkableAnnotations(Program pr) {
+
+		String generatedAnnotations = "";
+		
+		
+		for(int i=this.getOutputPredicate().size()/2; i<this.getOutputPredicate().size(); i ++) {
+
+		
+			int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+			String m = GeneratorRandomString.getRandomString(randomNumber);
+
+			generatedAnnotations += "annotation(\"" + m + "\"). \n";
+			generatedAnnotations += "hasAnnotation(\"" + pr + "\",\"" + m + "\"). \n";
+			generatedAnnotations += "hasName(\"" + m + "\",\"" + "non_shrinkable" + "\"). \n";
+
+			// terms generieren
+			randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+			Term t = new Term(GeneratorRandomString.getRandomString(randomNumber));
+			generatedAnnotations += "term(\"" + t + "\"). \n";
+			generatedAnnotations += "hasSerialization(\"" + t + "\",\"\"\"" + this.getOutputPredicate().get(i) + "\"\"\"). \n";
+			generatedAnnotations += "hasArgument(\"" + m + "\",\"" + t + "\"," + 0 + "). \n";
+
+		} // whileAnnoCoun
 		return generatedAnnotations;
 	}
 

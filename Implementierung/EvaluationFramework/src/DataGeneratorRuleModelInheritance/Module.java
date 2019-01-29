@@ -14,8 +14,8 @@ public class Module {
 	List<String>outputPredicate;
 	
 	public Module(){
-		this.name = "m" + this.nrOfModule;
-		this.nrOfModule++;
+		this.name = "m" + Module.nrOfModule;
+	    Module.nrOfModule++;
 		this.prev = null;
 	}
 	

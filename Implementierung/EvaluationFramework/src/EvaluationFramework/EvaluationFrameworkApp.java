@@ -184,16 +184,13 @@ public class EvaluationFrameworkApp {
 			DBConnection.DBSaveEntry.newRMI(rmiObject);
 			
 
-			
-			
-
 			/*System.out.println("\n\n");
 
 			System.out.println("1. AbstractionOnly");
-			System.out.println("2. ConformanceOnly");
-			System.out.println("3. DynamicBehavioralDetectionOnly");
-			System.out.println("4. StaticBehavioralDetectionOnly");
-			System.out.println("5. InheritanceOnly");
+			System.out.println("2. DynamicBehavioralDetectionOnly");
+			System.out.println("3. StaticBehavioralDetectionOnly");
+			System.out.println("4. InheritanceOnly");
+			System.out.pritnln("5. InheritanceMultiOnly");
 			System.out.println("6. StructuralDetectionOnly");
 
 			System.out.print("Please choose your option: ");

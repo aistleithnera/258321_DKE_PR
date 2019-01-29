@@ -15,7 +15,7 @@ public class RMIModule {
 		return this.m1;
 	}
 
-	// generate base Module
+	// generate base Module (META CODE)
 	public String generateRMIModule(int rules, int facts, int in, int out) {
 
 		Program pr = new Program();
@@ -74,7 +74,7 @@ public class RMIModule {
 	
 	
 	
-	// generate inherited Module
+	// generate inherited Module (META-CODE)
 	public String generateRMIModule(int rules, int facts, int in, int out, Module myModule) {
 
 		Program pr = new Program();
@@ -138,7 +138,7 @@ public class RMIModule {
 	}// generate inherited module
 
 	
-	// generate abstract Module
+	// generate abstract Module (META-CODE)
 	public String generateRMIModuleAbstact(int rules, int facts, int in, int out) {
 
 		Program pr = new Program();
@@ -200,9 +200,10 @@ public class RMIModule {
 		System.out.println("Abstract module: " + m1.getName() + "\n");
 
 		return s1;
-	}// generate abstract Module
+	}// generate abstract RMI Module
 	
 	
+	// generate RMIModule with non omitable (META-CODE)
 	public String generateRMIModuleWithNonOmitable(int rules, int facts, int in, int out) {
 
 		Program pr = new Program();
@@ -257,7 +258,67 @@ public class RMIModule {
 
 		return s1;
 
-	}// generate base Module
+	}// generate RMI Module with non omitable
+	
+	
+	// generate static RMI Module (META-CODE)
+	public String generateRMIModuleStatic(int rules, int facts, int in, int out) {
+
+		Program pr = new Program();
+		m1 = new Module();
+		var = GeneratorRandomString.getRandomBigChar(1);
+
+		int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+		String s = GeneratorRandomString.getRandomString(randomNumber);
+		Annotation module = new Annotation(s);
+		module.setTerm(m1.getName());
+		String s1 = "program(\"" + pr + "\")." + "\n";
+
+		s1 += module.generateAnnotationsModule(pr);
+
+		List<String> input = makePredicate(in);
+		List<String> output = makePredicate(out);
+
+		randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+		s = GeneratorRandomString.getRandomString(randomNumber);
+		Annotation a1 = new Annotation(s);
+
+		a1.setInputPredicate(input);
+		a1.setOutputPredicate(output);
+
+		m1.setInputPredicate(input);
+		m1.setOutputPredicate(output);
+
+		s1 += a1.generateAnnotationsInput(pr);
+		s1 += a1.generateNonOmitableInputAnnotations(pr);
+		s1 += a1.generateNonGrownableAnnotations(pr);
+		s1 += a1.generateNonShrinkableAnnotations(pr);
+
+		List<Rule> r = makeRule();
+
+		for (Rule r1 : r) {
+			s1 += r1.generateOnlyRules(1, pr);
+
+			randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+			s = GeneratorRandomString.getRandomString(randomNumber);
+			Annotation label = new Annotation(s);
+			s1 += label.generateAnnotationsLabel(r1.getName());
+			r1.setAnnotation(label.toString());
+
+		}
+
+		List<RelationalAtoms> factsList = generateRelationalAtomFactList(facts);
+
+		for (RelationalAtoms a : factsList) {
+			s1 += a.generateOnlyFacts(1, pr);
+		}
+
+		s1 += a1.generateAnnotationsOutput(pr);
+		// System.out.println(s1);
+
+		return s1;
+
+	}// generate static RMI Module
 	
 
 	// **************************************************************************
@@ -340,8 +401,7 @@ public class RMIModule {
 	}// generate body atoms of a relational atom
 
 	
-	// generate a single body atom of a rule (used by method above to put in the
-	// list)
+	// generate a single body atom of a rule (used by method above to put in the list)
 	public static RelationalAtoms generateRelationalAtomBody(String name) {
 
 		int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);

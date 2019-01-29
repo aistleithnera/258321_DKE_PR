@@ -1,10 +1,7 @@
 package DataGeneratorRuleModelInheritance;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
-import DataGeneratorRandomString.GeneratorRandomString;
 
 public class Rule {
 	
