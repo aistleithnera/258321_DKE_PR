@@ -25,11 +25,11 @@ public class InheritanceSingleBasicOnly {
 		RMIModule rmi4 = new RMIModule();
 		String s4 = rmi4.generateRMIModuleWithNonOmitable(2, 2, 2, 2);
 		Module m3 = rmi4.getModule();
-		System.out.println(s4 + "\n\n\n\n");
+	
 
 		RMIModule rmi5 = new RMIModule();
 		String s5 = rmi4.generateRMIModule(2, 2, 2, 2, m3);
-		System.out.println(s5 + "\n\n\n\n");
+	
 
 		int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
 		String s6 = GeneratorRandomString.getRandomString(randomNumber);
@@ -37,8 +37,10 @@ public class InheritanceSingleBasicOnly {
 
 		// inherits multi
 		RMIModule rmi6 = new RMIModule();
-		String s7 = rmi6.generateRMIModule(2, 2, 2, 2);
+		String s7 = rmi6.generateRMIModule(6, 2, 2, 2);
 		Module m6 = rmi6.getModule();
+		
+		System.out.println(s7);
 
 		RMIModule rmi7 = new RMIModule();
 		String s8 = rmi7.generateRMIModule(2, 2, 2, 2, m6);
@@ -49,7 +51,6 @@ public class InheritanceSingleBasicOnly {
 		Module m8 = rmi8.getModule();
 
 		System.out.println("==================");
-		System.out.println(s7 + s8 + s9);
 
 		System.out.println("===============================");
 
@@ -62,7 +63,7 @@ public class InheritanceSingleBasicOnly {
 		String s12 = rmi11.generateRMIModule(2, 2, 2, 2, m10);
 		Module m9 = rmi11.getModule();
 
-		System.out.println(s11 + s12);
+		
 
 		// System.out.println(s + s2);
 		// System.out.println(s3);

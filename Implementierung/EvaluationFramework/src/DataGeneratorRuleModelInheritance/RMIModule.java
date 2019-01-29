@@ -30,8 +30,8 @@ public class RMIModule {
 
 		s1 += module.generateAnnotationsModule(pr);
 
-		List<String> input = makePredicate(in);
-		List<String> output = makePredicate(out);
+		List<String> input = generatePredicate(in);
+		List<String> output = generatePredicate(out);
 
 		randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
 		s = GeneratorRandomString.getRandomString(randomNumber);
@@ -45,7 +45,7 @@ public class RMIModule {
 
 		s1 += a1.generateAnnotationsInput(pr);
 
-		List<Rule> r = makeRule();
+		List<Rule> r = generateRule();
 
 		for (Rule r1 : r) {
 			s1 += r1.generateOnlyRules(1, pr);
@@ -57,6 +57,23 @@ public class RMIModule {
 			r1.setAnnotation(label.toString());
 
 		}
+
+		int subRuleNum = 0;
+		if (rules > out) {
+			subRuleNum = rules - out;
+			List<Rule> r2 = generateSubRule(subRuleNum);
+
+			for (Rule r1 : r2) {
+				s1 += r1.generateOnlyRules(1, pr);
+
+				randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+				s = GeneratorRandomString.getRandomString(randomNumber);
+				Annotation label = new Annotation(s);
+				s1 += label.generateAnnotationsLabel(r1.getName());
+				r1.setAnnotation(label.toString());
+
+			}
+		}//if
 
 		List<RelationalAtoms> factsList = generateRelationalAtomFactList(facts);
 
@@ -71,9 +88,6 @@ public class RMIModule {
 
 	}// generate base Module
 
-	
-	
-	
 	// generate inherited Module (META-CODE)
 	public String generateRMIModule(int rules, int facts, int in, int out, Module myModule) {
 
@@ -94,8 +108,8 @@ public class RMIModule {
 		Annotation inherits = new Annotation(s);
 		s1 += inherits.generateAnnotationsInheritance(pr, myModule.getName());
 
-		List<String> input = makePredicate(in);
-		List<String> output = makePredicate(out);
+		List<String> input = generatePredicate(in);
+		List<String> output = generatePredicate(out);
 
 		randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
 		s = GeneratorRandomString.getRandomString(randomNumber);
@@ -109,7 +123,7 @@ public class RMIModule {
 
 		s1 += a1.generateAnnotationsInput(pr);
 
-		List<Rule> r = makeRule();
+		List<Rule> r = generateRule();
 		Rule rule = generateRule(m1.getOutputPredicate(), myModule.getInputPredicate());
 		r.add(rule);
 
@@ -137,7 +151,6 @@ public class RMIModule {
 
 	}// generate inherited module
 
-	
 	// generate abstract Module (META-CODE)
 	public String generateRMIModuleAbstact(int rules, int facts, int in, int out) {
 
@@ -153,8 +166,8 @@ public class RMIModule {
 
 		s1 += module.generateAnnotationsModule(pr);
 
-		List<String> input = makePredicate(in);
-		List<String> output = makePredicate(out);
+		List<String> input = generatePredicate(in);
+		List<String> output = generatePredicate(out);
 
 		randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
 		s = GeneratorRandomString.getRandomString(randomNumber);
@@ -168,7 +181,7 @@ public class RMIModule {
 
 		s1 += a1.generateAnnotationsInput(pr);
 
-		List<Rule> r = makeRule();
+		List<Rule> r = generateRule();
 
 		randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
 		String abst = GeneratorRandomString.getRandomString(randomNumber);
@@ -194,15 +207,14 @@ public class RMIModule {
 		}
 
 		s1 += a1.generateAnnotationsOutput(pr);
-		
+
 		System.out.println("**********************************");
 		System.out.println("Abstract predicate: " + abst);
 		System.out.println("Abstract module: " + m1.getName() + "\n");
 
 		return s1;
 	}// generate abstract RMI Module
-	
-	
+
 	// generate RMIModule with non omitable (META-CODE)
 	public String generateRMIModuleWithNonOmitable(int rules, int facts, int in, int out) {
 
@@ -218,8 +230,8 @@ public class RMIModule {
 
 		s1 += module.generateAnnotationsModule(pr);
 
-		List<String> input = makePredicate(in);
-		List<String> output = makePredicate(out);
+		List<String> input = generatePredicate(in);
+		List<String> output = generatePredicate(out);
 
 		randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
 		s = GeneratorRandomString.getRandomString(randomNumber);
@@ -234,7 +246,7 @@ public class RMIModule {
 		s1 += a1.generateAnnotationsInput(pr);
 		s1 += a1.generateNonOmitableInputAnnotations(pr);
 
-		List<Rule> r = makeRule();
+		List<Rule> r = generateRule();
 
 		for (Rule r1 : r) {
 			s1 += r1.generateOnlyRules(1, pr);
@@ -259,8 +271,7 @@ public class RMIModule {
 		return s1;
 
 	}// generate RMI Module with non omitable
-	
-	
+
 	// generate static RMI Module (META-CODE)
 	public String generateRMIModuleStatic(int rules, int facts, int in, int out) {
 
@@ -276,8 +287,8 @@ public class RMIModule {
 
 		s1 += module.generateAnnotationsModule(pr);
 
-		List<String> input = makePredicate(in);
-		List<String> output = makePredicate(out);
+		List<String> input = generatePredicate(in);
+		List<String> output = generatePredicate(out);
 
 		randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
 		s = GeneratorRandomString.getRandomString(randomNumber);
@@ -294,7 +305,7 @@ public class RMIModule {
 		s1 += a1.generateNonGrownableAnnotations(pr);
 		s1 += a1.generateNonShrinkableAnnotations(pr);
 
-		List<Rule> r = makeRule();
+		List<Rule> r = generateRule();
 
 		for (Rule r1 : r) {
 			s1 += r1.generateOnlyRules(1, pr);
@@ -319,14 +330,13 @@ public class RMIModule {
 		return s1;
 
 	}// generate static RMI Module
-	
 
 	// **************************************************************************
 	// the following methods are used as help methods for the above (main) methods
 	// **************************************************************************
 
 	// geneate list of input,output etc. predicates
-	public static List<String> makePredicate(int nr) {
+	public static List<String> generatePredicate(int nr) {
 		List<String> l = new ArrayList<>();
 		int count = 0;
 		while (count < nr) {
@@ -338,10 +348,8 @@ public class RMIModule {
 		return l;
 	}// geneate list of input,output etc. predicates
 
-	
-	
 	// generate list of rules based on input/output
-	public List<Rule> makeRule() {
+	public List<Rule> generateRule() {
 
 		List<Rule> ruleList = new ArrayList<>();
 
@@ -359,23 +367,37 @@ public class RMIModule {
 			List<RelationalAtoms> body = generateRelationalAtomBodyList(count);
 			r.setBody(body);
 
-			// *****************************************************
-			//to do....
-			if (count == 0) {
-				count = m1.getInputPredicate().size();
-			} else {
-				count--;
-			}
-
+			count--;
 			ruleList.add(r);
-
-		}
-
+		} // for
 		return ruleList;
 	}// generate list of rules based on input/output
 
-	
-	
+	// generate list of rules based on input/output for sub rules
+	public List<Rule> generateSubRule(int subRules) {
+		System.out.println("heloooooooooooooo");
+		List<Rule> ruleList = new ArrayList<>();
+
+		int count = subRules;
+		while (count > 0) {
+
+			int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+			String s = GeneratorRandomString.getRandomString(randomNumber);
+			Rule r = new Rule(s);
+
+			randomNumber = ThreadLocalRandom.current().nextInt(0, m1.getOutputPredicate().size());
+			RelationalAtoms head = generateRelationalAtomHead(m1.getOutputPredicate().get(randomNumber));
+			r.setHead(head);
+
+			List<RelationalAtoms> body = generateRelationalAtomBodyListForSubRule(3);
+			r.setBody(body);
+
+			ruleList.add(r);
+			count--;
+		}
+		return ruleList;
+	}// generate list of rules based on input/output
+
 	// generate the head atom of a rule
 	public static RelationalAtoms generateRelationalAtomHead(String predicate) {
 
@@ -388,8 +410,7 @@ public class RMIModule {
 		return atom;
 	}// generate the head atom of a rule
 
-	
-	// generate body atoms of a relational atoms
+	// generate body atoms of a relational atom
 	public List<RelationalAtoms> generateRelationalAtomBodyList(int count) {
 		List<RelationalAtoms> list = new ArrayList<>();
 
@@ -400,8 +421,20 @@ public class RMIModule {
 		return list;
 	}// generate body atoms of a relational atom
 
-	
-	// generate a single body atom of a rule (used by method above to put in the list)
+	// generate body atoms of a relational atom for sub rule
+	public List<RelationalAtoms> generateRelationalAtomBodyListForSubRule(int count) {
+		List<RelationalAtoms> list = new ArrayList<>();
+
+		List<String> predicateList = generatePredicate(count);
+		for (int i = 0; i < count; i++) {
+			RelationalAtoms a = generateRelationalAtomBody(predicateList.get(i));
+			list.add(a);
+		}
+		return list;
+	}// generate body atoms of a relational atom
+
+	// generate a single body atom of a rule (used by method above to put in the
+	// list)
 	public static RelationalAtoms generateRelationalAtomBody(String name) {
 
 		int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
@@ -414,8 +447,6 @@ public class RMIModule {
 
 	}// generate a body atom of a rule
 
-	
-	
 	// generate a list of terms
 	public static List<Term> generateTerm(int nr) {
 		List<Term> t = new ArrayList<>();
@@ -431,8 +462,6 @@ public class RMIModule {
 		return t;
 	}// generate a list of terms
 
-	
-	
 	// generate a list of atoms for facts
 	public static List<RelationalAtoms> generateRelationalAtomFactList(int count) {
 		List<RelationalAtoms> list = new ArrayList<>();
@@ -445,8 +474,7 @@ public class RMIModule {
 		}
 		return list;
 	}// generate a list of atoms/facts
-	
-	
+
 	// generate a single fact (used by the method above to put in the list)
 	public static RelationalAtoms generateRelationalAtomFacts() {
 
@@ -463,8 +491,6 @@ public class RMIModule {
 
 	}// generate a single facts
 
-	
-	
 	// generate a rule for inherited module based on input/output from super module)
 	public Rule generateRule(List<String> output, List<String> input) {
 
@@ -480,42 +506,36 @@ public class RMIModule {
 
 		return r;
 	}// generate a rule for inherited module based on input/output from super module)
-	
-	
+
 	// generate a list of relational atoms for body based on input
 	public List<RelationalAtoms> generateRelationalAtomBodyList(List<String> input) {
 		List<RelationalAtoms> list = new ArrayList<>();
-		
+
 		for (int i = 0; i < input.size(); i++) {
-			
+
 			RelationalAtoms a = generateRelationalAtomBody(input.get(i));
 			list.add(a);
-			
+
 		}
 		return list;
 	}// generate a list of relational atoms for body based on input
-		
-	
 
-		// generate abstract rule
-		public Rule generateAbstractRule(List<String> output, List<String> input, String abst) {
+	// generate abstract rule
+	public Rule generateAbstractRule(List<String> output, List<String> input, String abst) {
 
-			int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
-			String s = GeneratorRandomString.getRandomString(randomNumber);
-			Rule r = new Rule(s);
+		int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+		String s = GeneratorRandomString.getRandomString(randomNumber);
+		Rule r = new Rule(s);
 
-			RelationalAtoms head = generateRelationalAtomHead(output.get(0));
-			r.setHead(head);
+		RelationalAtoms head = generateRelationalAtomHead(output.get(0));
+		r.setHead(head);
 
-			List<RelationalAtoms> body = generateAbstractRelationalAtomBodyList(input, abst);
-			r.setBody(body);
+		List<RelationalAtoms> body = generateAbstractRelationalAtomBodyList(input, abst);
+		r.setBody(body);
 
-			return r;
-		}// generate abstract rule
+		return r;
+	}// generate abstract rule
 
-
-	
-	
 	// generate a list of relational atoms for body - with abstract atom
 	public List<RelationalAtoms> generateAbstractRelationalAtomBodyList(List<String> input, String abst) {
 		List<RelationalAtoms> list = new ArrayList<>();
@@ -533,6 +553,4 @@ public class RMIModule {
 
 	}// generate a list of relational atoms for body - with abstract atom
 
-	
-	
 }// RMIModule
