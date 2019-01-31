@@ -284,6 +284,8 @@ public class GeneratorCBR {
 
 			BusinessCase bc = new BusinessCase();
 			bc.setName(bcName);
+			
+			generatedBusinessCases += "businessCase(\"" + bc.getName() + "\").\n"; 
 
 			for (int t = 0; t < x; t++) {
 				String descProp = "";
@@ -299,7 +301,7 @@ public class GeneratorCBR {
 				bc.addDescProp(descProp);
 				bc.addParameterValues(paramValue);
 
-				generatedBusinessCases += "businessCase(\"" + bc.getName() + "\")." + "hasDescProp(\"" + bc.getName()
+				generatedBusinessCases +=  "hasDescProp(\"" + bc.getName()
 						+ "\",\"" + bc.getDescProp().get(t) + "\",\"" + bc.getParameterValues().get(t) + "\").";
 
 				generatedBusinessCases += "\n";

@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
-
 import DataGeneratorCBR.GeneratorCBR;
 import DataGeneratorRuleModelInheritance.GeneratorRuleModelInheritance;
 import DataGeneratorRuleModelInheritance.RMIModule;
@@ -35,6 +34,7 @@ public class EvaluationFrameworkApp {
 			int parameters;
 			int parameterValues;
 			int businessCases;
+			int tests;
 
 			System.out.print("Parameters: ");
 			parameters = s1.nextInt();
@@ -43,69 +43,77 @@ public class EvaluationFrameworkApp {
 			System.out.print("Business Cases: ");
 			businessCases = s1.nextInt();
 			System.out.print("\n");
-
-			String text = GeneratorCBR.generateCBRCode(parameters, parameterValues, businessCases);
-
-			System.out.println("Input ");
-			System.out.println("==================");
-			System.out.println("Parameters: " + parameters);
-			System.out.println("Parameter Values: " + parameterValues);
-			System.out.println("Business Cases: " + businessCases);
+			System.out.print("How many tests would you like to run: ");
+			tests = s1.nextInt();
 			System.out.print("\n");
 
-			System.out.println("Generated CBR Code");
-			System.out.println("==================");
+			for (int i = 0; i < tests; i++) {
 
-			System.out.println(text);
-			
-			double exTime = VadalogExecution.calcExTime();
-			boolean error = VadalogExecution.calcNoErrors(); 
-			double cpuUsage = VadalogExecution.calcCpuUsage(); 
-			
-			
-			System.out.println("Evaluation");
-			System.out.println("==================");
-			System.out.print("Execution Time: " + exTime + " Seconds");
-			System.out.print("\n");
-			System.out.print("Errors: " );
-			if (error == true) {
-				System.out.print("no errors detected");
-			} else {
-				System.out.print("errors detected");
+				String text = GeneratorCBR.generateCBRCode(parameters, parameterValues, businessCases);
+
+				System.out.println("Input ");
+				System.out.println("==================");
+				System.out.println("Parameters: " + parameters);
+				System.out.println("Parameter Values: " + parameterValues);
+				System.out.println("Business Cases: " + businessCases);
+				System.out.print("\n");
+
+				System.out.println("Generated CBR Code");
+				System.out.println("==================");
+				System.out.print("\n");
+				
+				System.out.println("Test: " + i);
+				System.out.println("==================");
+				
+
+				System.out.println(text);
+
+				double exTime = VadalogExecution.calcExTime();
+				boolean error = VadalogExecution.calcNoErrors();
+				double cpuUsage = VadalogExecution.calcCpuUsage();
+
+				System.out.println("Evaluation");
+				System.out.println("==================");
+				System.out.print("Execution Time: " + exTime + " Seconds");
+				System.out.print("\n");
+				System.out.print("Errors: ");
+				if (error == true) {
+					System.out.print("no errors detected");
+				} else {
+					System.out.print("errors detected");
+				}
+
+				System.out.print("\n");
+				System.out.print("CPU Usage: " + cpuUsage + " %");
+				System.out.print("\n");
+
+				CBR cbrObject = new CBR();
+
+				cbrObject.setId(ThreadLocalRandom.current().nextInt(0, 101));
+
+				Calendar now = Calendar.getInstance();
+				Date date = now.getTime();
+
+				cbrObject.setDay(now.get(Calendar.DAY_OF_MONTH));
+				cbrObject.setMonth(now.get(Calendar.MONTH) + 1);
+				cbrObject.setYear(now.get(Calendar.YEAR));
+				cbrObject.setHour(date.getHours());
+				cbrObject.setMinute(date.getMinutes());
+				cbrObject.setSecond(date.getSeconds());
+
+				cbrObject.setNoParm(parameters);
+				cbrObject.setNoParmVal(parameterValues);
+				cbrObject.setNoBusCase(businessCases);
+
+				cbrObject.setExTime(exTime);
+				cbrObject.setErrors(error);
+				cbrObject.setCpuUsage(cpuUsage);
+
+				DBConnection.DBSaveEntry.newCBR(cbrObject);
 			}
-			
-			System.out.print("\n");
-			System.out.print("CPU Usage: " + cpuUsage + " %");
-			System.out.print("\n");
-			
-			CBR cbrObject = new CBR(); 
-			
-			cbrObject.setId(ThreadLocalRandom.current().nextInt(0, 101));
-			
-			Calendar now = Calendar.getInstance(); 
-			Date date = now.getTime(); 
-			
-			cbrObject.setDay(now.get(Calendar.DAY_OF_MONTH)); 
-			cbrObject.setMonth(now.get(Calendar.MONTH)+1);
-			cbrObject.setYear(now.get(Calendar.YEAR));
-			cbrObject.setHour(date.getHours());
-			cbrObject.setMinute(date.getMinutes());
-			cbrObject.setSecond(date.getSeconds());
-			
-			cbrObject.setNoParm(parameters);
-			cbrObject.setNoParmVal(parameterValues);
-			cbrObject.setNoBusCase(businessCases);
-			
-			cbrObject.setExTime(exTime);
-			cbrObject.setErrors(error);
-			cbrObject.setCpuUsage(cpuUsage);
 
-			DBConnection.DBSaveEntry.newCBR(cbrObject);
-			
-
-			
 		} else if (option == 2) {
-			
+
 			int rules;
 			int facts;
 			int noInPr;
@@ -120,9 +128,9 @@ public class EvaluationFrameworkApp {
 			System.out.print("NoOutPr: ");
 			noOutPr = s1.nextInt();
 			System.out.print("\n");
-			
+
 			RMIModule m1 = new RMIModule();
-			String text = m1.generateRMIModule(rules, facts, noInPr, noOutPr );
+			String text = m1.generateRMIModule(rules, facts, noInPr, noOutPr);
 
 			System.out.println("Input ");
 			System.out.println("==================");
@@ -136,37 +144,35 @@ public class EvaluationFrameworkApp {
 			System.out.println("==================");
 
 			System.out.println(text);
-			
-			
+
 			double exTime = VadalogExecution.calcExTime();
-			boolean error = VadalogExecution.calcNoErrors(); 
-			double cpuUsage = VadalogExecution.calcCpuUsage(); 
-			
-			
+			boolean error = VadalogExecution.calcNoErrors();
+			double cpuUsage = VadalogExecution.calcCpuUsage();
+
 			System.out.println("Evaluation");
 			System.out.println("==================");
 			System.out.print("Execution Time: " + exTime + " Seconds");
 			System.out.print("\n");
-			System.out.print("Errors: " );
+			System.out.print("Errors: ");
 			if (error == true) {
 				System.out.print("no errors detected");
 			} else {
 				System.out.print("errors detected");
 			}
-			
+
 			System.out.print("\n");
-			System.out.print("CPU Usage: " + cpuUsage  + " %");
+			System.out.print("CPU Usage: " + cpuUsage + " %");
 			System.out.print("\n");
-			
-			RMI rmiObject = new RMI(); 
-			
+
+			RMI rmiObject = new RMI();
+
 			rmiObject.setId(ThreadLocalRandom.current().nextInt(0, 101));
-			
-			Calendar now = Calendar.getInstance(); 
-			Date date = now.getTime(); 
-			
-			rmiObject.setDay(now.get(Calendar.DAY_OF_MONTH)); 
-			rmiObject.setMonth(now.get(Calendar.MONTH)+1);
+
+			Calendar now = Calendar.getInstance();
+			Date date = now.getTime();
+
+			rmiObject.setDay(now.get(Calendar.DAY_OF_MONTH));
+			rmiObject.setMonth(now.get(Calendar.MONTH) + 1);
 			rmiObject.setYear(now.get(Calendar.YEAR));
 			rmiObject.setHour(date.getHours());
 			rmiObject.setMinute(date.getMinutes());
@@ -176,69 +182,60 @@ public class EvaluationFrameworkApp {
 			rmiObject.setNoFacts(facts);
 			rmiObject.setNoInPr(noInPr);
 			rmiObject.setNoOutPr(noOutPr);
-			
+
 			rmiObject.setExTime(exTime);
 			rmiObject.setErrors(error);
 			rmiObject.setCpuUsage(cpuUsage);
 
 			DBConnection.DBSaveEntry.newRMI(rmiObject);
-			
 
-			/*System.out.println("\n\n");
+			/*
+			 * System.out.println("\n\n");
+			 * 
+			 * System.out.println("1. AbstractionOnly");
+			 * System.out.println("2. DynamicBehavioralDetectionOnly");
+			 * System.out.println("3. StaticBehavioralDetectionOnly");
+			 * System.out.println("4. InheritanceOnly");
+			 * System.out.pritnln("5. InheritanceMultiOnly");
+			 * System.out.println("6. StructuralDetectionOnly");
+			 * 
+			 * System.out.print("Please choose your option: "); option2 = s1.nextInt();
+			 * 
+			 * switch (option2) {
+			 * 
+			 * case 1:
+			 * 
+			 * int anno1; int facts1; int rules1;
+			 * 
+			 * System.out.println("\nAbstractionOnly: \n");
+			 * System.out.print("Annotations: "); anno1 = s1.nextInt();
+			 * System.out.print("Facts: "); facts1 = s1.nextInt();
+			 * System.out.print("Rules: "); rules1 = s1.nextInt();
+			 * 
+			 * EvaluationFramework.RunAbstractionOnly(anno1, facts1, rules1);
+			 * 
+			 * break;
+			 * 
+			 * case 2:
+			 * 
+			 * break;
+			 * 
+			 * case 3:
+			 * 
+			 * System.out.println("\nDynamicBehavioralDetectionOnly: \n");
+			 * System.out.print("Facts: "); facts1 = s1.nextInt();
+			 * 
+			 * System.out.println("\n");
+			 * EvaluationFramework.RunDynamicBehavioralDetectionOnly(facts1);
+			 * 
+			 * break;
+			 * 
+			 * default: }// switch
+			 * 
+			 * } else { System.out.println("Option not valid!");
+			 */
 
-			System.out.println("1. AbstractionOnly");
-			System.out.println("2. DynamicBehavioralDetectionOnly");
-			System.out.println("3. StaticBehavioralDetectionOnly");
-			System.out.println("4. InheritanceOnly");
-			System.out.pritnln("5. InheritanceMultiOnly");
-			System.out.println("6. StructuralDetectionOnly");
-
-			System.out.print("Please choose your option: ");
-			option2 = s1.nextInt();
-
-			switch (option2) {
-
-			case 1:
-
-				int anno1;
-				int facts1;
-				int rules1;
-
-				System.out.println("\nAbstractionOnly: \n");
-				System.out.print("Annotations: ");
-				anno1 = s1.nextInt();
-				System.out.print("Facts: ");
-				facts1 = s1.nextInt();
-				System.out.print("Rules: ");
-				rules1 = s1.nextInt();
-
-				EvaluationFramework.RunAbstractionOnly(anno1, facts1, rules1);
-
-				break;
-
-			case 2:
-
-				break;
-
-			case 3:
-
-				System.out.println("\nDynamicBehavioralDetectionOnly: \n");
-				System.out.print("Facts: ");
-				facts1 = s1.nextInt();
-
-				System.out.println("\n");
-				EvaluationFramework.RunDynamicBehavioralDetectionOnly(facts1);
-
-				break;
-
-			default:
-			}// switch
-
-		} else {
-			System.out.println("Option not valid!");
-		*/
-
-	}
+		}
 	}
 
 }
