@@ -9,6 +9,7 @@ public class Annotation {
 
 	private String name;
 	private String term;
+	
 	List<String> inputPredicate;
 	List<String> outputPredicate;
 
@@ -241,5 +242,28 @@ public class Annotation {
 		} // whileAnnoCoun
 		return generatedAnnotations;
 	}
+	
+	public String generateAnnotationResultSet(Program pr) {
+
+		String generatedAnnotations = "";
+
+		// annotation generieren
+		generatedAnnotations += "annotation(\"" + this + "\"). \n";
+		generatedAnnotations += "hasAnnotation(\"" + pr + "\",\"" + this + "\"). \n";
+		generatedAnnotations += "hasName(\"" + this + "\",\"" + "resultset" + "\"). \n";
+
+		// terms generieren
+		int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+		Term t = new Term(GeneratorRandomString.getRandomString(randomNumber));
+		generatedAnnotations += "term(\"" + t + "\"). \n";
+		generatedAnnotations += "hasSerialization(\"" + t + "\",\"\"\"" + this.getTerm() + "\"\"\"). \n";
+		generatedAnnotations += "hasArgument(\"" + this + "\",\"" + t + "\"," + 0 + "). \n";
+
+		return generatedAnnotations;
+	}
+	
+	
+	
+	
 
 }

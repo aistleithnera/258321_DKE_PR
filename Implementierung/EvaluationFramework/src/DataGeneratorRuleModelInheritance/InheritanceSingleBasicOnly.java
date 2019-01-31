@@ -19,7 +19,8 @@ public class InheritanceSingleBasicOnly {
 
 		// abstract rmi3
 		RMIModule rmi3 = new RMIModule();
-		String s3 = rmi3.generateRMIModuleAbstact(2, 2, 2, 2);
+		String s3 = rmi3.generateRMIModuleAbstact(6, 2, 2, 2);
+		//System.out.println(s3);
 
 		// structure rmi 4, rmi 5
 		RMIModule rmi4 = new RMIModule();
@@ -35,20 +36,8 @@ public class InheritanceSingleBasicOnly {
 		String s6 = GeneratorRandomString.getRandomString(randomNumber);
 		Annotation module = new Annotation(s6);
 
-		// inherits multi
-		RMIModule rmi6 = new RMIModule();
-		String s7 = rmi6.generateRMIModule(6, 2, 2, 2);
-		Module m6 = rmi6.getModule();
 		
-		System.out.println(s7);
 
-		RMIModule rmi7 = new RMIModule();
-		String s8 = rmi7.generateRMIModule(2, 2, 2, 2, m6);
-		Module m7 = rmi7.getModule();
-
-		RMIModule rmi8 = new RMIModule();
-		String s9 = rmi8.generateRMIModule(2, 2, 2, 2, m6);
-		Module m8 = rmi8.getModule();
 
 		System.out.println("==================");
 
@@ -64,10 +53,29 @@ public class InheritanceSingleBasicOnly {
 		Module m9 = rmi11.getModule();
 
 		
-
 		// System.out.println(s + s2);
 		// System.out.println(s3);
+		
+		//dynamic  
+		RMIModule rmi12 = new RMIModule();
+		String s14 = rmi12.generateRMIModuleDynamic();
+		Module m14 = rmi12.getModule();
 
+		RMIModule rmi13 = new RMIModule();
+		String s111 = rmi13.generateRMIModuleDynamic(m14);
+		Module m15 = rmi13.getModule();
+		
+		RMIModule rmi14 = new RMIModule();
+		String s112 = rmi14.generateRMIModuleDynamicResultset(m14, 3);
+		
+		
+		
+		RMIModule rmi15 = new RMIModule();
+		String s113 = rmi15.generateRMIModuleDynamicResultsetInheritance(m15, m14);
+		
+		System.out.print(s14 + s111 + s112 + s113);
+		
+		
 	}
 
 }

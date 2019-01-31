@@ -17,7 +17,7 @@ import Vadalog.VadalogExecution;
 
 public class EvaluationFrameworkApp {
 
-	public static void main(String[] args) {
+	public static void main(String[] args){
 
 		System.out.println("Welcome!");
 
@@ -136,55 +136,115 @@ public class EvaluationFrameworkApp {
 
 		} else if (option == 2) {
 
-			int rules;
-			int facts;
-			int noInPr;
-			int noOutPr;
+			int rules = 0;
+			int facts = 0;
+			int noInPr = 0;
+			int noOutPr = 0;
+			String text = "";
+			
+		
+			 System.out.println("\n\n");
+			  
+			 System.out.println("1. AbstractionOnly");
+			 System.out.println("2. DynamicBehavioralDetectionOnly");
+			 System.out.println("3. StaticBehavioralDetectionOnly");
+			 System.out.println("4. InheritanceOnly");
+			 System.out.println("5. StructuralDetectionOnly");
+			 System.out.print("Please choose your option: "); 
+			 
+			 int noTest = s1.nextInt();
 
-			System.out.print("Rules: ");
-			rules = s1.nextInt();
-			System.out.print("Facts: ");
-			facts = s1.nextInt();
-			System.out.print("NoInPr: ");
-			noInPr = s1.nextInt();
-			System.out.print("NoOutPr: ");
-			noOutPr = s1.nextInt();
-			System.out.print("\n");
+			 switch (noTest) {
+			 
+			 case 1:
+				 	System.out.println("==================");
+				 	System.out.println("AbstractionOnly");
+				 	System.out.println("==================");
+				 	
+				 	System.out.print("Rules: ");
+					rules = s1.nextInt();
+					System.out.print("Facts: ");
+					facts = s1.nextInt();
+					System.out.print("NoInPr: ");
+					noInPr = s1.nextInt();
+					System.out.print("NoOutPr: ");
+					noOutPr = s1.nextInt();
+					System.out.print("\n");
+					
+					RMIModule rmi = new RMIModule();
+					text = rmi.generateRMIModuleAbstact(rules, facts, noInPr, noOutPr);
+			
+					
+			 break;
+			 
+			 case 2:
+				 System.out.println("==================");
+				 System.out.println("DynamicBehavioralDetectionOnly");
+				 System.out.println("==================");
+				 
+				 
+				 
+			  
+			 break;
+			  
+			 case 3:
+			  
+			
+			 
+			  
+			 System.out.println("\n");
+			 
+			  
+			 break;
+			 
+			 default:
+				 System.out.println("Option not valid!");
+				 
+			break;
+			
+			 }//end switch
+			  
+					
+			String fileName = "out.txt";
+			
+			
+			
+			try {
+			
+			PrintWriter outputStream = new PrintWriter(fileName);
+			
+			
+			outputStream.println("Input ");
+			outputStream.println("==================");
+			outputStream.println("Rules: " + rules);
+			outputStream.println("Facts: " + facts);
+			outputStream.println("NoInPr: " + noInPr);
+			outputStream.println("NoOutPr: " + noOutPr);
+			outputStream.print("\n");
 
-			RMIModule m1 = new RMIModule();
-			String text = m1.generateRMIModule(rules, facts, noInPr, noOutPr);
+			outputStream.println("Generated RMI Meta-Code");
+			outputStream.println("==================");
 
-			System.out.println("Input ");
-			System.out.println("==================");
-			System.out.println("Rules: " + rules);
-			System.out.println("Facts: " + facts);
-			System.out.println("NoInPr: " + noInPr);
-			System.out.println("NoOutPr: " + noOutPr);
-			System.out.print("\n");
-
-			System.out.println("Generated RMI Meta-Code");
-			System.out.println("==================");
-
-			System.out.println(text);
+			outputStream.println(text);
 
 			double exTime = VadalogExecution.calcExTime();
 			boolean error = VadalogExecution.calcNoErrors();
 			double cpuUsage = VadalogExecution.calcCpuUsage();
 
-			System.out.println("Evaluation");
-			System.out.println("==================");
-			System.out.print("Execution Time: " + exTime + " Seconds");
-			System.out.print("\n");
-			System.out.print("Errors: ");
+			outputStream.println("Evaluation");
+			outputStream.println("==================");
+			outputStream.print("Execution Time: " + exTime + " Seconds");
+			outputStream.print("\n");
+			outputStream.print("Errors: ");
 			if (error == true) {
-				System.out.print("no errors detected");
+				outputStream.print("no errors detected");
 			} else {
-				System.out.print("errors detected");
+				System.out.println("errors detected");
 			}
 
-			System.out.print("\n");
-			System.out.print("CPU Usage: " + cpuUsage + " %");
-			System.out.print("\n");
+			outputStream.print("\n");
+			outputStream.print("CPU Usage: " + cpuUsage + " %");
+			outputStream.print("\n");
 
 			RMI rmiObject = new RMI();
 
@@ -199,63 +259,26 @@ public class EvaluationFrameworkApp {
 			rmiObject.setHour(date.getHours());
 			rmiObject.setMinute(date.getMinutes());
 			rmiObject.setSecond(date.getSeconds());
-			rmiObject.setTestType(1);
+			rmiObject.setTestType(noTest);
 			rmiObject.setNoRules(rules);
 			rmiObject.setNoFacts(facts);
 			rmiObject.setNoInPr(noInPr);
 			rmiObject.setNoOutPr(noOutPr);
-
 			rmiObject.setExTime(exTime);
 			rmiObject.setErrors(error);
 			rmiObject.setCpuUsage(cpuUsage);
 
 			DBConnection.DBSaveEntry.newRMI(rmiObject);
+			
+			outputStream.close();
 
-			/*
-			 * System.out.println("\n\n");
-			 * 
-			 * System.out.println("1. AbstractionOnly");
-			 * System.out.println("2. DynamicBehavioralDetectionOnly");
-			 * System.out.println("3. StaticBehavioralDetectionOnly");
-			 * System.out.println("4. InheritanceOnly");
-			 * System.out.pritnln("5. InheritanceMultiOnly");
-			 * System.out.println("6. StructuralDetectionOnly");
-			 * 
-			 * System.out.print("Please choose your option: "); option2 = s1.nextInt();
-			 * 
-			 * switch (option2) {
-			 * 
-			 * case 1:
-			 * 
-			 * int anno1; int facts1; int rules1;
-			 * 
-			 * System.out.println("\nAbstractionOnly: \n");
-			 * System.out.print("Annotations: "); anno1 = s1.nextInt();
-			 * System.out.print("Facts: "); facts1 = s1.nextInt();
-			 * System.out.print("Rules: "); rules1 = s1.nextInt();
-			 * 
-			 * EvaluationFramework.RunAbstractionOnly(anno1, facts1, rules1);
-			 * 
-			 * break;
-			 * 
-			 * case 2:
-			 * 
-			 * break;
-			 * 
-			 * case 3:
-			 * 
-			 * System.out.println("\nDynamicBehavioralDetectionOnly: \n");
-			 * System.out.print("Facts: "); facts1 = s1.nextInt();
-			 * 
-			 * System.out.println("\n");
-			 * EvaluationFramework.RunDynamicBehavioralDetectionOnly(facts1);
-			 * 
-			 * break;
-			 * 
-			 * default: }// switch
-			 * 
-			 * } else { System.out.println("Option not valid!");
-			 */
+			System.out.println("Done.");
+			System.out.println("Please check your txt file.");
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+
 
 		}
 	}
