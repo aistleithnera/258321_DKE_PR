@@ -1,5 +1,7 @@
 package EvaluationFramework;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Scanner;
@@ -36,80 +38,100 @@ public class EvaluationFrameworkApp {
 			int businessCases;
 			int tests;
 
-			System.out.print("Parameters: ");
-			parameters = s1.nextInt();
-			System.out.print("Parameter Values: ");
-			parameterValues = s1.nextInt();
-			System.out.print("Business Cases: ");
-			businessCases = s1.nextInt();
-			System.out.print("\n");
-			System.out.print("How many tests would you like to run: ");
-			tests = s1.nextInt();
-			System.out.print("\n");
+			String fileName = "out.txt";
 
-			for (int i = 0; i < tests; i++) {
+			try {
+				PrintWriter outputStream = new PrintWriter(fileName);
 
-				String text = GeneratorCBR.generateCBRCode(parameters, parameterValues, businessCases);
+				outputStream.println("CBR Code Tests ");
+				outputStream.println("==================");
+				outputStream.print("\n");
 
-				System.out.println("Input ");
-				System.out.println("==================");
-				System.out.println("Parameters: " + parameters);
-				System.out.println("Parameter Values: " + parameterValues);
-				System.out.println("Business Cases: " + businessCases);
+				System.out.print("Parameters: ");
+				parameters = s1.nextInt();
+				System.out.print("Parameter Values: ");
+				parameterValues = s1.nextInt();
+				System.out.print("Business Cases: ");
+				businessCases = s1.nextInt();
+				System.out.print("How many tests would you like to run: ");
+				tests = s1.nextInt();
 				System.out.print("\n");
 
-				System.out.println("Generated CBR Code");
-				System.out.println("==================");
-				System.out.print("\n");
-				
-				System.out.println("Test: " + i);
-				System.out.println("==================");
-				
+				outputStream.println("Input ");
+				outputStream.println("==================");
+				outputStream.println("Parameters: " + parameters);
+				outputStream.println("Parameter Values: " + parameterValues);
+				outputStream.println("Business Cases: " + businessCases);
+				outputStream.println("Test: " + tests);
+				outputStream.print("\n");
 
-				System.out.println(text);
+				for (int i = 0; i < tests; i++) {
 
-				double exTime = VadalogExecution.calcExTime();
-				boolean error = VadalogExecution.calcNoErrors();
-				double cpuUsage = VadalogExecution.calcCpuUsage();
+					String text = GeneratorCBR.generateCBRCode(parameters, parameterValues, businessCases);
 
-				System.out.println("Evaluation");
-				System.out.println("==================");
-				System.out.print("Execution Time: " + exTime + " Seconds");
-				System.out.print("\n");
-				System.out.print("Errors: ");
-				if (error == true) {
-					System.out.print("no errors detected");
-				} else {
-					System.out.print("errors detected");
+					outputStream.println("Test: " + i);
+					outputStream.println("==================");
+					outputStream.print("\n");
+
+					outputStream.println("Generated CBR Code");
+					outputStream.println("==================");
+
+					outputStream.println(text);
+
+					double exTime = VadalogExecution.calcExTime();
+					boolean error = VadalogExecution.calcNoErrors();
+					double cpuUsage = VadalogExecution.calcCpuUsage();
+
+					outputStream.println("Evaluation Test " + i);
+					outputStream.println("==================");
+					outputStream.println("Execution Time: " + exTime + " Seconds");
+
+					String errorsHelp;
+
+					if (error == true) {
+						errorsHelp = "no errors detected";
+					} else {
+						errorsHelp = "errors detected";
+					}
+
+					outputStream.println("Errors: " + errorsHelp);
+
+					outputStream.println("CPU Usage: " + cpuUsage + " %");
+					outputStream.println("\n");
+
+					CBR cbrObject = new CBR();
+
+					cbrObject.setId(ThreadLocalRandom.current().nextInt(0, 101));
+
+					Calendar now = Calendar.getInstance();
+					Date date = now.getTime();
+
+					cbrObject.setDay(now.get(Calendar.DAY_OF_MONTH));
+					cbrObject.setMonth(now.get(Calendar.MONTH) + 1);
+					cbrObject.setYear(now.get(Calendar.YEAR));
+					cbrObject.setHour(date.getHours());
+					cbrObject.setMinute(date.getMinutes());
+					cbrObject.setSecond(date.getSeconds());
+
+					cbrObject.setNoParm(parameters);
+					cbrObject.setNoParmVal(parameterValues);
+					cbrObject.setNoBusCase(businessCases);
+
+					cbrObject.setExTime(exTime);
+					cbrObject.setErrors(error);
+					cbrObject.setCpuUsage(cpuUsage);
+
+					DBConnection.DBSaveEntry.newCBR(cbrObject);
+
 				}
 
-				System.out.print("\n");
-				System.out.print("CPU Usage: " + cpuUsage + " %");
-				System.out.print("\n");
+				outputStream.close();
 
-				CBR cbrObject = new CBR();
+				System.out.println("Done.");
+				System.out.println("Please check your txt file.");
 
-				cbrObject.setId(ThreadLocalRandom.current().nextInt(0, 101));
-
-				Calendar now = Calendar.getInstance();
-				Date date = now.getTime();
-
-				cbrObject.setDay(now.get(Calendar.DAY_OF_MONTH));
-				cbrObject.setMonth(now.get(Calendar.MONTH) + 1);
-				cbrObject.setYear(now.get(Calendar.YEAR));
-				cbrObject.setHour(date.getHours());
-				cbrObject.setMinute(date.getMinutes());
-				cbrObject.setSecond(date.getSeconds());
-
-				cbrObject.setNoParm(parameters);
-				cbrObject.setNoParmVal(parameterValues);
-				cbrObject.setNoBusCase(businessCases);
-
-				cbrObject.setExTime(exTime);
-				cbrObject.setErrors(error);
-				cbrObject.setCpuUsage(cpuUsage);
-
-				DBConnection.DBSaveEntry.newCBR(cbrObject);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
 			}
 
 		} else if (option == 2) {
