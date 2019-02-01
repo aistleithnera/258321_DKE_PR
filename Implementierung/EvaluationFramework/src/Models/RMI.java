@@ -1,14 +1,12 @@
 package Models;
 
-public class RMI {
+import java.sql.Date;
+import java.sql.Time;
+
+public class RMI { // RMI Objekt erlaubt eine bequeme Speicherung der Testdaten
 	
-	private int id;
-	private int day;
-	private int month;
-	private int year;
-	private int hour;
-	private int minute;
-	private int second;
+	private Date date;
+	private Time time;
 	private int testType;
 	private int noRules;
 	private int noFacts;
@@ -18,47 +16,19 @@ public class RMI {
 	private boolean errors;
 	private double cpuUsage;
 	
-	public int getId() {
-		return id;
+	// Getter und Setter Methoden
+
+	public Date getDate() {
+		return date;
 	}
-	public void setId(int id) {
-		this.id = id;
+	public void setDate(Date date) {
+		this.date = date;
 	}
-	public int getDay() {
-		return day;
+	public Time getTime() {
+		return time;
 	}
-	public void setDay(int day) {
-		this.day = day;
-	}
-	public int getMonth() {
-		return month;
-	}
-	public void setMonth(int month) {
-		this.month = month;
-	}
-	public int getYear() {
-		return year;
-	}
-	public void setYear(int year) {
-		this.year = year;
-	}
-	public int getHour() {
-		return hour;
-	}
-	public void setHour(int hour) {
-		this.hour = hour;
-	}
-	public int getMinute() {
-		return minute;
-	}
-	public void setMinute(int minute) {
-		this.minute = minute;
-	}
-	public int getSecond() {
-		return second;
-	}
-	public void setSecond(int second) {
-		this.second = second;
+	public void setTime(Time time) {
+		this.time = time;
 	}
 	public int getTestType() {
 		return testType;

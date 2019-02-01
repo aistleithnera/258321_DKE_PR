@@ -1,206 +1,468 @@
+CBR Code Tests 
+==================
+
 Input 
 ==================
-Rules: 4
-Facts: 3
-NoInPr: 2
-NoOutPr: 2
+Parameters: 2
+Parameter Values: 1
+Business Cases: 5
+Test: 5
 
-Generated RMI Meta-Code
+Test: 0
 ==================
-program("program1").
-annotation("pidk"). 
-hasAnnotation("program1","pidk"). 
-hasName("pidk","module"). 
-term("wzbm"). 
-hasSerialization("wzbm","""m1"""). 
-hasArgument("pidk","wzbm",0). 
-annotation("aceeq"). 
-hasAnnotation("program1","aceeq"). 
-hasName("aceeq","input"). 
-term("nvvd"). 
-hasSerialization("nvvd","""zcvuh"""). 
-hasArgument("aceeq","nvvd",0). 
-annotation("ltckw"). 
-hasAnnotation("program1","ltckw"). 
-hasName("ltckw","input"). 
-term("xybxb"). 
-hasSerialization("xybxb","""onwhe"""). 
-hasArgument("ltckw","xybxb",0). 
-rule("vvhhj").
-hasRule("program1","vvhhj").
-hasPositiveHeadAtom("vvhhj","xpmavp").
-relationalAtom("xpmavp"). 
-hasName("xpmavp","hpya"). 
-term("kkwkiim"). 
-hasSerialization("kkwkiim","K"). 
-hasArgument("xpmavp","kkwkiim",0). 
-hasPositiveBodyAtom("vvhhj","vsjn").
-relationalAtom("vsjn"). 
-hasName("vsjn","zcvuh"). 
-term("smjyx"). 
-hasSerialization("smjyx","K"). 
-hasArgument("vsjn","smjyx",0). 
-hasPositiveBodyAtom("vvhhj","eqlg").
-relationalAtom("eqlg"). 
-hasName("eqlg","onwhe"). 
-term("mmpmtl"). 
-hasSerialization("mmpmtl","K"). 
-hasArgument("eqlg","mmpmtl",0). 
-annotation("lwysa"). 
-hasAnnotation("vvhhj","lwysa"). 
-hasName("lwysa","label"). 
-term("gopkkq"). 
-hasSerialization("gopkkq","""lwysa"""). 
-hasArgument("lwysa","gopkkq",0). 
-rule("kvycqd").
-hasRule("program1","kvycqd").
-hasPositiveHeadAtom("kvycqd","zoqic").
-relationalAtom("zoqic"). 
-hasName("zoqic","dkldegb"). 
-term("dgtjo"). 
-hasSerialization("dgtjo","K"). 
-hasArgument("zoqic","dgtjo",0). 
-hasPositiveBodyAtom("kvycqd","ivjwvf").
-relationalAtom("ivjwvf"). 
-hasName("ivjwvf","zcvuh"). 
-term("blatjvt"). 
-hasSerialization("blatjvt","K"). 
-hasArgument("ivjwvf","blatjvt",0). 
-annotation("bsnd"). 
-hasAnnotation("kvycqd","bsnd"). 
-hasName("bsnd","label"). 
-term("rfqe"). 
-hasSerialization("rfqe","""bsnd"""). 
-hasArgument("bsnd","rfqe",0). 
-rule("datl").
-hasRule("program1","datl").
-hasPositiveHeadAtom("datl","lriwmek").
-relationalAtom("lriwmek"). 
-hasName("lriwmek","hpya"). 
-term("goasm"). 
-hasSerialization("goasm","K"). 
-hasArgument("lriwmek","goasm",0). 
-hasPositiveBodyAtom("datl","gdpuq").
-relationalAtom("gdpuq"). 
-hasName("gdpuq","zcvuh"). 
-term("eijdd"). 
-hasSerialization("eijdd","K"). 
-hasArgument("gdpuq","eijdd",0). 
-hasPositiveBodyAtom("datl","ggefgbr").
-relationalAtom("ggefgbr"). 
-hasName("ggefgbr","onwhe"). 
-term("obkkc"). 
-hasSerialization("obkkc","K"). 
-hasArgument("ggefgbr","obkkc",0). 
-hasPositiveBodyAtom("datl","jrnp").
-relationalAtom("jrnp"). 
-hasName("jrnp","ydjnimi"). 
-term("crxv"). 
-hasSerialization("crxv","K"). 
-hasArgument("jrnp","crxv",0). 
-annotation("mfprvyl"). 
-hasAnnotation("datl","mfprvyl"). 
-hasName("mfprvyl","label"). 
-term("gsbrbr"). 
-hasSerialization("gsbrbr","""mfprvyl"""). 
-hasArgument("mfprvyl","gsbrbr",0). 
-rule("fbogz").
-hasRule("program1","fbogz").
-hasPositiveHeadAtom("fbogz","qfont").
-relationalAtom("qfont"). 
-hasName("qfont","wlaii"). 
-term("jgptlfs"). 
-hasSerialization("jgptlfs","K"). 
-hasArgument("qfont","jgptlfs",0). 
-hasPositiveBodyAtom("fbogz","bmftip").
-relationalAtom("bmftip"). 
-hasName("bmftip","ujcxot"). 
-term("vvwtqj"). 
-hasSerialization("vvwtqj","K"). 
-hasArgument("bmftip","vvwtqj",0). 
-hasPositiveBodyAtom("fbogz","ycquhlc").
-relationalAtom("ycquhlc"). 
-hasName("ycquhlc","axczubs"). 
-term("sbvqgv"). 
-hasSerialization("sbvqgv","K"). 
-hasArgument("ycquhlc","sbvqgv",0). 
-hasPositiveBodyAtom("fbogz","idhjto").
-relationalAtom("idhjto"). 
-hasName("idhjto","yebyv"). 
-term("usxtb"). 
-hasSerialization("usxtb","K"). 
-hasArgument("idhjto","usxtb",0). 
-annotation("gvedd"). 
-hasAnnotation("fbogz","gvedd"). 
-hasName("gvedd","label"). 
-term("obdbzxq"). 
-hasSerialization("obdbzxq","""gvedd"""). 
-hasArgument("gvedd","obdbzxq",0). 
-rule("ucng").
-hasRule("program1","ucng").
-hasPositiveHeadAtom("ucng","dbvkw").
-relationalAtom("dbvkw"). 
-hasName("dbvkw","tmhyxwm"). 
-term("efjqtd"). 
-hasSerialization("efjqtd","K"). 
-hasArgument("dbvkw","efjqtd",0). 
-hasPositiveBodyAtom("ucng","dhhgwk").
-relationalAtom("dhhgwk"). 
-hasName("dhhgwk","vypofh"). 
-term("fcwfydr"). 
-hasSerialization("fcwfydr","K"). 
-hasArgument("dhhgwk","fcwfydr",0). 
-hasPositiveBodyAtom("ucng","jdks").
-relationalAtom("jdks"). 
-hasName("jdks","vdpv"). 
-term("kwuqd"). 
-hasSerialization("kwuqd","K"). 
-hasArgument("jdks","kwuqd",0). 
-hasPositiveBodyAtom("ucng","nxjw").
-relationalAtom("nxjw"). 
-hasName("nxjw","hmlch"). 
-term("xzyfo"). 
-hasSerialization("xzyfo","K"). 
-hasArgument("nxjw","xzyfo",0). 
-annotation("ooxg"). 
-hasAnnotation("ucng","ooxg"). 
-hasName("ooxg","label"). 
-term("qrricyj"). 
-hasSerialization("qrricyj","""ooxg"""). 
-hasArgument("ooxg","qrricyj",0). 
-relationalAtom("vptbo"). 
-hasFact("program1","vptbo"). 
-hasName("vptbo","tcjkp"). 
-term("vbmp"). 
-hasSerialization("vbmp","""K"""). 
-hasArgument("vptbo","vbmp",0). 
-relationalAtom("fsyuvn"). 
-hasFact("program1","fsyuvn"). 
-hasName("fsyuvn","aibun"). 
-term("hmenr"). 
-hasSerialization("hmenr","""K"""). 
-hasArgument("fsyuvn","hmenr",0). 
-relationalAtom("cllge"). 
-hasFact("program1","cllge"). 
-hasName("cllge","ngpqyb"). 
-term("zoygmad"). 
-hasSerialization("zoygmad","""K"""). 
-hasArgument("cllge","zoygmad",0). 
-annotation("mxdef"). 
-hasAnnotation("program1","mxdef"). 
-hasName("mxdef","output"). 
-term("vbbavg"). 
-hasSerialization("vbbavg","""hpya"""). 
-hasArgument("mxdef","vbbavg",0). 
-annotation("qlsi"). 
-hasAnnotation("program1","qlsi"). 
-hasName("qlsi","output"). 
-term("rajbjb"). 
-hasSerialization("rajbjb","""dkldegb"""). 
-hasArgument("qlsi","rajbjb",0). 
 
-Evaluation
+Generated CBR Code
 ==================
-Execution Time: 27.0 Seconds
+% Generic Components
+contextClass("ccName_yticzsCtx"). 
+businessCaseClass("bccName_dhotmCase"). 
+
+% Parameters
+hasParameter("ccName_yticzsCtx","Param_0_jffqbos"). hasParameter("ccName_yticzsCtx","Param_1_vnvpu"). 
+parameter("Param_0_jffqbos").
+parameter("Param_1_vnvpu").
+
+% Parameter Values
+paramValues("Param_0_jffqbos","ParamValue_0_0_ghpqjn").
+paramValues("Param_1_vnvpu","ParamValue_1_0_nirld").
+
+
+
+
+% Contexts
+context("ctx0").
+hasName("ctx0","ctxName_xaugo").
+hasModule("ctx0","module0"). hasContextClass("ctx0","ccName_yticzsCtx").
+hasParamValues("ctx0","Param_0_jffqbos","ParamValue_0_0_ghpqjn").
+hasParamValues("ctx0","Param_1_vnvpu","ParamValue_1_0_nirld").
+
+
+% Determine Parameter Values
+detParamValue(BC,"Param_0_jffqbos",Val) :- businessCase(BC), hasDescProp(BC,"descProp_dkfb",Val).
+detParamValue(BC,"Param_1_vnvpu",Val) :- businessCase(BC), hasDescProp(BC,"descProp_tuud",Val).
+
+% Business Cases
+hasBusinessCaseClass(BC,"bccName_dhotmCase") :- businessCase(BC).
+businessCase("bc1").
+hasDescProp("bc1","descProp_dkfb","ParamValue_0_0_ghpqjn").
+hasDescProp("bc1","descProp_tuud","ParamValue_1_0_nirld").
+
+businessCase("bc2").
+hasDescProp("bc2","descProp_dkfb","ParamValue_0_0_ghpqjn").
+hasDescProp("bc2","descProp_tuud","ParamValue_1_0_nirld").
+
+businessCase("bc3").
+hasDescProp("bc3","descProp_dkfb","ParamValue_0_0_ghpqjn").
+hasDescProp("bc3","descProp_tuud","ParamValue_1_0_nirld").
+
+businessCase("bc4").
+hasDescProp("bc4","descProp_dkfb","ParamValue_0_0_ghpqjn").
+hasDescProp("bc4","descProp_tuud","ParamValue_1_0_nirld").
+
+businessCase("bc5").
+hasDescProp("bc5","descProp_dkfb","ParamValue_0_0_ghpqjn").
+hasDescProp("bc5","descProp_tuud","ParamValue_1_0_nirld").
+
+
+% transitive and transitive-reflexive covers
+tCovers(Pval,Cval) :- tCovers(Pval,X), covers(X,Cval).
+tCovers(Pval,Cval) :- covers(Pval,Cval).
+trCovers(Pval,Cval) :- tCovers(Pval,Cval). trCovers(Pval,Pval):- paramValue(_,Pval).
+
+% Context Hierarchy
+paramCover(P,C,Param):- hasParamValue(C,Param,Pval), hasParamValue(P,Param,Pval2), trCovers(Pval2,Pval).
+notParamCover(C,P,Param):- context(C), hasContextClass(C,CtxCl), hasParameter(CtxCl,Param), context(P), not paramCover(C,P,Param).
+ctxInherits(C,P) :- paramCover(P,C,_), not notParamCover(P,C,_).
+
+% DETERMINE RELEVANT CONTEXTS AND THE MOST SPECIFIC RELEVANT CONTEXT
+bcParamCover(BC,Ctx,Param) :- hasParamValue(Ctx,Param,PVal), detParamValue(BC,Param,PVal2), trCovers(PVal,PVal2).
+notBcParamCover(BC,Ctx,Param) :- businessCase(BC), context(Ctx), hasContextClass(Ctx,CtxCl), hasParameter(CtxCl,Param), not bcParamCover(BC,Ctx,Param).
+detRelevantCtxs(BC,Ctx) :- bcParamCover(BC,Ctx,X), not notBcParamCover(BC,Ctx,Y).
+
+hasRelevantDescendant(BC,Ctx) :- detRelevantCtxs(BC,Ctx), detRelevantCtxs(BC,Ctx2), ctxInherits(Ctx2,Ctx), not w_ctxIdent(Ctx,Ctx2), Ctx!=Ctx2.
+detMostSpecificCtx(BC,Ctx) :- detRelevantCtxs(BC,Ctx), not hasRelevantDescendant(BC,Ctx).
+
+@output("detMostSpecificCtx"). @post("detMostSpecificCtx","orderby(1,2)").
+@output("detRelevantCtxs"). @post("detRelevantCtxs","orderby(1,2)").% WARNINGS
+w_incompleteCtxSpec(C) :- parameter(P), context(C), not hasParamValue(C,P,_).
+@output("w_incompleteCtxSpec").
+
+ctxDiffParamValue(Ctx1,Ctx2) :- context(Ctx1), context(Ctx2), hasParamValue(Ctx1,P,PVal1), hasParamValue(Ctx2,P,PVal2), PVal1!=PVal2.
+w_ctxIdent(Ctx1,Ctx2) :- context(Ctx1), context(Ctx2), not ctxDiffParamValue(Ctx1,Ctx2),Ctx1!=Ctx2.
+@output("w_ctxIdent").
+
+
+Evaluation Test 0
+==================
+Execution Time: 6.0 Seconds
+Errors: errors detected
+CPU Usage: 9.0 %
+
+
+Test: 1
+==================
+
+Generated CBR Code
+==================
+% Generic Components
+contextClass("ccName_euotiCtx"). 
+businessCaseClass("bccName_eggdCase"). 
+
+% Parameters
+hasParameter("ccName_euotiCtx","Param_0_iicai"). hasParameter("ccName_euotiCtx","Param_1_vfvhfc"). 
+parameter("Param_0_iicai").
+parameter("Param_1_vfvhfc").
+
+% Parameter Values
+paramValues("Param_0_iicai","ParamValue_0_0_gmdwj").
+paramValues("Param_1_vfvhfc","ParamValue_1_0_mkeqspn").
+
+% Parameter Hierachies
+
+
+
+% Contexts
+context("ctx0").
+hasName("ctx0","ctxName_ladb").
+hasModule("ctx0","module0"). hasContextClass("ctx0","ccName_euotiCtx").
+hasParamValues("ctx0","Param_0_iicai","ParamValue_0_0_gmdwj").
+hasParamValues("ctx0","Param_1_vfvhfc","ParamValue_1_0_mkeqspn").
+
+
+% Determine Parameter Values
+detParamValue(BC,"Param_0_iicai",Val) :- businessCase(BC), hasDescProp(BC,"descProp_pflqbo",Val).
+detParamValue(BC,"Param_1_vfvhfc",Val) :- businessCase(BC), hasDescProp(BC,"descProp_ruqgs",Val).
+
+% Business Cases
+hasBusinessCaseClass(BC,"bccName_eggdCase") :- businessCase(BC).
+businessCase("bc1").
+hasDescProp("bc1","descProp_pflqbo","ParamValue_0_0_gmdwj").
+hasDescProp("bc1","descProp_ruqgs","ParamValue_1_0_mkeqspn").
+
+businessCase("bc2").
+hasDescProp("bc2","descProp_pflqbo","ParamValue_0_0_gmdwj").
+hasDescProp("bc2","descProp_ruqgs","ParamValue_1_0_mkeqspn").
+
+businessCase("bc3").
+hasDescProp("bc3","descProp_pflqbo","ParamValue_0_0_gmdwj").
+hasDescProp("bc3","descProp_ruqgs","ParamValue_1_0_mkeqspn").
+
+businessCase("bc4").
+hasDescProp("bc4","descProp_pflqbo","ParamValue_0_0_gmdwj").
+hasDescProp("bc4","descProp_ruqgs","ParamValue_1_0_mkeqspn").
+
+businessCase("bc5").
+hasDescProp("bc5","descProp_pflqbo","ParamValue_0_0_gmdwj").
+hasDescProp("bc5","descProp_ruqgs","ParamValue_1_0_mkeqspn").
+
+
+% transitive and transitive-reflexive covers
+tCovers(Pval,Cval) :- tCovers(Pval,X), covers(X,Cval).
+tCovers(Pval,Cval) :- covers(Pval,Cval).
+trCovers(Pval,Cval) :- tCovers(Pval,Cval). trCovers(Pval,Pval):- paramValue(_,Pval).
+
+% Context Hierarchy
+paramCover(P,C,Param):- hasParamValue(C,Param,Pval), hasParamValue(P,Param,Pval2), trCovers(Pval2,Pval).
+notParamCover(C,P,Param):- context(C), hasContextClass(C,CtxCl), hasParameter(CtxCl,Param), context(P), not paramCover(C,P,Param).
+ctxInherits(C,P) :- paramCover(P,C,_), not notParamCover(P,C,_).
+
+% DETERMINE RELEVANT CONTEXTS AND THE MOST SPECIFIC RELEVANT CONTEXT
+bcParamCover(BC,Ctx,Param) :- hasParamValue(Ctx,Param,PVal), detParamValue(BC,Param,PVal2), trCovers(PVal,PVal2).
+notBcParamCover(BC,Ctx,Param) :- businessCase(BC), context(Ctx), hasContextClass(Ctx,CtxCl), hasParameter(CtxCl,Param), not bcParamCover(BC,Ctx,Param).
+detRelevantCtxs(BC,Ctx) :- bcParamCover(BC,Ctx,X), not notBcParamCover(BC,Ctx,Y).
+
+hasRelevantDescendant(BC,Ctx) :- detRelevantCtxs(BC,Ctx), detRelevantCtxs(BC,Ctx2), ctxInherits(Ctx2,Ctx), not w_ctxIdent(Ctx,Ctx2), Ctx!=Ctx2.
+detMostSpecificCtx(BC,Ctx) :- detRelevantCtxs(BC,Ctx), not hasRelevantDescendant(BC,Ctx).
+
+@output("detMostSpecificCtx"). @post("detMostSpecificCtx","orderby(1,2)").
+@output("detRelevantCtxs"). @post("detRelevantCtxs","orderby(1,2)").% WARNINGS
+w_incompleteCtxSpec(C) :- parameter(P), context(C), not hasParamValue(C,P,_).
+@output("w_incompleteCtxSpec").
+
+ctxDiffParamValue(Ctx1,Ctx2) :- context(Ctx1), context(Ctx2), hasParamValue(Ctx1,P,PVal1), hasParamValue(Ctx2,P,PVal2), PVal1!=PVal2.
+w_ctxIdent(Ctx1,Ctx2) :- context(Ctx1), context(Ctx2), not ctxDiffParamValue(Ctx1,Ctx2),Ctx1!=Ctx2.
+@output("w_ctxIdent").
+
+
+Evaluation Test 1
+==================
+Execution Time: 25.0 Seconds
 Errors: no errors detected
 CPU Usage: 47.0 %
+
+
+Test: 2
+==================
+
+Generated CBR Code
+==================
+% Generic Components
+contextClass("ccName_mqnphloCtx"). 
+businessCaseClass("bccName_wqggdwwCase"). 
+
+% Parameters
+hasParameter("ccName_mqnphloCtx","Param_0_rwgy"). hasParameter("ccName_mqnphloCtx","Param_1_tencmiu"). 
+parameter("Param_0_rwgy").
+parameter("Param_1_tencmiu").
+
+% Parameter Values
+paramValues("Param_0_rwgy","ParamValue_0_0_lfktx").
+paramValues("Param_1_tencmiu","ParamValue_1_0_sgdv").
+
+% Parameter Hierachies
+
+
+
+% Contexts
+context("ctx0").
+hasName("ctx0","ctxName_bsbyx").
+hasModule("ctx0","module0"). hasContextClass("ctx0","ccName_mqnphloCtx").
+hasParamValues("ctx0","Param_0_rwgy","ParamValue_0_0_lfktx").
+hasParamValues("ctx0","Param_1_tencmiu","ParamValue_1_0_sgdv").
+
+
+% Determine Parameter Values
+detParamValue(BC,"Param_0_rwgy",Val) :- businessCase(BC), hasDescProp(BC,"descProp_tbah",Val).
+detParamValue(BC,"Param_1_tencmiu",Val) :- businessCase(BC), hasDescProp(BC,"descProp_kyfq",Val).
+
+% Business Cases
+hasBusinessCaseClass(BC,"bccName_wqggdwwCase") :- businessCase(BC).
+businessCase("bc1").
+hasDescProp("bc1","descProp_tbah","ParamValue_0_0_lfktx").
+hasDescProp("bc1","descProp_kyfq","ParamValue_1_0_sgdv").
+
+businessCase("bc2").
+hasDescProp("bc2","descProp_tbah","ParamValue_0_0_lfktx").
+hasDescProp("bc2","descProp_kyfq","ParamValue_1_0_sgdv").
+
+businessCase("bc3").
+hasDescProp("bc3","descProp_tbah","ParamValue_0_0_lfktx").
+hasDescProp("bc3","descProp_kyfq","ParamValue_1_0_sgdv").
+
+businessCase("bc4").
+hasDescProp("bc4","descProp_tbah","ParamValue_0_0_lfktx").
+hasDescProp("bc4","descProp_kyfq","ParamValue_1_0_sgdv").
+
+businessCase("bc5").
+hasDescProp("bc5","descProp_tbah","ParamValue_0_0_lfktx").
+hasDescProp("bc5","descProp_kyfq","ParamValue_1_0_sgdv").
+
+
+% transitive and transitive-reflexive covers
+tCovers(Pval,Cval) :- tCovers(Pval,X), covers(X,Cval).
+tCovers(Pval,Cval) :- covers(Pval,Cval).
+trCovers(Pval,Cval) :- tCovers(Pval,Cval). trCovers(Pval,Pval):- paramValue(_,Pval).
+
+% Context Hierarchy
+paramCover(P,C,Param):- hasParamValue(C,Param,Pval), hasParamValue(P,Param,Pval2), trCovers(Pval2,Pval).
+notParamCover(C,P,Param):- context(C), hasContextClass(C,CtxCl), hasParameter(CtxCl,Param), context(P), not paramCover(C,P,Param).
+ctxInherits(C,P) :- paramCover(P,C,_), not notParamCover(P,C,_).
+
+% DETERMINE RELEVANT CONTEXTS AND THE MOST SPECIFIC RELEVANT CONTEXT
+bcParamCover(BC,Ctx,Param) :- hasParamValue(Ctx,Param,PVal), detParamValue(BC,Param,PVal2), trCovers(PVal,PVal2).
+notBcParamCover(BC,Ctx,Param) :- businessCase(BC), context(Ctx), hasContextClass(Ctx,CtxCl), hasParameter(CtxCl,Param), not bcParamCover(BC,Ctx,Param).
+detRelevantCtxs(BC,Ctx) :- bcParamCover(BC,Ctx,X), not notBcParamCover(BC,Ctx,Y).
+
+hasRelevantDescendant(BC,Ctx) :- detRelevantCtxs(BC,Ctx), detRelevantCtxs(BC,Ctx2), ctxInherits(Ctx2,Ctx), not w_ctxIdent(Ctx,Ctx2), Ctx!=Ctx2.
+detMostSpecificCtx(BC,Ctx) :- detRelevantCtxs(BC,Ctx), not hasRelevantDescendant(BC,Ctx).
+
+@output("detMostSpecificCtx"). @post("detMostSpecificCtx","orderby(1,2)").
+@output("detRelevantCtxs"). @post("detRelevantCtxs","orderby(1,2)").% WARNINGS
+w_incompleteCtxSpec(C) :- parameter(P), context(C), not hasParamValue(C,P,_).
+@output("w_incompleteCtxSpec").
+
+ctxDiffParamValue(Ctx1,Ctx2) :- context(Ctx1), context(Ctx2), hasParamValue(Ctx1,P,PVal1), hasParamValue(Ctx2,P,PVal2), PVal1!=PVal2.
+w_ctxIdent(Ctx1,Ctx2) :- context(Ctx1), context(Ctx2), not ctxDiffParamValue(Ctx1,Ctx2),Ctx1!=Ctx2.
+@output("w_ctxIdent").
+
+
+Evaluation Test 2
+==================
+Execution Time: 3.0 Seconds
+Errors: errors detected
+CPU Usage: 8.0 %
+
+
+Test: 3
+==================
+
+Generated CBR Code
+==================
+% Generic Components
+contextClass("ccName_dbdmajxCtx"). 
+businessCaseClass("bccName_kanmkizCase"). 
+
+% Parameters
+hasParameter("ccName_dbdmajxCtx","Param_0_uerv"). hasParameter("ccName_dbdmajxCtx","Param_1_qqxcjs"). 
+parameter("Param_0_uerv").
+parameter("Param_1_qqxcjs").
+
+% Parameter Values
+paramValues("Param_0_uerv","ParamValue_0_0_atba").
+paramValues("Param_1_qqxcjs","ParamValue_1_0_axhov").
+
+
+
+
+% Contexts
+context("ctx0").
+hasName("ctx0","ctxName_svly").
+hasModule("ctx0","module0"). hasContextClass("ctx0","ccName_dbdmajxCtx").
+hasParamValues("ctx0","Param_0_uerv","ParamValue_0_0_atba").
+hasParamValues("ctx0","Param_1_qqxcjs","ParamValue_1_0_axhov").
+
+
+% Determine Parameter Values
+detParamValue(BC,"Param_0_uerv",Val) :- businessCase(BC), hasDescProp(BC,"descProp_matuxa",Val).
+detParamValue(BC,"Param_1_qqxcjs",Val) :- businessCase(BC), hasDescProp(BC,"descProp_hcepit",Val).
+
+% Business Cases
+hasBusinessCaseClass(BC,"bccName_kanmkizCase") :- businessCase(BC).
+businessCase("bc1").
+hasDescProp("bc1","descProp_matuxa","ParamValue_0_0_atba").
+hasDescProp("bc1","descProp_hcepit","ParamValue_1_0_axhov").
+
+businessCase("bc2").
+hasDescProp("bc2","descProp_matuxa","ParamValue_0_0_atba").
+hasDescProp("bc2","descProp_hcepit","ParamValue_1_0_axhov").
+
+businessCase("bc3").
+hasDescProp("bc3","descProp_matuxa","ParamValue_0_0_atba").
+hasDescProp("bc3","descProp_hcepit","ParamValue_1_0_axhov").
+
+businessCase("bc4").
+hasDescProp("bc4","descProp_matuxa","ParamValue_0_0_atba").
+hasDescProp("bc4","descProp_hcepit","ParamValue_1_0_axhov").
+
+businessCase("bc5").
+hasDescProp("bc5","descProp_matuxa","ParamValue_0_0_atba").
+hasDescProp("bc5","descProp_hcepit","ParamValue_1_0_axhov").
+
+
+% transitive and transitive-reflexive covers
+tCovers(Pval,Cval) :- tCovers(Pval,X), covers(X,Cval).
+tCovers(Pval,Cval) :- covers(Pval,Cval).
+trCovers(Pval,Cval) :- tCovers(Pval,Cval). trCovers(Pval,Pval):- paramValue(_,Pval).
+
+% Context Hierarchy
+paramCover(P,C,Param):- hasParamValue(C,Param,Pval), hasParamValue(P,Param,Pval2), trCovers(Pval2,Pval).
+notParamCover(C,P,Param):- context(C), hasContextClass(C,CtxCl), hasParameter(CtxCl,Param), context(P), not paramCover(C,P,Param).
+ctxInherits(C,P) :- paramCover(P,C,_), not notParamCover(P,C,_).
+
+% DETERMINE RELEVANT CONTEXTS AND THE MOST SPECIFIC RELEVANT CONTEXT
+bcParamCover(BC,Ctx,Param) :- hasParamValue(Ctx,Param,PVal), detParamValue(BC,Param,PVal2), trCovers(PVal,PVal2).
+notBcParamCover(BC,Ctx,Param) :- businessCase(BC), context(Ctx), hasContextClass(Ctx,CtxCl), hasParameter(CtxCl,Param), not bcParamCover(BC,Ctx,Param).
+detRelevantCtxs(BC,Ctx) :- bcParamCover(BC,Ctx,X), not notBcParamCover(BC,Ctx,Y).
+
+hasRelevantDescendant(BC,Ctx) :- detRelevantCtxs(BC,Ctx), detRelevantCtxs(BC,Ctx2), ctxInherits(Ctx2,Ctx), not w_ctxIdent(Ctx,Ctx2), Ctx!=Ctx2.
+detMostSpecificCtx(BC,Ctx) :- detRelevantCtxs(BC,Ctx), not hasRelevantDescendant(BC,Ctx).
+
+@output("detMostSpecificCtx"). @post("detMostSpecificCtx","orderby(1,2)").
+@output("detRelevantCtxs"). @post("detRelevantCtxs","orderby(1,2)").% WARNINGS
+w_incompleteCtxSpec(C) :- parameter(P), context(C), not hasParamValue(C,P,_).
+@output("w_incompleteCtxSpec").
+
+ctxDiffParamValue(Ctx1,Ctx2) :- context(Ctx1), context(Ctx2), hasParamValue(Ctx1,P,PVal1), hasParamValue(Ctx2,P,PVal2), PVal1!=PVal2.
+w_ctxIdent(Ctx1,Ctx2) :- context(Ctx1), context(Ctx2), not ctxDiffParamValue(Ctx1,Ctx2),Ctx1!=Ctx2.
+@output("w_ctxIdent").
+
+
+Evaluation Test 3
+==================
+Execution Time: 31.0 Seconds
+Errors: no errors detected
+CPU Usage: 34.0 %
+
+
+Test: 4
+==================
+
+Generated CBR Code
+==================
+% Generic Components
+contextClass("ccName_qwadlhCtx"). 
+businessCaseClass("bccName_vimemfCase"). 
+
+% Parameters
+hasParameter("ccName_qwadlhCtx","Param_0_mraaxtl"). hasParameter("ccName_qwadlhCtx","Param_1_xanqulj"). 
+parameter("Param_0_mraaxtl").
+parameter("Param_1_xanqulj").
+
+% Parameter Values
+paramValues("Param_0_mraaxtl","ParamValue_0_0_rmnq").
+paramValues("Param_1_xanqulj","ParamValue_1_0_wfqotb").
+
+% Parameter Hierachies
+
+
+
+% Contexts
+context("ctx0").
+hasName("ctx0","ctxName_oujsim").
+hasModule("ctx0","module0"). hasContextClass("ctx0","ccName_qwadlhCtx").
+hasParamValues("ctx0","Param_0_mraaxtl","ParamValue_0_0_rmnq").
+hasParamValues("ctx0","Param_1_xanqulj","ParamValue_1_0_wfqotb").
+
+
+% Determine Parameter Values
+detParamValue(BC,"Param_0_mraaxtl",Val) :- businessCase(BC), hasDescProp(BC,"descProp_yhsziir",Val).
+detParamValue(BC,"Param_1_xanqulj",Val) :- businessCase(BC), hasDescProp(BC,"descProp_oyhey",Val).
+
+% Business Cases
+hasBusinessCaseClass(BC,"bccName_vimemfCase") :- businessCase(BC).
+businessCase("bc1").
+hasDescProp("bc1","descProp_yhsziir","ParamValue_0_0_rmnq").
+hasDescProp("bc1","descProp_oyhey","ParamValue_1_0_wfqotb").
+
+businessCase("bc2").
+hasDescProp("bc2","descProp_yhsziir","ParamValue_0_0_rmnq").
+hasDescProp("bc2","descProp_oyhey","ParamValue_1_0_wfqotb").
+
+businessCase("bc3").
+hasDescProp("bc3","descProp_yhsziir","ParamValue_0_0_rmnq").
+hasDescProp("bc3","descProp_oyhey","ParamValue_1_0_wfqotb").
+
+businessCase("bc4").
+hasDescProp("bc4","descProp_yhsziir","ParamValue_0_0_rmnq").
+hasDescProp("bc4","descProp_oyhey","ParamValue_1_0_wfqotb").
+
+businessCase("bc5").
+hasDescProp("bc5","descProp_yhsziir","ParamValue_0_0_rmnq").
+hasDescProp("bc5","descProp_oyhey","ParamValue_1_0_wfqotb").
+
+
+% transitive and transitive-reflexive covers
+tCovers(Pval,Cval) :- tCovers(Pval,X), covers(X,Cval).
+tCovers(Pval,Cval) :- covers(Pval,Cval).
+trCovers(Pval,Cval) :- tCovers(Pval,Cval). trCovers(Pval,Pval):- paramValue(_,Pval).
+
+% Context Hierarchy
+paramCover(P,C,Param):- hasParamValue(C,Param,Pval), hasParamValue(P,Param,Pval2), trCovers(Pval2,Pval).
+notParamCover(C,P,Param):- context(C), hasContextClass(C,CtxCl), hasParameter(CtxCl,Param), context(P), not paramCover(C,P,Param).
+ctxInherits(C,P) :- paramCover(P,C,_), not notParamCover(P,C,_).
+
+% DETERMINE RELEVANT CONTEXTS AND THE MOST SPECIFIC RELEVANT CONTEXT
+bcParamCover(BC,Ctx,Param) :- hasParamValue(Ctx,Param,PVal), detParamValue(BC,Param,PVal2), trCovers(PVal,PVal2).
+notBcParamCover(BC,Ctx,Param) :- businessCase(BC), context(Ctx), hasContextClass(Ctx,CtxCl), hasParameter(CtxCl,Param), not bcParamCover(BC,Ctx,Param).
+detRelevantCtxs(BC,Ctx) :- bcParamCover(BC,Ctx,X), not notBcParamCover(BC,Ctx,Y).
+
+hasRelevantDescendant(BC,Ctx) :- detRelevantCtxs(BC,Ctx), detRelevantCtxs(BC,Ctx2), ctxInherits(Ctx2,Ctx), not w_ctxIdent(Ctx,Ctx2), Ctx!=Ctx2.
+detMostSpecificCtx(BC,Ctx) :- detRelevantCtxs(BC,Ctx), not hasRelevantDescendant(BC,Ctx).
+
+@output("detMostSpecificCtx"). @post("detMostSpecificCtx","orderby(1,2)").
+@output("detRelevantCtxs"). @post("detRelevantCtxs","orderby(1,2)").% WARNINGS
+w_incompleteCtxSpec(C) :- parameter(P), context(C), not hasParamValue(C,P,_).
+@output("w_incompleteCtxSpec").
+
+ctxDiffParamValue(Ctx1,Ctx2) :- context(Ctx1), context(Ctx2), hasParamValue(Ctx1,P,PVal1), hasParamValue(Ctx2,P,PVal2), PVal1!=PVal2.
+w_ctxIdent(Ctx1,Ctx2) :- context(Ctx1), context(Ctx2), not ctxDiffParamValue(Ctx1,Ctx2),Ctx1!=Ctx2.
+@output("w_ctxIdent").
+
+
+Evaluation Test 4
+==================
+Execution Time: 38.0 Seconds
+Errors: no errors detected
+CPU Usage: 44.0 %
+
+

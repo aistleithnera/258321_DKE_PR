@@ -2,6 +2,7 @@ package EvaluationFramework;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.sql.Time;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Scanner;
@@ -17,7 +18,7 @@ import Vadalog.VadalogExecution;
 
 public class EvaluationFrameworkApp {
 
-	public static void main(String[] args){
+	public static void main(String[] args) {
 
 		System.out.println("Welcome!");
 
@@ -101,17 +102,16 @@ public class EvaluationFrameworkApp {
 
 					CBR cbrObject = new CBR();
 
-					cbrObject.setId(ThreadLocalRandom.current().nextInt(0, 101));
-
 					Calendar now = Calendar.getInstance();
-					Date date = now.getTime();
+					Date utilDate = now.getTime();
+					java.sql.Date date;
+					java.sql.Time time;
 
-					cbrObject.setDay(now.get(Calendar.DAY_OF_MONTH));
-					cbrObject.setMonth(now.get(Calendar.MONTH) + 1);
-					cbrObject.setYear(now.get(Calendar.YEAR));
-					cbrObject.setHour(date.getHours());
-					cbrObject.setMinute(date.getMinutes());
-					cbrObject.setSecond(date.getSeconds());
+					date = new java.sql.Date(utilDate.getYear(), utilDate.getMonth(), utilDate.getDate() + 1);
+					time = new java.sql.Time(utilDate.getHours() + 1, utilDate.getMinutes(), utilDate.getSeconds());
+
+					cbrObject.setDate(date);
+					cbrObject.setTime(time);
 
 					cbrObject.setNoParm(parameters);
 					cbrObject.setNoParmVal(parameterValues);
@@ -121,7 +121,7 @@ public class EvaluationFrameworkApp {
 					cbrObject.setErrors(error);
 					cbrObject.setCpuUsage(cpuUsage);
 
-					DBConnection.DBSaveEntry.newCBR(cbrObject);
+					DB.SaveEntry.newCBR(cbrObject);
 
 				}
 
@@ -141,144 +141,131 @@ public class EvaluationFrameworkApp {
 			int noInPr = 0;
 			int noOutPr = 0;
 			String text = "";
-			
-		
-			 System.out.println("\n\n");
-			  
-			 System.out.println("1. AbstractionOnly");
-			 System.out.println("2. DynamicBehavioralDetectionOnly");
-			 System.out.println("3. StaticBehavioralDetectionOnly");
-			 System.out.println("4. InheritanceOnly");
-			 System.out.println("5. StructuralDetectionOnly");
-			 System.out.print("Please choose your option: "); 
-			 
-			 int noTest = s1.nextInt();
 
-			 switch (noTest) {
-			 
-			 case 1:
-				 	System.out.println("==================");
-				 	System.out.println("AbstractionOnly");
-				 	System.out.println("==================");
-				 	
-				 	System.out.print("Rules: ");
-					rules = s1.nextInt();
-					System.out.print("Facts: ");
-					facts = s1.nextInt();
-					System.out.print("NoInPr: ");
-					noInPr = s1.nextInt();
-					System.out.print("NoOutPr: ");
-					noOutPr = s1.nextInt();
-					System.out.print("\n");
-					
-					RMIModule rmi = new RMIModule();
-					text = rmi.generateRMIModuleAbstact(rules, facts, noInPr, noOutPr);
-			
-					
-			 break;
-			 
-			 case 2:
-				 System.out.println("==================");
-				 System.out.println("DynamicBehavioralDetectionOnly");
-				 System.out.println("==================");
-				 
-				 
-				 
-			  
-			 break;
-			  
-			 case 3:
-			  
-			
-			 
-			  
-			 System.out.println("\n");
-			 
-			  
-			 break;
-			 
-			 default:
-				 System.out.println("Option not valid!");
-				 
-			break;
-			
-			 }//end switch
-			  
-					
+			System.out.println("\n\n");
+
+			System.out.println("1. AbstractionOnly");
+			System.out.println("2. DynamicBehavioralDetectionOnly");
+			System.out.println("3. StaticBehavioralDetectionOnly");
+			System.out.println("4. InheritanceOnly");
+			System.out.println("5. StructuralDetectionOnly");
+			System.out.print("Please choose your option: ");
+
+			int noTest = s1.nextInt();
+
+			switch (noTest) {
+
+			case 1:
+				System.out.println("==================");
+				System.out.println("AbstractionOnly");
+				System.out.println("==================");
+
+				System.out.print("Rules: ");
+				rules = s1.nextInt();
+				System.out.print("Facts: ");
+				facts = s1.nextInt();
+				System.out.print("NoInPr: ");
+				noInPr = s1.nextInt();
+				System.out.print("NoOutPr: ");
+				noOutPr = s1.nextInt();
+				System.out.print("\n");
+
+				RMIModule rmi = new RMIModule();
+				text = rmi.generateRMIModuleAbstact(rules, facts, noInPr, noOutPr);
+
+				break;
+
+			case 2:
+				System.out.println("==================");
+				System.out.println("DynamicBehavioralDetectionOnly");
+				System.out.println("==================");
+
+				break;
+
+			case 3:
+
+				System.out.println("\n");
+
+				break;
+
+			default:
+				System.out.println("Option not valid!");
+
+				break;
+
+			}// end switch
+
 			String fileName = "out.txt";
-			
-			
-			
+
 			try {
-			
-			PrintWriter outputStream = new PrintWriter(fileName);
-			
-			
-			outputStream.println("Input ");
-			outputStream.println("==================");
-			outputStream.println("Rules: " + rules);
-			outputStream.println("Facts: " + facts);
-			outputStream.println("NoInPr: " + noInPr);
-			outputStream.println("NoOutPr: " + noOutPr);
-			outputStream.print("\n");
 
-			outputStream.println("Generated RMI Meta-Code");
-			outputStream.println("==================");
+				PrintWriter outputStream = new PrintWriter(fileName);
 
-			outputStream.println(text);
+				outputStream.println("Input ");
+				outputStream.println("==================");
+				outputStream.println("Rules: " + rules);
+				outputStream.println("Facts: " + facts);
+				outputStream.println("NoInPr: " + noInPr);
+				outputStream.println("NoOutPr: " + noOutPr);
+				outputStream.print("\n");
 
-			double exTime = VadalogExecution.calcExTime();
-			boolean error = VadalogExecution.calcNoErrors();
-			double cpuUsage = VadalogExecution.calcCpuUsage();
+				outputStream.println("Generated RMI Meta-Code");
+				outputStream.println("==================");
 
-			outputStream.println("Evaluation");
-			outputStream.println("==================");
-			outputStream.print("Execution Time: " + exTime + " Seconds");
-			outputStream.print("\n");
-			outputStream.print("Errors: ");
-			if (error == true) {
-				outputStream.print("no errors detected");
-			} else {
-				System.out.println("errors detected");
+				outputStream.println(text);
+
+				double exTime = VadalogExecution.calcExTime();
+				boolean error = VadalogExecution.calcNoErrors();
+				double cpuUsage = VadalogExecution.calcCpuUsage();
+
+				outputStream.println("Evaluation");
+				outputStream.println("==================");
+				outputStream.print("Execution Time: " + exTime + " Seconds");
+				outputStream.print("\n");
+				outputStream.print("Errors: ");
+				if (error == true) {
+					outputStream.print("no errors detected");
+				} else {
+					System.out.println("errors detected");
+				}
+
+				outputStream.print("\n");
+				outputStream.print("CPU Usage: " + cpuUsage + " %");
+				outputStream.print("\n");
+
+				RMI rmiObject = new RMI();
+
+				Calendar now = Calendar.getInstance();
+				Date utilDate = now.getTime();
+				java.sql.Date date;
+				java.sql.Time time;
+
+				date = new java.sql.Date(utilDate.getYear(), utilDate.getMonth(), utilDate.getDate() + 1);
+				time = new java.sql.Time(utilDate.getHours() + 1, utilDate.getMinutes(), utilDate.getSeconds());
+
+				rmiObject.setDate(date);
+				rmiObject.setTime(time);
+
+				rmiObject.setTestType(noTest);
+				rmiObject.setNoRules(rules);
+				rmiObject.setNoFacts(facts);
+				rmiObject.setNoInPr(noInPr);
+				rmiObject.setNoOutPr(noOutPr);
+				rmiObject.setExTime(exTime);
+				rmiObject.setErrors(error);
+				rmiObject.setCpuUsage(cpuUsage);
+
+				DB.SaveEntry.newRMI(rmiObject);
+
+				outputStream.close();
+				
+				System.out.print("\n");
+				System.out.println("Done.");
+				System.out.println("Please check your txt file.");
+
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
 			}
-
-			outputStream.print("\n");
-			outputStream.print("CPU Usage: " + cpuUsage + " %");
-			outputStream.print("\n");
-
-			RMI rmiObject = new RMI();
-
-			rmiObject.setId(ThreadLocalRandom.current().nextInt(0, 101));
-
-			Calendar now = Calendar.getInstance();
-			Date date = now.getTime();
-
-			rmiObject.setDay(now.get(Calendar.DAY_OF_MONTH));
-			rmiObject.setMonth(now.get(Calendar.MONTH) + 1);
-			rmiObject.setYear(now.get(Calendar.YEAR));
-			rmiObject.setHour(date.getHours());
-			rmiObject.setMinute(date.getMinutes());
-			rmiObject.setSecond(date.getSeconds());
-			rmiObject.setTestType(noTest);
-			rmiObject.setNoRules(rules);
-			rmiObject.setNoFacts(facts);
-			rmiObject.setNoInPr(noInPr);
-			rmiObject.setNoOutPr(noOutPr);
-			rmiObject.setExTime(exTime);
-			rmiObject.setErrors(error);
-			rmiObject.setCpuUsage(cpuUsage);
-
-			DBConnection.DBSaveEntry.newRMI(rmiObject);
-			
-			outputStream.close();
-
-			System.out.println("Done.");
-			System.out.println("Please check your txt file.");
-
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-
 
 		}
 	}
