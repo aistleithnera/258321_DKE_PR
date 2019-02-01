@@ -2,7 +2,7 @@ package Models;
 
 import java.util.Date;
 
-public class CBR {
+public class CBR { // CBR Objekt erlaubt eine bequeme Speicherung der Testdaten
 	
 	private int id;
 	private Date date;
@@ -14,6 +14,8 @@ public class CBR {
 	private double exTime;
 	private boolean errors;
 	private double cpuUsage;
+	
+	// Getter und Setter Methoden
 	
 	public int getId() {
 		return id;
@@ -27,11 +29,8 @@ public class CBR {
 	public void setDate(Date date) {
 		this.date = date;
 	}
-	public long getTime(Date date) {
-		return time;
-	}
-	public void setTime(long time) {
-		this.time = time;
+	public long getTime() {
+		return time;		
 	}
 	public int getNoParm() {
 		return noParm;

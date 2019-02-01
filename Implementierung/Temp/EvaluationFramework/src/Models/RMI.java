@@ -2,7 +2,7 @@ package Models;
 
 import java.util.Date;
 
-public class RMI {
+public class RMI { // RMI Objekt erlaubt eine bequeme Speicherung der Testdaten
 	
 	private int id;
 	private Date date;
@@ -16,6 +16,8 @@ public class RMI {
 	private boolean errors;
 	private double cpuUsage;
 	
+	// Getter und Setter Methoden
+	
 	public int getId() {
 		return id;
 	}
@@ -28,11 +30,8 @@ public class RMI {
 	public void setDate(Date date) {
 		this.date = date;
 	}
-	public long getTime(Date date) {
-		return time;
-	}
-	public void setTime(long time) {
-		this.time = time;
+	public long getTime() {
+		return time;		
 	}
 	public int getTestType() {
 		return testType;
