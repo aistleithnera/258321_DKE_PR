@@ -1,12 +1,12 @@
 package Models;
 
-import java.util.Date;
+import java.sql.Date;
+import java.sql.Time;
 
 public class CBR { // CBR Objekt erlaubt eine bequeme Speicherung der Testdaten
 	
-	private int id;
 	private Date date;
-	private long time;
+	private Time time;
 	private int noParm;
 	private int noParmVal;
 	private int noCont;
@@ -17,20 +17,17 @@ public class CBR { // CBR Objekt erlaubt eine bequeme Speicherung der Testdaten
 	
 	// Getter und Setter Methoden
 	
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
 	public Date getDate() {
 		return date;
 	}
 	public void setDate(Date date) {
 		this.date = date;
 	}
-	public long getTime() {
-		return time;		
+	public Time getTime() {
+		return time;
+	}
+	public void setTime(Time time) {
+		this.time = time;
 	}
 	public int getNoParm() {
 		return noParm;

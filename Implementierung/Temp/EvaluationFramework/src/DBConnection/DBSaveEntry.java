@@ -3,7 +3,6 @@ package DBConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Date;
 
 import Models.CBR;
 import Models.RMI;
@@ -12,7 +11,7 @@ public class DBSaveEntry {
 	
 	public static void newCBR(CBR cbr) { // Erstellt einen neuen Datenbankeintrag fuer CBR
 
-		String queryInsertCBR = "INSERT INTO cbr (id, date, noParm, noParmVal, noBusCase, exTime, errors, cpuUsage) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String queryInsertCBR = "INSERT INTO cbr (date, time, noParm, noParmVal, noBusCase, exTime, errors, cpuUsage) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 		// Insert Statement fuer die Datenbank mit den noch zu definierenden Values
 		PreparedStatement insertCBR = null;
 
@@ -21,13 +20,11 @@ public class DBSaveEntry {
 		try {
 
 			connection = DBConnection.getConnection();
-			
-			Date akDate = cbr.getDate();
 
 			insertCBR = connection.prepareStatement(queryInsertCBR);
 
-			insertCBR.setInt(1, cbr.getId());
-			insertCBR.setLong(2, akDate.getTime());
+			insertCBR.setDate(1, cbr.getDate());
+			insertCBR.setTime(2, cbr.getTime());
 			insertCBR.setInt(3, cbr.getNoParm());
 			insertCBR.setInt(4, cbr.getNoParmVal());		
 			insertCBR.setInt(5, cbr.getNoBusCase());
@@ -65,7 +62,7 @@ public class DBSaveEntry {
 	
 	public static void newRMI(RMI rmi) { // Erstellt einen neuen Datenbankeintrag fuer RMI
 
-		String queryinsertRMI = "INSERT INTO rmi (id, date, testType, noRules, noFacts, noInPr, noOutPr, exTime, errors, cpuUsage) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String queryinsertRMI = "INSERT INTO rmi (date, time, testType, noRules, noFacts, noInPr, noOutPr, exTime, errors, cpuUsage) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		// Insert Statement fuer die Datenbank mit den noch zu definierenden Values
 		PreparedStatement insertRMI = null;
 
@@ -74,13 +71,11 @@ public class DBSaveEntry {
 		try {
 
 			connection = DBConnection.getConnection();
-			
-			Date akDate = rmi.getDate();
 
 			insertRMI = connection.prepareStatement(queryinsertRMI);
 
-			insertRMI.setInt(1, rmi.getId());
-			insertRMI.setLong(2, akDate.getTime());
+			insertRMI.setDate(1, rmi.getDate());
+			insertRMI.setTime(2, rmi.getTime());
 			insertRMI.setInt(3, rmi.getTestType());
 			insertRMI.setInt(4, rmi.getNoRules());	
 			insertRMI.setInt(5, rmi.getNoFacts());	
