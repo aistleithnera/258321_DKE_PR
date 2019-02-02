@@ -6,7 +6,10 @@ import DataGeneratorRandomString.GeneratorRandomString;
 
 public class GeneratorCBR {
 
+	// static String for the generated CBR Cod
 	private static String CBRCode;
+
+	// static Objects to save the ContextClass and BusinessCaseClass
 	private static ContextClass cc;
 	private static BusinessCaseClass bcc;
 
@@ -29,11 +32,13 @@ public class GeneratorCBR {
 
 	public static String generateContextClass() {
 		String contextClass = "";
+
+		// create new ContextClass Object
 		cc = new ContextClass();
 
 		contextClass += "% Generic Components\n";
 
-		// set length of name
+		// set length of name to make sure, not all are the same length
 		int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
 
 		// set name
@@ -46,9 +51,10 @@ public class GeneratorCBR {
 
 	public static String generateBusinessCaseClass() {
 
+		// create new BusinessCaseClass Object
 		bcc = new BusinessCaseClass();
 
-		// set length of name
+		// set length of name to make sure, not all are the same length
 		int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
 
 		// set name
@@ -102,11 +108,14 @@ public class GeneratorCBR {
 
 		generatedParameterValues += "% Parameter Values\n";
 
+		// for every Parameter ParameterValues are generated
 		for (int i = 0; i < cc.getParameters().size(); i++) {
 			for (int m = 0; m < pv; m++) {
+
+				// new ParameterValue Object is created
 				ParameterValue pp = new ParameterValue();
 
-				// set name length
+				// set length of name to make sure, not all are the same length
 				int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
 
 				// set name
@@ -119,6 +128,7 @@ public class GeneratorCBR {
 
 		}
 
+		// all Parameters and ParameterValues are added to the return String
 		for (int i = 0; i < cc.getParameters().size(); i++) {
 			for (int t = 0; t < cc.getParameters().get(i).getParameterValues().size(); t++) {
 
@@ -141,11 +151,10 @@ public class GeneratorCBR {
 		String generatedParameterValuesHierarchies = "";
 
 		// random choice if hierarchy tree is wide or deep
-		// random number 0 = wide hierarchy tree is wide
-		// random number 1 = wide hierarchy tree is deep
 
 		int randomNumber = ThreadLocalRandom.current().nextInt(0, 2);
 
+		// random number 0 = wide hierarchy tree is wide
 		if (randomNumber == 0) {
 
 			generatedParameterValuesHierarchies += "% Parameter Hierachies\n";
@@ -173,7 +182,7 @@ public class GeneratorCBR {
 			}
 
 		}
-
+		// random number 1 = wide hierarchy tree is deep
 		if (randomNumber == 1) {
 
 			for (int i = 0; i < cc.getParameters().size(); i++) {
@@ -196,10 +205,12 @@ public class GeneratorCBR {
 
 	private static String generateContexts(int contexts) {
 		String generatedContexts = "";
+		
 		generatedContexts += "% Contexts\n";
 
 		for (int i = 0; i < contexts; i++) {
-
+			
+			// a new Context Object is created
 			Context c = new Context();
 			c.setCtx("ctx" + i);
 
@@ -213,7 +224,7 @@ public class GeneratorCBR {
 			c.setName("ctxName_" + GeneratorRandomString.getRandomString(randomNumber));
 			generatedContexts += "hasName(\"" + c.getCtx() + "\",\"" + c.getName() + "\").\n";
 
-			// new module is generated
+			// new Module Object is generated
 			Module m = new Module();
 			m.setName("module" + i);
 
@@ -227,7 +238,6 @@ public class GeneratorCBR {
 			generatedContexts += "hasContextClass(\"" + c.getCtx() + "\",\"" + c.getContextClass() + "\").\n";
 
 			// match parameter values
-
 			for (int p = 0; p < cc.getParameters().size(); p++) {
 
 				generatedContexts += "hasParamValues(\"" + c.getCtx() + "\",\"" + cc.getParameters().get(p).getName()
@@ -248,6 +258,7 @@ public class GeneratorCBR {
 
 		genratedDetermineParameterValues += "% Determine Parameter Values\n";
 
+		// ParameterVlaues are determined for all Parameters
 		for (int i = 0; i < cc.getParameters().size(); i++) {
 
 			// to prevent to have all determined parameter values names at the same length,
@@ -269,25 +280,31 @@ public class GeneratorCBR {
 	}
 
 	private static String generateBusinessCases(int businessCases) {
+		
 		String generatedBusinessCases = "";
 
 		generatedBusinessCases += "% Business Cases\n";
 
 		generatedBusinessCases += "hasBusinessCaseClass(BC,\"" + bcc.getName() + "\") :- businessCase(BC).\n";
 
-		int x = cc.getParameters().size();
+		
 
 		for (int i = 1; i <= businessCases; i++) {
 
+			// name for BusinessCase is set
+			// new BusinessCase Object is created
 			String bcName = "";
 			bcName = "bc" + i;
-
 			BusinessCase bc = new BusinessCase();
 			bc.setName(bcName);
-			
-			generatedBusinessCases += "businessCase(\"" + bc.getName() + "\").\n"; 
 
+			generatedBusinessCases += "businessCase(\"" + bc.getName() + "\").\n";
+			
+			int x = cc.getParameters().size();
+			
 			for (int t = 0; t < x; t++) {
+				
+				// descProperties and paramValues are set 
 				String descProp = "";
 				String paramValue = "";
 
@@ -301,8 +318,8 @@ public class GeneratorCBR {
 				bc.addDescProp(descProp);
 				bc.addParameterValues(paramValue);
 
-				generatedBusinessCases +=  "hasDescProp(\"" + bc.getName()
-						+ "\",\"" + bc.getDescProp().get(t) + "\",\"" + bc.getParameterValues().get(t) + "\").";
+				generatedBusinessCases += "hasDescProp(\"" + bc.getName() + "\",\"" + bc.getDescProp().get(t) + "\",\""
+						+ bc.getParameterValues().get(t) + "\").";
 
 				generatedBusinessCases += "\n";
 
@@ -319,6 +336,7 @@ public class GeneratorCBR {
 
 	private static String generateStaticCode() {
 
+		// all the static code is created here and added to the return String
 		String staticCode = "";
 
 		// transitive and transitive-reflexive covers

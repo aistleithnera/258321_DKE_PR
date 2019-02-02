@@ -3,6 +3,7 @@ package DataGeneratorCBR;
 import java.util.ArrayList;
 import java.util.List;
 
+//class to save the information about the Business Case Class
 public class BusinessCaseClass {
 
 	private String name;

@@ -8,7 +8,7 @@ import Models.CBR;
 import Models.RMI;
 
 public class SaveEntry {
-	
+
 	public static void newCBR(CBR cbr) { // Erstellt einen neuen Datenbankeintrag fuer CBR
 
 		String queryInsertCBR = "INSERT INTO cbr (date, time, noParm, noParmVal, noBusCase, exTime, errors, cpuUsage) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -26,13 +26,13 @@ public class SaveEntry {
 			insertCBR.setDate(1, cbr.getDate());
 			insertCBR.setTime(2, cbr.getTime());
 			insertCBR.setInt(3, cbr.getNoParm());
-			insertCBR.setInt(4, cbr.getNoParmVal());		
+			insertCBR.setInt(4, cbr.getNoParmVal());
 			insertCBR.setInt(5, cbr.getNoBusCase());
 			insertCBR.setDouble(6, cbr.getExTime());
-			insertCBR.setBoolean(7, cbr.isErrors());			
+			insertCBR.setBoolean(7, cbr.isErrors());
 			insertCBR.setDouble(8, cbr.getCpuUsage());
 			// konkreter Insert der Werte und Verknuepfung mit den Values
-			
+
 			insertCBR.executeUpdate();
 			// Ausfuehrung des Updates
 
@@ -59,7 +59,7 @@ public class SaveEntry {
 			}
 		}
 	}
-	
+
 	public static void newRMI(RMI rmi) { // Erstellt einen neuen Datenbankeintrag fuer RMI
 
 		String queryinsertRMI = "INSERT INTO rmi (date, time, testType, noRules, noFacts, noInPr, noOutPr, exTime, errors, cpuUsage) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -77,15 +77,15 @@ public class SaveEntry {
 			insertRMI.setDate(1, rmi.getDate());
 			insertRMI.setTime(2, rmi.getTime());
 			insertRMI.setInt(3, rmi.getTestType());
-			insertRMI.setInt(4, rmi.getNoRules());	
-			insertRMI.setInt(5, rmi.getNoFacts());	
+			insertRMI.setInt(4, rmi.getNoRules());
+			insertRMI.setInt(5, rmi.getNoFacts());
 			insertRMI.setInt(6, rmi.getNoInPr());
 			insertRMI.setInt(7, rmi.getNoOutPr());
 			insertRMI.setDouble(8, rmi.getExTime());
-			insertRMI.setBoolean(9, rmi.isErrors());			
+			insertRMI.setBoolean(9, rmi.isErrors());
 			insertRMI.setDouble(10, rmi.getCpuUsage());
 			// konkreter Insert der Werte und Verknuepfung mit den Values
-			
+
 			insertRMI.executeUpdate();
 			// Ausfuehrung des Updates
 

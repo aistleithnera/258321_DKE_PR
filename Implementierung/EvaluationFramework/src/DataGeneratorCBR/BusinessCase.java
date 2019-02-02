@@ -3,6 +3,7 @@ package DataGeneratorCBR;
 import java.util.ArrayList;
 import java.util.List;
 
+//class to save the information about the Business Case
 public class BusinessCase {
 
 	String name;
@@ -24,10 +25,9 @@ public class BusinessCase {
 	public void setDescProp(List<String> descProp) {
 		this.descProp = descProp;
 	}
-	
-	
+
 	public void addDescProp(String dp) {
-		this.descProp.add(dp); 
+		this.descProp.add(dp);
 	}
 
 	public List<String> getParameterValues() {
@@ -37,9 +37,9 @@ public class BusinessCase {
 	public void setParameterValues(List<String> parameterValues) {
 		this.parameterValues = parameterValues;
 	}
-	
+
 	public void addParameterValues(String v) {
-		this.parameterValues.add(v); 
+		this.parameterValues.add(v);
 	}
 
 }

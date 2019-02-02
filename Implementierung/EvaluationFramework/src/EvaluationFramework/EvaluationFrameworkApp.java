@@ -2,16 +2,11 @@ package EvaluationFramework;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.sql.Time;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Scanner;
-import java.util.concurrent.ThreadLocalRandom;
-
 import DataGeneratorCBR.GeneratorCBR;
-import DataGeneratorRuleModelInheritance.GeneratorRuleModelInheritance;
 import DataGeneratorRuleModelInheritance.RMIModule;
-import Exceptions.NegativeNumberException;
 import Models.CBR;
 import Models.RMI;
 import Vadalog.VadalogExecution;
@@ -20,11 +15,14 @@ public class EvaluationFrameworkApp {
 
 	public static void main(String[] args) {
 
+		// start of the main programme
+
 		System.out.println("Welcome!");
 
 		System.out.println("1. CBR");
 		System.out.println("2. RMI");
 
+		// choosing the option of the test
 		System.out.print("Please choose your option: ");
 
 		int option;
@@ -33,7 +31,7 @@ public class EvaluationFrameworkApp {
 		option = s1.nextInt();
 
 		if (option == 1) {
-
+			// option 1 generates CBR Code
 			int parameters;
 			int parameterValues;
 			int businessCases;
@@ -48,6 +46,7 @@ public class EvaluationFrameworkApp {
 				outputStream.println("==================");
 				outputStream.print("\n");
 
+				// Reading of the Input Parameters
 				System.out.print("Parameters: ");
 				parameters = s1.nextInt();
 				System.out.print("Parameter Values: ");
@@ -58,6 +57,7 @@ public class EvaluationFrameworkApp {
 				tests = s1.nextInt();
 				System.out.print("\n");
 
+				// Printing the Input Parameters into the out txt file
 				outputStream.println("Input ");
 				outputStream.println("==================");
 				outputStream.println("Parameters: " + parameters);
@@ -68,8 +68,10 @@ public class EvaluationFrameworkApp {
 
 				for (int i = 0; i < tests; i++) {
 
+					// Generating CBR Code with the Input Parameters
 					String text = GeneratorCBR.generateCBRCode(parameters, parameterValues, businessCases);
 
+					// Printing the Tests and Generated Code into the out txt file
 					outputStream.println("Test: " + i);
 					outputStream.println("==================");
 					outputStream.print("\n");
@@ -79,10 +81,12 @@ public class EvaluationFrameworkApp {
 
 					outputStream.println(text);
 
+					// calling the Vadalog Execution Dummy Methods
 					double exTime = VadalogExecution.calcExTime();
 					boolean error = VadalogExecution.calcNoErrors();
 					double cpuUsage = VadalogExecution.calcCpuUsage();
 
+					// Printing the Resulst of the Vadalog Execution into the out txt file
 					outputStream.println("Evaluation Test " + i);
 					outputStream.println("==================");
 					outputStream.println("Execution Time: " + exTime + " Seconds");
@@ -100,6 +104,7 @@ public class EvaluationFrameworkApp {
 					outputStream.println("CPU Usage: " + cpuUsage + " %");
 					outputStream.println("\n");
 
+					// create an CBR OBject with all data to make JDBC saving easier
 					CBR cbrObject = new CBR();
 
 					Calendar now = Calendar.getInstance();
@@ -107,6 +112,7 @@ public class EvaluationFrameworkApp {
 					java.sql.Date date;
 					java.sql.Time time;
 
+					// set sql Date and Time
 					date = new java.sql.Date(utilDate.getYear(), utilDate.getMonth(), utilDate.getDate() + 1);
 					time = new java.sql.Time(utilDate.getHours() + 1, utilDate.getMinutes(), utilDate.getSeconds());
 
@@ -121,6 +127,7 @@ public class EvaluationFrameworkApp {
 					cbrObject.setErrors(error);
 					cbrObject.setCpuUsage(cpuUsage);
 
+					// save Entry into DB
 					DB.SaveEntry.newCBR(cbrObject);
 
 				}
@@ -258,7 +265,7 @@ public class EvaluationFrameworkApp {
 				DB.SaveEntry.newRMI(rmiObject);
 
 				outputStream.close();
-				
+
 				System.out.print("\n");
 				System.out.println("Done.");
 				System.out.println("Please check your txt file.");
