@@ -1,6 +1,8 @@
 package Test;
 
+import DataGeneratorCBR.GeneratorCBR;
 import DataGeneratorRuleModelInheritance.GeneratorRuleModelInheritance;
+import Exceptions.NegativeNumberException;
 
 public class TestGeneratorRuleModelInheritance {
 
@@ -152,6 +154,6 @@ public class TestGeneratorRuleModelInheritance {
 				+ GeneratorRuleModelInheritance.generateRulesWithNonRelationalAtoms(1, 1, 1, 1);
 		System.out.println(text20);
 
-	}//main
+	}
 
-}//TestGeneratorRuleModelInheritance
+}

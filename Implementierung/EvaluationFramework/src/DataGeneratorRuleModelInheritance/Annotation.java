@@ -7,63 +7,59 @@ import DataGeneratorRandomString.GeneratorRandomString;
 
 public class Annotation {
 
-	// attributes
 	private String name;
 	private String term;
+	
 	List<String> inputPredicate;
 	List<String> outputPredicate;
 
-	// constructor
-	public Annotation(String name) {
-		this.name = name;
-	}// annotation
-
-	// getter
-	public List<String> getInputPredicate() {
-		return this.inputPredicate;
-	}// getInputPredicate
-
-	public List<String> getOutputPredicate() {
-		return this.outputPredicate;
-	}// getOutputPredicate
-
-	public String getTerm() {
-		return this.term;
-	}// getTerm
-
-	// setter
 	public void setInputPredicate(List<String> l) {
 		this.inputPredicate = l;
-	}// setInputPredicate
+	}
 
 	public void setOutputPredicate(List<String> l) {
 		this.outputPredicate = l;
-	}// setOutputPredicate
+	}
+
+	public List<String> getInputPredicate() {
+		return this.inputPredicate;
+	}
+
+	public List<String> getOutputPredicate() {
+		return this.outputPredicate;
+	}
+
+	public String getTerm() {
+		return this.term;
+	}
 
 	public void setTerm(String t) {
 		this.term = t;
-	}// setTerm
+	}
 
-	public void setName(String s) {
-		this.name = s;
-	}// setName
+	public Annotation(String name) {
+		this.name = name;
+	}
 
 	public String toString() {
 		return this.name;
-	}// toString
+	}
 
-	// generate Meta-Code
+	public void setName(String s) {
+		this.name = s;
+	}
 
+	
 	public String generateAnnotationsModule(Program pr) {
 
 		String generatedAnnotations = "";
 
-		// generate annotation
+		// annotation generieren
 		generatedAnnotations += "annotation(\"" + this + "\"). \n";
 		generatedAnnotations += "hasAnnotation(\"" + pr + "\",\"" + this + "\"). \n";
 		generatedAnnotations += "hasName(\"" + this + "\",\"" + "module" + "\"). \n";
 
-		// generate termns
+		// terms generieren
 		int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
 		Term t = new Term(GeneratorRandomString.getRandomString(randomNumber));
 		generatedAnnotations += "term(\"" + t + "\"). \n";
@@ -71,9 +67,10 @@ public class Annotation {
 		generatedAnnotations += "hasArgument(\"" + this + "\",\"" + t + "\"," + 0 + "). \n";
 
 		return generatedAnnotations;
-	}// generateAnnotationModule
+	}
 
-	// generate meta code for input
+	
+	// für jeden input annotations generieren
 	public String generateAnnotationsInput(Program pr) {
 
 		String generatedAnnotations = "";
@@ -87,17 +84,19 @@ public class Annotation {
 			generatedAnnotations += "hasAnnotation(\"" + pr + "\",\"" + m + "\"). \n";
 			generatedAnnotations += "hasName(\"" + m + "\",\"" + "input" + "\"). \n";
 
+			// terms generieren
 			randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
 			Term t = new Term(GeneratorRandomString.getRandomString(randomNumber));
 			generatedAnnotations += "term(\"" + t + "\"). \n";
 			generatedAnnotations += "hasSerialization(\"" + t + "\",\"\"\"" + s + "\"\"\"). \n";
 			generatedAnnotations += "hasArgument(\"" + m + "\",\"" + t + "\"," + 0 + "). \n";
 
-		} // for
+		} // whileAnnoCoun
 		return generatedAnnotations;
-	}// generateAnnotationsInput
+	}
 
-	// generate input with restriction- nonOmitable
+	
+	//für jeden input non omitable annotations generieren
 	public String generateNonOmitableInputAnnotations(Program pr) {
 
 		String generatedAnnotations = "";
@@ -111,17 +110,19 @@ public class Annotation {
 			generatedAnnotations += "hasAnnotation(\"" + pr + "\",\"" + m + "\"). \n";
 			generatedAnnotations += "hasName(\"" + m + "\",\"" + "non_omitable" + "\"). \n";
 
+			// terms generieren
 			randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
 			Term t = new Term(GeneratorRandomString.getRandomString(randomNumber));
 			generatedAnnotations += "term(\"" + t + "\"). \n";
 			generatedAnnotations += "hasSerialization(\"" + t + "\",\"\"\"" + s + "\"\"\"). \n";
 			generatedAnnotations += "hasArgument(\"" + m + "\",\"" + t + "\"," + 0 + "). \n";
 
-		} // for
+		} // whileAnnoCoun
 		return generatedAnnotations;
-	}// generateNonOmitableInputAnnotation
+	}
 
-	// generate annotation with inheritance
+
+	// iheritance annotations generieren
 	public String generateAnnotationsInheritance(Program pr, String modulename) {
 
 		String generatedAnnotations = "";
@@ -133,6 +134,7 @@ public class Annotation {
 		generatedAnnotations += "hasAnnotation(\"" + pr + "\",\"" + m + "\"). \n";
 		generatedAnnotations += "hasName(\"" + m + "\",\"" + "inherits" + "\"). \n";
 
+		// terms generieren
 		randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
 		Term t = new Term(GeneratorRandomString.getRandomString(randomNumber));
 		generatedAnnotations += "term(\"" + t + "\"). \n";
@@ -140,9 +142,9 @@ public class Annotation {
 		generatedAnnotations += "hasArgument(\"" + m + "\",\"" + t + "\"," + 0 + "). \n";
 
 		return generatedAnnotations;
-	}// generateAnnoatationsInheritance
+	}
 
-	// generate annotation for output
+	//für jeden output annotations generieren
 	public String generateAnnotationsOutput(Program pr) {
 
 		String generatedAnnotations = "";
@@ -155,17 +157,18 @@ public class Annotation {
 			generatedAnnotations += "hasAnnotation(\"" + pr + "\",\"" + m + "\"). \n";
 			generatedAnnotations += "hasName(\"" + m + "\",\"" + "output" + "\"). \n";
 
+			// terms generieren
 			randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
 			Term t = new Term(GeneratorRandomString.getRandomString(randomNumber));
 			generatedAnnotations += "term(\"" + t + "\"). \n";
 			generatedAnnotations += "hasSerialization(\"" + t + "\",\"\"\"" + s + "\"\"\"). \n";
 			generatedAnnotations += "hasArgument(\"" + m + "\",\"" + t + "\"," + 0 + "). \n";
 
-		} // for
+		} // whileAnnoCoun
 		return generatedAnnotations;
-	}// generateAnnotationsOutput
+	}
 
-	// generate annotation for label
+	// label annotations generieren
 	public String generateAnnotationsLabel(String ruleId) {
 
 		String generatedAnnotations = "";
@@ -183,15 +186,17 @@ public class Annotation {
 		generatedAnnotations += "hasArgument(\"" + this + "\",\"" + t + "\"," + 0 + "). \n";
 
 		return generatedAnnotations;
-	}// generateAnnotatiionsLabel
-
-	// generate annotation with restriction- nonGrownable
+	}
+	
+	// non growable annotations generieren
 	public String generateNonGrownableAnnotations(Program pr) {
 
 		String generatedAnnotations = "";
+		
+		
+		for(int i=0; i<this.getOutputPredicate().size()/2; i ++) {
 
-		for (int i = 0; i < this.getOutputPredicate().size() / 2; i++) {
-
+		
 			int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
 			String m = GeneratorRandomString.getRandomString(randomNumber);
 
@@ -199,24 +204,27 @@ public class Annotation {
 			generatedAnnotations += "hasAnnotation(\"" + pr + "\",\"" + m + "\"). \n";
 			generatedAnnotations += "hasName(\"" + m + "\",\"" + "non_growable" + "\"). \n";
 
+			// terms generieren
 			randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
 			Term t = new Term(GeneratorRandomString.getRandomString(randomNumber));
 			generatedAnnotations += "term(\"" + t + "\"). \n";
-			generatedAnnotations += "hasSerialization(\"" + t + "\",\"\"\"" + this.getOutputPredicate().get(i)
-					+ "\"\"\"). \n";
+			generatedAnnotations += "hasSerialization(\"" + t + "\",\"\"\"" + this.getOutputPredicate().get(i) + "\"\"\"). \n";
 			generatedAnnotations += "hasArgument(\"" + m + "\",\"" + t + "\"," + 0 + "). \n";
 
-		} // for
+		} // whileAnnoCoun
 		return generatedAnnotations;
-	}// generateNonGrownableAnnotations
+	}
 
-	// generate annotation with restriction- nonShrinkableAnnotations
+	
+	// non shrinkable annotations generieren
 	public String generateNonShrinkableAnnotations(Program pr) {
 
 		String generatedAnnotations = "";
+		
+		
+		for(int i=this.getOutputPredicate().size()/2; i<this.getOutputPredicate().size(); i ++) {
 
-		for (int i = this.getOutputPredicate().size() / 2; i < this.getOutputPredicate().size(); i++) {
-
+		
 			int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
 			String m = GeneratorRandomString.getRandomString(randomNumber);
 
@@ -224,26 +232,27 @@ public class Annotation {
 			generatedAnnotations += "hasAnnotation(\"" + pr + "\",\"" + m + "\"). \n";
 			generatedAnnotations += "hasName(\"" + m + "\",\"" + "non_shrinkable" + "\"). \n";
 
+			// terms generieren
 			randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
 			Term t = new Term(GeneratorRandomString.getRandomString(randomNumber));
 			generatedAnnotations += "term(\"" + t + "\"). \n";
-			generatedAnnotations += "hasSerialization(\"" + t + "\",\"\"\"" + this.getOutputPredicate().get(i)
-					+ "\"\"\"). \n";
+			generatedAnnotations += "hasSerialization(\"" + t + "\",\"\"\"" + this.getOutputPredicate().get(i) + "\"\"\"). \n";
 			generatedAnnotations += "hasArgument(\"" + m + "\",\"" + t + "\"," + 0 + "). \n";
 
-		} // for
+		} // whileAnnoCoun
 		return generatedAnnotations;
-	}// generateNonShrinkableAnnotations
-
-	// generate annotation- resultSet
+	}
+	
 	public String generateAnnotationResultSet(Program pr) {
 
 		String generatedAnnotations = "";
 
+		// annotation generieren
 		generatedAnnotations += "annotation(\"" + this + "\"). \n";
 		generatedAnnotations += "hasAnnotation(\"" + pr + "\",\"" + this + "\"). \n";
 		generatedAnnotations += "hasName(\"" + this + "\",\"" + "resultset" + "\"). \n";
 
+		// terms generieren
 		int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
 		Term t = new Term(GeneratorRandomString.getRandomString(randomNumber));
 		generatedAnnotations += "term(\"" + t + "\"). \n";
@@ -251,6 +260,10 @@ public class Annotation {
 		generatedAnnotations += "hasArgument(\"" + this + "\",\"" + t + "\"," + 0 + "). \n";
 
 		return generatedAnnotations;
-	}// generateAnnotationsResultSet
+	}
+	
+	
+	
+	
 
-}// Annotation
+}

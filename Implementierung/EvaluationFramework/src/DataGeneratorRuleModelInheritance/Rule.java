@@ -2,105 +2,113 @@ package DataGeneratorRuleModelInheritance;
 
 import java.util.List;
 
-public class Rule {
 
-	// attributes
+public class Rule {
+	
 	private String name;
-	private RelationalAtoms head;
+	private  RelationalAtoms head;
 	private List<RelationalAtoms> relationalAtomsBody;
 	private String annotation;
+	
 
-	// constructor
 	public Rule(String name) {
 		this.name = name;
-	}// Rule
 
-	// getter
-
-	public String getAnnotation() {
+	}
+	
+	public String getAnnotation(){
 		return this.annotation;
-	}// getAnnotation
-
-	public RelationalAtoms getHead() {
+	}
+	
+	public void setAnnotation(String a){
+		this.annotation= a;
+	}
+	
+		
+	
+	public RelationalAtoms getHead(){
 		return this.head;
-	}// getHead
-
-	public String getName() {
+	}
+	
+	public String getName(){
 		return this.name;
-	}// getName
+	}
+	
+	
 
-	public RelationalAtoms getRelationalAtomsHead() {
-		return this.head;
-	}// getRelationalAtomsHead
-
-	public List<RelationalAtoms> getRelationalAtomsBody() {
-		return this.relationalAtomsBody;
-	}// getRelationalAtomsBody
-
-	// setter
-	public void setAnnotation(String a) {
-		this.annotation = a;
-	}// setAnnotation
-
-	public void setName(String s) {
+	public String toString(){
+		return this.name;
+	}
+	
+	public void setName(String s){
 		this.name = s;
-	}// setName
-
-	public void setHead(RelationalAtoms a) {
+	}
+	
+	
+	public void setHead(RelationalAtoms a){
 		this.head = a;
-
-	}// setHead
-
-	public void setBody(List<RelationalAtoms> a) {
+		
+	}
+	
+	public void setBody(List<RelationalAtoms> a){
 		this.relationalAtomsBody = a;
-	}// setBody
-
-	public String toString() {
-		return this.name;
-	}// toString
-
-	// generate Meta-Code
-	public String generateOnlyRules(int rulesCount, Program pr) {
-
+	}
+	
+	
+	public RelationalAtoms getRelationalAtomsHead(){
+		return this.head;
+	}
+	
+	public List<RelationalAtoms> getRelationalAtomsBody(){
+		return this.relationalAtomsBody;
+	}
+	
+	
+	
+	public  String generateOnlyRules(int rulesCount, Program pr) {
+		
 		String rules = "";
+		
 
-		while (rulesCount > 0) {
-
-			rules += "rule(\"" + this.getName() + "\").\n";
-			rules += "hasRule(\"" + pr + "\",\"" + this.getName() + "\").\n";
-			rules += "hasPositiveHeadAtom(\"" + this.getName() + "\",\"" + this.getRelationalAtomsHead().getId()
-					+ "\").\n";
+		while(rulesCount > 0) {
+			
+			
+			rules+= "rule(\"" + this.getName() + "\").\n";
+			rules+= "hasRule(\"" + pr + "\",\"" + this.getName() + "\").\n";
+			rules+= "hasPositiveHeadAtom(\"" + this.getName() +"\",\"" + this.getRelationalAtomsHead().getId() + "\").\n";
 			rules += "relationalAtom(\"" + this.getRelationalAtomsHead().getId() + "\"). \n";
-			rules += "hasName(\"" + this.getRelationalAtomsHead().getId() + "\",\""
-					+ this.getRelationalAtomsHead().getPredicate() + "\"). \n";
-
+			rules += "hasName(\"" + this.getRelationalAtomsHead().getId() + "\",\"" + this.getRelationalAtomsHead().getPredicate() + "\"). \n";
+		
 			rules += "term(\"" + this.getRelationalAtomsHead().getTerm().get(0).getName() + "\"). \n";
-			rules += "hasSerialization(\"" + this.getRelationalAtomsHead().getTerm().get(0).getName() + "\",\""
-					+ this.getRelationalAtomsHead().getTerm().get(0).getSerialization() + "\"). \n";
-			rules += "hasArgument(\"" + this.getRelationalAtomsHead().getId() + "\",\""
-					+ this.getRelationalAtomsHead().getTerm().get(0).getName() + "\"," + 0 + "). \n";
-
-			for (RelationalAtoms a : this.getRelationalAtomsBody()) {
-				rules += "hasPositiveBodyAtom(\"" + this.getName() + "\",\"" + a.getId() + "\").\n";
-
+			rules += "hasSerialization(\"" + this.getRelationalAtomsHead().getTerm().get(0).getName() + "\",\"" +  this.getRelationalAtomsHead().getTerm().get(0).getSerialization()
+			+ "\"). \n";
+			rules += "hasArgument(\"" + this.getRelationalAtomsHead().getId() + "\",\"" + this.getRelationalAtomsHead().getTerm().get(0).getName() + "\"," + 0 + "). \n";
+			
+			
+		
+				for(RelationalAtoms a : this.getRelationalAtomsBody()) {
+				rules+= "hasPositiveBodyAtom(\"" + this.getName() +"\",\"" + a.getId() + "\").\n";
+			
 				rules += "relationalAtom(\"" + a.getId() + "\"). \n";
 				rules += "hasName(\"" + a.getId() + "\",\"" + a.getPredicate() + "\"). \n";
-
-				for (Term t : a.getTerm()) {
-
-					rules += "term(\"" + t.getName() + "\"). \n";
-					rules += "hasSerialization(\"" + t.getName() + "\",\"" + t.getSerialization() + "\"). \n";
-					rules += "hasArgument(\"" + a.getId() + "\",\"" + t.getName() + "\"," + 0 + "). \n";
-
-				} // end for
-
-			} // for
-
-			rulesCount--;
-
-		} // while
-
-		return rules;
-	}// generateOnlyRules
-
-}// Rule
+	
+				for(Term t : a.getTerm()) {
+				
+				rules += "term(\"" + t.getName() + "\"). \n";
+				rules += "hasSerialization(\"" + t.getName() + "\",\"" +  t.getSerialization()
+				+ "\"). \n";
+				rules += "hasArgument(\"" + a.getId() + "\",\"" + t.getName() + "\"," + 0 + "). \n";
+				
+				}
+				
+			}
+				
+		rulesCount--;
+			
+	
+		}
+		
+	return rules;
+	}//generateOnlyRules
+	
+}
