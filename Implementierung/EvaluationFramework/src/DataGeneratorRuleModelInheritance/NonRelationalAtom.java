@@ -1,25 +1,22 @@
 package DataGeneratorRuleModelInheritance;
 
 public class NonRelationalAtom {
-	
-private String name;
-	
-	
+
+	//attributes
+	private String name;
+
+	// constructor
 	public NonRelationalAtom(String name) {
 		this.name = name;
-}
+	}//nonRelationalAtom
 
-	public String toString(){
-		return this.name;
-	}
-	
-	public void setName(String s){
+	//setter
+	public void setName(String s) {
 		this.name = s;
-	}
+	}//setName
 	
-	
-	
-	
-	
+	public String toString() {
+		return this.name;
+	}//toString
 
-}
+}// NonRelationalAtom
