@@ -4,100 +4,64 @@ import java.util.List;
 
 public class Module {
 
+	// attributes
 	private String name;
-	private Module prev;
 	private static int nrOfModule = 1;
-	
 	List<Rule> rules;
 	List<RelationalAtoms> facts;
 	List<String> inputPredicate;
-	List<String>outputPredicate;
-	
-	public Module(){
+	List<String> outputPredicate;
+
+	// constructors
+	public Module() {
 		this.name = "m" + Module.nrOfModule;
-	    Module.nrOfModule++;
-		this.prev = null;
-	}
-	
-	public void setPrev(Module m){
-		this.prev = m;
-	}
-	
-	public Module getPrev(){
-		return this.prev;
-	}
-	
-	public void setName(){
-		this.name = "m" + nrOfModule;
-	}
-	
-	
-	public String getName(){
+		Module.nrOfModule++;
+	}// Module
+
+	Module(String name) {
+		this.name = name;
+	}// Module
+
+	// getter
+	public String getName() {
 		return this.name;
-	}
-	
-	
-	public void setInputPredicate(List<String> l){
-		this.inputPredicate = l;
-	}
-	
-	public void setOutputPredicate(List<String> l){
-		this.outputPredicate = l;
-	}
-	
-	public List<String> getInputPredicate(){
+	}// getName
+
+	public List<String> getInputPredicate() {
 		return this.inputPredicate;
-	}
-	
-	public List<String> getOutputPredicate(){
+	}// getInputPredicate
+
+	public List<String> getOutputPredicate() {
 		return this.outputPredicate;
-	}
-	
-	
-	
-	RelationalAtoms i;
-	RelationalAtoms o;
-	
-	
-	public void setI(RelationalAtoms i){
-		this.i = i;
-	}
-	
-	public void setO(RelationalAtoms o ){
-		this.o = o;
-	}
-	
-	public RelationalAtoms getI(){
-		return this.i;
-	}
-	public RelationalAtoms getO(){
-		return this.o;
-	}
-	
-	
-	
-	
+	}// getOutputPredicate
 
-	Module(String name){
-		this.name= name;
-	}
-	
-	public void setRules(List<Rule>t){
-		this.rules = t;
-	}
-	
-	public List<Rule> getRules(){
+	public List<Rule> getRules() {
 		return this.rules;
-	}
-	
-	public void setFacts(List<RelationalAtoms>t){
-		this.facts = t;
-	}
-	
-	public List<RelationalAtoms> getFacts(){
-		return this.facts;
-	}
-	
-	
+	}// getRules
 
-}
+	public List<RelationalAtoms> getFacts() {
+		return this.facts;
+	}// getFacts
+
+	// setter
+	public void setName() {
+		this.name = "m" + nrOfModule;
+	}// setName
+
+	public void setInputPredicate(List<String> l) {
+		this.inputPredicate = l;
+	}// setInputPredicte
+
+	public void setOutputPredicate(List<String> l) {
+		this.outputPredicate = l;
+	}// setOutputPredicate
+
+	public void setRules(List<Rule> t) {
+		this.rules = t;
+	}// setRules
+
+	public void setFacts(List<RelationalAtoms> t) {
+		this.facts = t;
+	}// setFacts
+
+}// Module

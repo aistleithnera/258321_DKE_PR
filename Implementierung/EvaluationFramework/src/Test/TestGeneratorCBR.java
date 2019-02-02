@@ -1,7 +1,6 @@
 package Test;
 
 import DataGeneratorCBR.GeneratorCBR;
-import Exceptions.NegativeNumberException;
 
 public class TestGeneratorCBR {
 
@@ -11,6 +10,6 @@ public class TestGeneratorCBR {
 
 		System.out.println(GeneratorCBR.generateCBRCode(3, 4, 5));
 
-	}
+	}//main
 
-}
+}//TestGeneratorCBR

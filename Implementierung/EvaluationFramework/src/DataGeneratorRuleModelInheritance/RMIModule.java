@@ -8,12 +8,14 @@ import DataGeneratorRandomString.GeneratorRandomString;
 
 public class RMIModule {
 
+	// attributes
 	static String var;
 	Module m1;
 
+	// getter
 	public Module getModule() {
 		return this.m1;
-	}
+	}// getModule
 
 	// generate base Module (META CODE)
 	public String generateRMIModule(int rules, int facts, int in, int out) {
@@ -56,7 +58,7 @@ public class RMIModule {
 			s1 += label.generateAnnotationsLabel(r1.getName());
 			r1.setAnnotation(label.toString());
 
-		}
+		} // for
 
 		int subRuleNum = 0;
 		if (rules > out) {
@@ -72,17 +74,16 @@ public class RMIModule {
 				s1 += label.generateAnnotationsLabel(r1.getName());
 				r1.setAnnotation(label.toString());
 
-			}
-		}//if
+			} // for
+		} // if
 
 		List<RelationalAtoms> factsList = generateRelationalAtomFactList(facts);
 
 		for (RelationalAtoms a : factsList) {
 			s1 += a.generateOnlyFacts(1, pr);
-		}
+		} // for
 
 		s1 += a1.generateAnnotationsOutput(pr);
-		// System.out.println(s1);
 
 		return s1;
 
@@ -136,16 +137,15 @@ public class RMIModule {
 			s1 += label.generateAnnotationsLabel(r1.getName());
 			r1.setAnnotation(label.toString());
 
-		}
+		} // for
 
 		List<RelationalAtoms> factsList = generateRelationalAtomFactList(facts);
 
 		for (RelationalAtoms a : factsList) {
 			s1 += a.generateOnlyFacts(1, pr);
-		}
+		} // for
 
 		s1 += a1.generateAnnotationsOutput(pr);
-		// System.out.println(s1);
 
 		return s1;
 
@@ -197,13 +197,12 @@ public class RMIModule {
 			s1 += label.generateAnnotationsLabel(r1.getName());
 			r1.setAnnotation(label.toString());
 
-		}
-		
+		} // for
+
 		int subRuleNum = 0;
 		if (rules > out) {
 			subRuleNum = rules - out;
 			List<Rule> r2 = generateSubRule(subRuleNum);
-	
 
 			for (Rule r1 : r2) {
 				s1 += r1.generateOnlyRules(1, pr);
@@ -214,17 +213,14 @@ public class RMIModule {
 				s1 += label.generateAnnotationsLabel(r1.getName());
 				r1.setAnnotation(label.toString());
 
-			}
-		}//if
-
-		
-		
+			} // for
+		} // if
 
 		List<RelationalAtoms> factsList = generateRelationalAtomFactList(facts);
 
 		for (RelationalAtoms a : factsList) {
 			s1 += a.generateOnlyFacts(1, pr);
-		}
+		} // for
 
 		s1 += a1.generateAnnotationsOutput(pr);
 
@@ -273,13 +269,12 @@ public class RMIModule {
 			s1 += label.generateAnnotationsLabel(r1.getName());
 			r1.setAnnotation(label.toString());
 
-		}
+		} // for
 
 		int subRuleNum = 0;
 		if (rules > out) {
 			subRuleNum = rules - out;
 			List<Rule> r2 = generateSubRule(subRuleNum);
-	
 
 			for (Rule r1 : r2) {
 				s1 += r1.generateOnlyRules(1, pr);
@@ -290,18 +285,16 @@ public class RMIModule {
 				s1 += label.generateAnnotationsLabel(r1.getName());
 				r1.setAnnotation(label.toString());
 
-			}
-		}//if
+			} // for
+		} // if
 
-		
 		List<RelationalAtoms> factsList = generateRelationalAtomFactList(facts);
 
 		for (RelationalAtoms a : factsList) {
 			s1 += a.generateOnlyFacts(1, pr);
-		}
+		} // for
 
 		s1 += a1.generateAnnotationsOutput(pr);
-		// System.out.println(s1);
 
 		return s1;
 
@@ -351,13 +344,12 @@ public class RMIModule {
 			s1 += label.generateAnnotationsLabel(r1.getName());
 			r1.setAnnotation(label.toString());
 
-		}
-		
+		} // for
+
 		int subRuleNum = 0;
 		if (rules > out) {
 			subRuleNum = rules - out;
 			List<Rule> r2 = generateSubRule(subRuleNum);
-	
 
 			for (Rule r1 : r2) {
 				s1 += r1.generateOnlyRules(1, pr);
@@ -368,24 +360,22 @@ public class RMIModule {
 				s1 += label.generateAnnotationsLabel(r1.getName());
 				r1.setAnnotation(label.toString());
 
-			}
-		}//if
-
-		
+			} // for
+		} // if
 
 		List<RelationalAtoms> factsList = generateRelationalAtomFactList(facts);
 
 		for (RelationalAtoms a : factsList) {
 			s1 += a.generateOnlyFacts(1, pr);
-		}
+		} // for
 
 		s1 += a1.generateAnnotationsOutput(pr);
 
 		return s1;
 
 	}// generate static RMI Module
-	
-	
+
+	// generate dynamic RMI Module
 	public String generateRMIModuleDynamic() {
 
 		Program pr = new Program();
@@ -401,10 +391,9 @@ public class RMIModule {
 
 		return s1;
 
-	}// generate base Module dynamic
-	
-	
-	
+	}// generateRMIModuleDynamic
+
+	// generate dynamic RMI Module
 	public String generateRMIModuleDynamic(Module myModule) {
 
 		Program pr = new Program();
@@ -425,8 +414,8 @@ public class RMIModule {
 		return s1;
 
 	}// generate inherited module dynamic
-	
-	
+
+	// generate ResultSet of module(dynamic)
 	public String generateRMIModuleDynamicResultset(Module myModul, int nrResultSet) {
 
 		Program pr = new Program();
@@ -434,25 +423,23 @@ public class RMIModule {
 		int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
 		String s = GeneratorRandomString.getRandomString(randomNumber);
 		String s1 = "program(\"" + pr + "\")." + "\n";
-		
+
 		Annotation result = new Annotation(s);
 		result.setTerm(myModul.getName());
 		s1 += result.generateAnnotationResultSet(pr);
-		
-		
-		List<RelationalAtoms> factsList =  generateRelationalAtomFactListDynamic(nrResultSet);
+
+		List<RelationalAtoms> factsList = generateRelationalAtomFactListDynamic(nrResultSet);
 
 		for (RelationalAtoms a : factsList) {
 			s1 += a.generateOnlyFacts(1, pr);
-		}
-		
+		} // end for
+
 		myModul.setFacts(factsList);
 		return s1;
 
 	}// generate resultSet dynamic
 
-	
-	
+	// generate resultSet dynamic with inheritance
 	public String generateRMIModuleDynamicResultsetInheritance(Module myModul, Module superModul) {
 
 		Program pr = new Program();
@@ -460,31 +447,25 @@ public class RMIModule {
 		int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
 		String s = GeneratorRandomString.getRandomString(randomNumber);
 		String s1 = "program(\"" + pr + "\")." + "\n";
-		
+
 		Annotation result = new Annotation(s);
 		result.setTerm(myModul.getName());
 		s1 += result.generateAnnotationResultSet(pr);
-		
-		
-		List<RelationalAtoms> factsList =  generateRelationalAtomFactListDynamicInherits(superModul.getFacts());
+
+		List<RelationalAtoms> factsList = generateRelationalAtomFactListDynamicInherits(superModul.getFacts());
 
 		for (RelationalAtoms a : factsList) {
 			s1 += a.generateOnlyFacts(1, pr);
-		}
-		
+		} // for
+
 		myModul.setFacts(factsList);
 		return s1;
 
 	}// generate resultSet dynamic
-	
-	
-	
-	
-
-	
 
 	// **************************************************************************
-	// the following methods are used as help methods for the above (main) methods
+	// the following methods are used as help methods for the above (main)
+	// methods
 	// **************************************************************************
 
 	// geneate list of input,output etc. predicates
@@ -496,7 +477,7 @@ public class RMIModule {
 			String s = GeneratorRandomString.getRandomString(randomNumber);
 			l.add(s);
 			count++;
-		}
+		} // while
 		return l;
 	}// geneate list of input,output etc. predicates
 
@@ -525,7 +506,7 @@ public class RMIModule {
 		return ruleList;
 	}// generate list of rules based on input/output
 
-	// generate list of subRules 
+	// generate list of subRules
 	public List<Rule> generateSubRule(int subRules) {
 		List<Rule> ruleList = new ArrayList<>();
 
@@ -535,7 +516,7 @@ public class RMIModule {
 			int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
 			String s = GeneratorRandomString.getRandomString(randomNumber);
 			Rule r = new Rule(s);
-			
+
 			randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
 			String s1 = GeneratorRandomString.getRandomString(randomNumber);
 
@@ -548,7 +529,7 @@ public class RMIModule {
 
 			ruleList.add(r);
 			count--;
-		}
+		} // while
 		return ruleList;
 	}// generate list of rules based on input/output
 
@@ -571,7 +552,7 @@ public class RMIModule {
 		for (int i = 0; i < count; i++) {
 			RelationalAtoms a = generateRelationalAtomBody(m1.getInputPredicate().get(i));
 			list.add(a);
-		}
+		} // for
 		return list;
 	}// generate body atoms of a relational atom
 
@@ -583,7 +564,7 @@ public class RMIModule {
 		for (int i = 0; i < count; i++) {
 			RelationalAtoms a = generateRelationalAtomBody(predicateList.get(i));
 			list.add(a);
-		}
+		} // for
 		return list;
 	}// generate body atoms of a relational atom
 
@@ -612,7 +593,7 @@ public class RMIModule {
 			t1.setSerialization(var);
 			t.add(t1);
 			count++;
-		}
+		} // while
 		return t;
 	}// generate a list of terms
 
@@ -625,7 +606,7 @@ public class RMIModule {
 			RelationalAtoms a = generateRelationalAtomFacts();
 			list.add(a);
 
-		}
+		} // for
 		return list;
 	}// generate a list of atoms/facts
 
@@ -637,105 +618,87 @@ public class RMIModule {
 		RelationalAtoms atom = new RelationalAtoms(s);
 		randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
 		s = GeneratorRandomString.getRandomString(randomNumber);
-
 		atom.setPredicate(s);
 		List<Term> t = generateTerm(1);
 		atom.setTerm(t);
 		return atom;
+	}// generate a single facts
+
+	// generate a list of atoms for facts dynamic
+	public static List<RelationalAtoms> generateRelationalAtomFactListDynamic(int count) {
+		List<RelationalAtoms> list = new ArrayList<>();
+
+		for (int i = 0; i < count; i++) {
+			RelationalAtoms a = generateRelationalAtomFactsDynamic();
+			list.add(a);
+		} // for
+		return list;
+	}// generate a list of atoms/facts dynamic
+
+	// generate a single fact dynamic (used by the method above to put in the
+	// list)
+	public static RelationalAtoms generateRelationalAtomFactsDynamic() {
+		int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+		String s = GeneratorRandomString.getRandomString(randomNumber);
+		RelationalAtoms atom = new RelationalAtoms(s);
+		randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+		s = GeneratorRandomString.getRandomString(randomNumber);
+		atom.setPredicate(s);
+		List<Term> t = generateTermDynamic(1);
+		atom.setTerm(t);
+		return atom;
+	}// generate a single facts
+
+	// generate a list of terms
+	public static List<Term> generateTermDynamic(int nr) {
+		List<Term> t = new ArrayList<>();
+		int count = 0;
+		while (count < nr) {
+			int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+			Term t1 = new Term(GeneratorRandomString.getRandomString(randomNumber));
+			randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+			String s = GeneratorRandomString.getRandomString(randomNumber);
+			t1.setSerialization(s);
+			t.add(t1);
+			count++;
+		} // while
+		return t;
+	}// generate a list of terms
+
+	// generate a list of atoms for facts dynamic
+	public static List<RelationalAtoms> generateRelationalAtomFactListDynamicInherits(List<RelationalAtoms> l) {
+		List<RelationalAtoms> list = new ArrayList<>();
+
+		int count = ThreadLocalRandom.current().nextInt(4, 8);
+
+		for (int i = 0; i < count; i++) {
+
+			RelationalAtoms a = generateRelationalAtomFactsDynamic(l);
+			list.add(a);
+
+		} // for
+		return list;
+	}// generate a list of atoms/facts dynamic
+
+	// generate a single fact dynamic (used by the method above to put in the
+	// list)
+	public static RelationalAtoms generateRelationalAtomFactsDynamic(List<RelationalAtoms> l) {
+
+		int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+		String s = GeneratorRandomString.getRandomString(randomNumber);
+		RelationalAtoms atom = new RelationalAtoms(s);
+		randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
+		s = GeneratorRandomString.getRandomString(randomNumber);
+		randomNumber = ThreadLocalRandom.current().nextInt(0, l.size() - 1);
+		atom.setPredicate(l.get(randomNumber).getPredicate());
+		List<Term> t = generateTermDynamic(1);
+		atom.setTerm(t);
+		return atom;
 
 	}// generate a single facts
-	
-	
-	
-	
-	// generate a list of atoms for facts dynamic
-		public static List<RelationalAtoms> generateRelationalAtomFactListDynamic(int count) {
-			List<RelationalAtoms> list = new ArrayList<>();
 
-			for (int i = 0; i < count; i++) {
-
-				RelationalAtoms a = generateRelationalAtomFactsDynamic();
-				list.add(a);
-
-			}
-			return list;
-		}// generate a list of atoms/facts dynamic
-	
-	
-	// generate a single fact dynamic (used by the method above to put in the list)
-		public static RelationalAtoms generateRelationalAtomFactsDynamic() {
-
-			int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
-			String s = GeneratorRandomString.getRandomString(randomNumber);
-			RelationalAtoms atom = new RelationalAtoms(s);
-			randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
-			s = GeneratorRandomString.getRandomString(randomNumber);
-
-			atom.setPredicate(s);
-			List<Term> t = generateTermDynamic(1);
-			atom.setTerm(t);
-			return atom;
-
-		}// generate a single facts
-		
-		
-		
-		// generate a list of terms 
-		public static List<Term> generateTermDynamic(int nr) {
-			List<Term> t = new ArrayList<>();
-			int count = 0;
-			while (count < nr) {
-				int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
-				Term t1 = new Term(GeneratorRandomString.getRandomString(randomNumber));
-				randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
-				String s = GeneratorRandomString.getRandomString(randomNumber);
-				t1.setSerialization(s);
-				t.add(t1);
-				count++;
-			}
-			return t;
-		}// generate a list of terms
-		
-		
-		
-
-		// generate a list of atoms for facts dynamic
-			public static List<RelationalAtoms> generateRelationalAtomFactListDynamicInherits(List<RelationalAtoms> l) {
-				List<RelationalAtoms> list = new ArrayList<>();
-				
-				int count = ThreadLocalRandom.current().nextInt(4, 8);
-
-				for (int i = 0; i < count; i++) {
-
-					RelationalAtoms a = generateRelationalAtomFactsDynamic(l);
-					list.add(a);
-
-				}
-				return list;
-			}// generate a list of atoms/facts dynamic
-	
-	
-	
-			// generate a single fact dynamic (used by the method above to put in the list)
-			public static RelationalAtoms generateRelationalAtomFactsDynamic(List<RelationalAtoms> l) {
-
-				int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
-				String s = GeneratorRandomString.getRandomString(randomNumber);
-				RelationalAtoms atom = new RelationalAtoms(s);
-				randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
-				s = GeneratorRandomString.getRandomString(randomNumber);
-				randomNumber = ThreadLocalRandom.current().nextInt(0, l.size()-1);
-				atom.setPredicate(l.get(randomNumber).getPredicate());
-				List<Term> t = generateTermDynamic(1);
-				atom.setTerm(t);
-				return atom;
-
-			}// generate a single facts
-	
-	
-	
-
-	// generate a rule for inherited module based on input/output from super module)
+	// generate a rule for inherited module based on input/output from super
+	// module)
 	public Rule generateRule(List<String> output, List<String> input) {
 
 		int randomNumber = ThreadLocalRandom.current().nextInt(4, 8);
@@ -749,7 +712,8 @@ public class RMIModule {
 		r.setBody(body);
 
 		return r;
-	}// generate a rule for inherited module based on input/output from super module)
+	}// generate a rule for inherited module based on input/output from super
+		// module)
 
 	// generate a list of relational atoms for body based on input
 	public List<RelationalAtoms> generateRelationalAtomBodyList(List<String> input) {
@@ -789,7 +753,7 @@ public class RMIModule {
 			RelationalAtoms a = generateRelationalAtomBody(input.get(i));
 			list.add(a);
 
-		}
+		} // for
 
 		RelationalAtoms a = generateRelationalAtomBody(abst);
 		list.add(a);
