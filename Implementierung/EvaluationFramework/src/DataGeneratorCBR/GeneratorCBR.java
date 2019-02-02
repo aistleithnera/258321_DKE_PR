@@ -6,7 +6,7 @@ import DataGeneratorRandomString.GeneratorRandomString;
 
 public class GeneratorCBR {
 
-	// static String for the generated CBR Cod
+	// static String for the generated CBR Code
 	private static String CBRCode;
 
 	// static Objects to save the ContextClass and BusinessCaseClass
@@ -30,7 +30,7 @@ public class GeneratorCBR {
 
 	}
 
-	public static String generateContextClass() {
+	private static String generateContextClass() {
 		String contextClass = "";
 
 		// create new ContextClass Object
@@ -49,7 +49,7 @@ public class GeneratorCBR {
 		return contextClass;
 	}
 
-	public static String generateBusinessCaseClass() {
+	private static String generateBusinessCaseClass() {
 
 		// create new BusinessCaseClass Object
 		bcc = new BusinessCaseClass();
@@ -66,7 +66,7 @@ public class GeneratorCBR {
 
 	}
 
-	public static String generateParameters(int count) {
+	private static String generateParameters(int count) {
 
 		int paramCount = count;
 		String generatedParameters = "";
